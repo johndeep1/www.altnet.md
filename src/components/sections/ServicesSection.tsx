@@ -1,0 +1,160 @@
+'use client';
+
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import ServiceCard from '../services/ServiceCard';
+import {
+  WifiIcon, TvIcon, PhoneIcon, RocketLaunchIcon,
+  ShieldCheckIcon, DevicePhoneMobileIcon
+} from '@heroicons/react/24/outline';
+
+const services = [
+  {
+    title: "Internet Fibră Optică",
+    description: "Conectivitate de ultimă generație cu viteze de până la 1Gbps",
+    icon: <WifiIcon className="w-8 h-8" />,
+    gradient: "from-primary to-primary-dark",
+    features: ["Până la 1Gbps", "Latență < 5ms", "Router WiFi 6"],
+  },
+  {
+    title: "TV Digital 4K",
+    description: "Experiență vizuală premium cu conținut 4K și funcții smart",
+    icon: <TvIcon className="w-8 h-8" />,
+    gradient: "from-blue-500 to-indigo-500",
+    features: ["150+ canale HD", "4K disponibil", "Smart TV Apps"],
+  },
+  {
+    title: "Telefonie IP",
+    description: "Comunicare crystal-clear cu tehnologie VoIP avansată",
+    icon: <PhoneIcon className="w-8 h-8" />,
+    gradient: "from-purple-500 to-violet-500",
+    features: ["Apeluri HD", "Număr portabil", "Minute nelimitate"],
+  },
+  {
+    title: "Gaming Optimizat",
+    description: "Conexiune dedicată pentru gaming cu latență minimă",
+    icon: <RocketLaunchIcon className="w-8 h-8" />,
+    gradient: "from-rose-500 to-pink-500",
+    features: ["Ping optimizat", "QoS Gaming", "Anti-DDoS"],
+  },
+  {
+    title: "Securitate Avansată",
+    description: "Protecție completă pentru toate dispozitivele tale",
+    icon: <ShieldCheckIcon className="w-8 h-8" />,
+    gradient: "from-amber-500 to-orange-500",
+    features: ["Firewall", "Control Parental", "VPN inclus"],
+  },
+  {
+    title: "Smart Home Ready",
+    description: "Soluții integrate pentru casa ta inteligentă",
+    icon: <DevicePhoneMobileIcon className="w-8 h-8" />,
+    gradient: "from-teal-500 to-emerald-500",
+    features: ["IoT Support", "Smart Control", "Auto-configurare"],
+  }
+];
+
+export default function ServicesSection() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.8]);
+
+  return (
+    <section className="py-32 relative overflow-hidden" ref={ref}>
+      {/* Enhanced Background Elements */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ opacity, y: backgroundY }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-white to-gray-50/50" />
+        <div className="absolute w-[1000px] h-[1000px] -left-1/2 -top-1/2 bg-gradient-to-br from-primary/5 to-blue-500/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute w-[800px] h-[800px] -right-1/2 top-1/2 bg-gradient-to-bl from-purple-500/5 to-pink-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute w-[600px] h-[600px] left-1/2 bottom-0 bg-gradient-to-tr from-amber-500/5 to-rose-500/5 rounded-full blur-2xl animate-pulse delay-2000" />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Enhanced Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center mb-24"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="inline-flex items-center gap-2 mb-6"
+          >
+            <span className="h-px w-8 bg-primary/60" />
+            <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary font-medium text-sm">
+              Servicii Premium
+            </span>
+            <span className="h-px w-8 bg-primary/60" />
+          </motion.div>
+
+          <motion.div
+            style={{ scale }}
+            className="space-y-6"
+          >
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+              <span className="block mb-2">Conectivitate de</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-primary">
+                Nouă Generație
+              </span>
+            </h2>
+
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Descoperă serviciile noastre premium, proiectate pentru viitorul digital
+            </p>
+          </motion.div>
+        </motion.div>
+
+        {/* Updated Grid Layout for 6 Cards */}
+        <motion.div
+          style={{ scale }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+        >
+          {services.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease: [0.23, 1, 0.32, 1]
+              }}
+            >
+              <ServiceCard
+                {...service}
+                index={index}
+                isInView={isInView}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Enhanced Bottom Decorative Element */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.8, duration: 0.5 }}
+          className="mt-20 text-center"
+        >
+          <div className="inline-flex items-center gap-4 text-gray-500 text-sm">
+            <span className="h-px w-12 bg-gray-200" />
+            <span>Tehnologie de ultimă generație</span>
+            <span className="h-px w-12 bg-gray-200" />
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
