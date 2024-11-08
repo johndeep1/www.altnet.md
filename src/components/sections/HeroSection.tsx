@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 const glowVariants = {
   initial: { scale: 1, opacity: 0.3 },
