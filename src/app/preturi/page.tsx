@@ -321,7 +321,7 @@ export default function PricingPage() {
                         <td className="py-4 px-6 text-left text-gray-600">
                           {feature.name}
                         </td>
-                        {['start', 'popular', 'pro'].map((plan) => (
+                       {(['start', 'popular', 'pro'] as const).map((plan) => (
                           <td key={plan} className="py-4 px-6 text-center">
                             {typeof feature[plan] === 'boolean' ? (
                               feature[plan] ? (
