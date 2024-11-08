@@ -2,8 +2,7 @@
 
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import Image from 'next/image';
-import { StarIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/solid';
+import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/solid';
 import TestimonialCard from '../testimonials/TestimonialCard';
 
 const testimonials = [
