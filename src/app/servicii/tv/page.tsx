@@ -201,7 +201,7 @@ export default function TVPage() {
           animate="visible"
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
-          {currentChannels.map((channel, index) => (
+          {currentChannels.map((channel) => (
             <motion.div
               key={channel}
               variants={itemVariants}
