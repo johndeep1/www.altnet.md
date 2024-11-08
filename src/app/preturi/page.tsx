@@ -120,7 +120,6 @@ export default function PricingPage() {
     offset: ["start start", "end end"]
   });
 
-
   return (
     <main ref={containerRef} className="min-h-screen pt-32 pb-16">
       {/* Animated Background */}
@@ -321,7 +320,7 @@ export default function PricingPage() {
                         <td className="py-4 px-6 text-left text-gray-600">
                           {feature.name}
                         </td>
-                       {(['start', 'popular', 'pro'] as const).map((plan) => (
+                        {(['start', 'popular', 'pro'] as const).map((plan) => (
                           <td key={plan} className="py-4 px-6 text-center">
                             {typeof feature[plan] === 'boolean' ? (
                               feature[plan] ? (
@@ -382,30 +381,26 @@ export default function PricingPage() {
 
                   {/* Mobile Features List */}
                   <div className="space-y-4">
-  {comparisonFeatures.map((section) => (
-    <div key={section.category}>
-      <div className="flex items-center gap-2 font-medium text-gray-900 mb-2">
-        <div className="text-primary">{section.icon}</div>
-        {section.category}
-      </div>
-      <div className="space-y-2">
-        {section.features.map((feature) => (
-          <div key={feature.name} className="flex justify-between text-sm">
-            <span className="text-gray-600">{feature.name}</span>
-            <span className="font-medium text-gray-900">
-              {typeof feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro'] === 'boolean'
-                ? (feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']
-                  ? <CheckIcon className="w-5 h-5 text-primary" />
-                  : <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />)
-                : feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  ))}
-</div>
-
+                    {comparisonFeatures.map((section) => (
+                      <div key={section.category}>
+                        <div className="flex items-center gap-2 font-medium text-gray-900 mb-2">
+                          <div className="text-primary">{section.icon}</div>
+                          {section.category}
+                        </div>
+                        <div className="space-y-2">
+                          {section.features.map((feature) => (
+                            <div key={feature.name} className="flex justify-between text-sm">
+                              <span className="text-gray-600">{feature.name}</span>
+                              <span className="font-medium text-gray-900">
+                                {typeof feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro'] === 'boolean'
+                                  ? (feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']
+                                    ? <CheckIcon className="w-5 h-5 text-primary" />
+                                    : <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />)
+                                  : feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
