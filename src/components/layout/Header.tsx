@@ -9,7 +9,6 @@ import {
   Bars3Icon,
   XMarkIcon,
   PhoneIcon,
-  ChatBubbleBottomCenterTextIcon,
   BoltIcon
 } from '@heroicons/react/24/outline';
 
