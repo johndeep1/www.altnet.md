@@ -120,8 +120,6 @@ export default function PricingPage() {
     offset: ["start start", "end end"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
 
   return (
     <main ref={containerRef} className="min-h-screen pt-32 pb-16">
