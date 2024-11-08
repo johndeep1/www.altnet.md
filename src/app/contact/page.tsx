@@ -6,7 +6,6 @@ import {
   EnvelopeIcon,
   MapPinIcon,
   ClockIcon,
-  ChatBubbleBottomCenterTextIcon
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
