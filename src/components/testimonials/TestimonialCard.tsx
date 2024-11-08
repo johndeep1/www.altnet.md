@@ -54,7 +54,7 @@ export default function TestimonialCard({
 
         {/* Content */}
         <blockquote className="text-gray-600 mb-6">
-          "{content}"
+          &quot;{content}&quot;
         </blockquote>
 
         {/* Author Info */}
@@ -88,7 +88,7 @@ export default function TestimonialCard({
 
         {/* Decorative Elements */}
         <div className="absolute top-4 right-4 text-4xl text-primary/10 font-serif">
-          "
+          &quot;
         </div>
       </div>
     </motion.div>
