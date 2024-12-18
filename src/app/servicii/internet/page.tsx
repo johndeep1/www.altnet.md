@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { ConsistentBackground } from '@/components/sections/HeroSection';
@@ -70,10 +70,6 @@ const particlePositions = [
 export default function InternetPage() {
   const router = useRouter();
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
 
   // Navigation functions
   const handleAvailabilityCheck = () => {

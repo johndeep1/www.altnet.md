@@ -4,18 +4,6 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const glowVariants = {
-  initial: { scale: 1, opacity: 0.3 },
-  animate: {
-    scale: [1, 1.2, 1],
-    opacity: [0.3, 0.5, 0.3],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
-};
 
 const floatingVariants = {
   animate: {

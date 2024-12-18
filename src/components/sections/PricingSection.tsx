@@ -5,7 +5,6 @@ import { useRef } from 'react';
 import PricingCards from '../pricing/PricingCards';
 import { ConsistentBackground } from './HeroSection';
 import {
-  ArrowTrendingUpIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
