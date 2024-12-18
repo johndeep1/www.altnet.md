@@ -13,7 +13,6 @@ import {
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 import CustomSelect from '@/components/ui/CustomSelect';
 
 const contactMethods = [

@@ -9,7 +9,6 @@ import {
   ShieldCheckIcon,
   TrophyIcon,
 } from '@heroicons/react/24/outline';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 
 const values = [
   {
@@ -83,7 +82,6 @@ export default function DesprePage() {
   return (
     <main className="relative overflow-hidden">
       {/* Consistent Background for entire page */}
-      <ConsistentBackground />
 
       {/* Hero Section */}
       <section className="relative min-h-[60vh] -mt-24 pt-24">

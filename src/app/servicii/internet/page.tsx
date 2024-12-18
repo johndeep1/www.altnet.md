@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 
 const features = [
   {

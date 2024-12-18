@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import PricingCards, { defaultPlans } from '@/components/pricing/PricingCards';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 import { CheckIcon } from '@heroicons/react/24/outline';
 
 const comparisonFeatures = [

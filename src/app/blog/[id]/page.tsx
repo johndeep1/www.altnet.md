@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
   CalendarIcon,
   ClockIcon,
@@ -95,7 +95,6 @@ const articleContent = {
 };
 
 export default function BlogPostPage() {
-  const router = useRouter();
   const params = useParams();
   const postId = Number(params.id);
   const post = posts.find(p => p.id === postId);

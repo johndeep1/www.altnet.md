@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 
 const channelCategories = [
   {

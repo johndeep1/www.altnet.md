@@ -10,7 +10,6 @@ import {
   TagIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
-import { ConsistentBackground } from '@/components/sections/HeroSection';
 import { posts } from '@/data/blog-posts';
 
 const categories = [
