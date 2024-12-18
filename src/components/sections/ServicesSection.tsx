@@ -3,6 +3,7 @@
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import ServiceCard from '../services/ServiceCard';
+import { ConsistentBackground } from './HeroSection';
 import {
   WifiIcon, TvIcon, PhoneIcon, RocketLaunchIcon,
   ShieldCheckIcon, DevicePhoneMobileIcon
@@ -61,22 +62,12 @@ export default function ServicesSection() {
     offset: ["start end", "end start"]
   });
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0.8]);
 
   return (
     <section className="py-32 relative overflow-hidden" ref={ref}>
-      {/* Enhanced Background Elements */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ opacity, y: backgroundY }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-white to-gray-50/50" />
-        <div className="absolute w-[1000px] h-[1000px] -left-1/2 -top-1/2 bg-gradient-to-br from-primary/5 to-blue-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute w-[800px] h-[800px] -right-1/2 top-1/2 bg-gradient-to-bl from-purple-500/5 to-pink-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute w-[600px] h-[600px] left-1/2 bottom-0 bg-gradient-to-tr from-amber-500/5 to-rose-500/5 rounded-full blur-2xl animate-pulse delay-2000" />
-      </motion.div>
+      {/* Consistent Background */}
+      <ConsistentBackground />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Enhanced Section Header */}

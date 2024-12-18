@@ -3,60 +3,9 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import PricingCard from '@/components/pricing/PricingCard';
-import { BoltIcon, RocketLaunchIcon, SparklesIcon, CheckIcon } from '@heroicons/react/24/outline';
-
-const pricingPlans = [
-  {
-    title: "Start",
-    subtitle: "Pentru început",
-    price: 299,
-    speed: "300 Mbps",
-    gradient: "from-blue-500 via-blue-600 to-blue-700",
-    icon: <BoltIcon className="w-6 h-6" />,
-    features: [
-      { text: "Internet de mare viteză", included: true },
-      { text: "Router WiFi 6", included: true },
-      { text: "Instalare gratuită", included: true },
-      { text: "TV Digital", included: false },
-      { text: "Telefonie fixă", included: false },
-    ],
-    popularFeatures: ["Viteză garantată", "Asistență 24/7"],
-  },
-  {
-    title: "Popular",
-    subtitle: "Cel mai ales",
-    price: 399,
-    speed: "500 Mbps",
-    gradient: "from-primary via-primary-dark to-violet-600",
-    icon: <RocketLaunchIcon className="w-6 h-6" />,
-    features: [
-      { text: "Internet de mare viteză", included: true },
-      { text: "Router WiFi 6", included: true },
-      { text: "Instalare gratuită", included: true },
-      { text: "TV Digital HD", included: true },
-      { text: "Telefonie fixă", included: true },
-    ],
-    popularFeatures: ["TV pe mobil inclus", "Gaming optimizat"],
-    featured: true,
-  },
-  {
-    title: "Pro",
-    subtitle: "Pentru pretențioși",
-    price: 499,
-    speed: "1000 Mbps",
-    gradient: "from-violet-500 via-purple-600 to-purple-700",
-    icon: <SparklesIcon className="w-6 h-6" />,
-    features: [
-      { text: "Internet Gigabit", included: true },
-      { text: "Router WiFi 6E", included: true },
-      { text: "Instalare prioritară", included: true },
-      { text: "TV 4K", included: true },
-      { text: "Telefonie internațională", included: true },
-    ],
-    popularFeatures: ["IP Static inclus", "SLA garantat"],
-  }
-];
+import PricingCards, { defaultPlans } from '@/components/pricing/PricingCards';
+import { ConsistentBackground } from '@/components/sections/HeroSection';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 const comparisonFeatures = [
   {
@@ -68,12 +17,12 @@ const comparisonFeatures = [
       </svg>
     ),
     features: [
-      { name: 'Viteză Download', start: '300 Mbps', popular: '500 Mbps', pro: '1000 Mbps' },
-      { name: 'Viteză Upload', start: '300 Mbps', popular: '500 Mbps', pro: '1000 Mbps' },
-      { name: 'Router WiFi', start: 'WiFi 6', popular: 'WiFi 6', pro: 'WiFi 6E' },
-      { name: 'IP Static', start: false, popular: true, pro: true },
-      { name: 'IPv6', start: true, popular: true, pro: true },
-      { name: 'Instalare', start: 'Gratuită', popular: 'Gratuită', pro: 'Prioritară' },
+      { name: 'Viteză Download', start: '300 Mbps', popular: '500 Mbps', premium: '1000 Mbps' },
+      { name: 'Viteză Upload', start: '300 Mbps', popular: '500 Mbps', premium: '1000 Mbps' },
+      { name: 'Router WiFi', start: 'WiFi 6', popular: 'WiFi 6', premium: 'WiFi 6E' },
+      { name: 'IP Static', start: false, popular: true, premium: true },
+      { name: 'IPv6', start: true, popular: true, premium: true },
+      { name: 'Instalare', start: 'Gratuită', popular: 'Gratuită', premium: 'Prioritară' },
     ]
   },
   {
@@ -85,12 +34,9 @@ const comparisonFeatures = [
       </svg>
     ),
     features: [
-      { name: 'Canale TV', start: '60+', popular: '120+', pro: '160+' },
-      { name: 'Canale HD', start: '20+', popular: '50+', pro: '70+' },
-      { name: 'TV pe mobil', start: false, popular: true, pro: true },
-      { name: 'Canale 4K', start: false, popular: '2', pro: '5+' },
-      { name: 'Înregistrări Cloud', start: false, popular: '50 ore', pro: '100 ore' },
-      { name: 'Multi-screen', start: '1 device', popular: '2 devices', pro: '4 devices' },
+      { name: 'Canale TV', start: false, popular: 'HD', premium: '4K' },
+      { name: 'TV pe mobil', start: false, popular: true, premium: true },
+      { name: 'Multi-screen', start: false, popular: '2 devices', premium: '4 devices' },
     ]
   },
   {
@@ -102,12 +48,7 @@ const comparisonFeatures = [
       </svg>
     ),
     features: [
-      { name: 'Minute în rețea', start: 'Nelimitat', popular: 'Nelimitat', pro: 'Nelimitat' },
-      { name: 'Minute naționale', start: '100', popular: 'Nelimitat', pro: 'Nelimitat' },
-      { name: 'Minute internaționale', start: false, popular: '100', pro: 'Nelimitat' },
-      { name: 'Numere adiționale', start: false, popular: '1', pro: '2' },
-      { name: 'Apeluri HD', start: false, popular: true, pro: true },
-      { name: 'Robotul Telefonic', start: false, popular: true, pro: true },
+      { name: 'Telefonie fixă', start: false, popular: true, premium: 'Nelimitată' },
     ]
   }
 ];
@@ -121,20 +62,9 @@ export default function PricingPage() {
   });
 
   return (
-    <main ref={containerRef} className="min-h-screen pt-32 pb-16">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white" />
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'radial-gradient(circle at center, rgba(79, 70, 229, 0.1) 0%, transparent 50%)',
-            scale: useTransform(scrollYProgress, [0, 1], [1, 1.5]),
-            opacity: useTransform(scrollYProgress, [0, 1], [1, 0])
-          }}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-      </div>
+    <main ref={containerRef} className="min-h-screen pt-32 pb-16 relative">
+      {/* Consistent Background */}
+      <ConsistentBackground />
 
       {/* Hero Section with 3D Element */}
       <section className="relative mb-24">
@@ -175,42 +105,163 @@ export default function PricingPage() {
             >
               <div className="aspect-square relative">
                 <svg className="w-full h-full" viewBox="0 0 400 400">
-                  {/* Add animated network visualization */}
+                  {/* Background Circles */}
                   <motion.g
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
                   >
-                    {/* Connection Lines */}
-                    <motion.path
-                      d="M200 100 L100 200 L200 300 L300 200 Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      fill="none"
-                      className="text-primary/20"
-                      initial={{ pathLength: 0 }}
-                      animate={{ pathLength: 1 }}
-                      transition={{ duration: 2 }}
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="160"
+                      className="fill-none stroke-gray-100"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="120"
+                      className="fill-none stroke-gray-100"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                    <circle
+                      cx="200"
+                      cy="200"
+                      r="80"
+                      className="fill-none stroke-gray-100"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                  </motion.g>
+
+                  {/* Animated Connection Lines */}
+                  <motion.g
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                  >
+                    {/* Main Router in Center */}
+                    <motion.circle
+                      cx="200"
+                      cy="200"
+                      r="15"
+                      className="fill-primary"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.5 }}
                     />
 
                     {/* Connection Points */}
                     {[
-                      [200, 100], [100, 200],
-                      [200, 300], [300, 200]
+                      [120, 120], [280, 120], // Top points
+                      [120, 280], [280, 280], // Bottom points
+                      [100, 200], [300, 200], // Side points
+                      [200, 100], [200, 300]  // Top and bottom center points
                     ].map(([cx, cy], i) => (
+                      <motion.g key={i}>
+                        {/* Connection Line */}
+                        <motion.line
+                          x1="200"
+                          y1="200"
+                          x2={cx}
+                          y2={cy}
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          className="text-primary/20"
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 1, delay: i * 0.1 }}
+                        />
+                        {/* Connection Point */}
+                        <motion.circle
+                          cx={cx}
+                          cy={cy}
+                          r="6"
+                          className="fill-primary"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.5 + (i * 0.1) }}
+                        />
+                        {/* Pulse Effect */}
+                        <motion.circle
+                          cx={cx}
+                          cy={cy}
+                          r="6"
+                          className="fill-primary"
+                          initial={{ scale: 1, opacity: 0.5 }}
+                          animate={{ scale: 2, opacity: 0 }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            delay: 1 + (i * 0.2)
+                          }}
+                        />
+                      </motion.g>
+                    ))}
+
+                    {/* Data Flow Animation */}
+                    {[0, 1, 2, 3].map((i) => (
                       <motion.circle
-                        key={i}
-                        cx={cx}
-                        cy={cy}
-                        r="8"
-                        className="fill-primary"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: i * 0.2 }}
+                        key={`data-${i}`}
+                        cx="200"
+                        cy="200"
+                        r="40"
+                        className="fill-none stroke-primary/10"
+                        initial={{ scale: 0.5, opacity: 0.8 }}
+                        animate={{ scale: 2.5, opacity: 0 }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          delay: i * 0.75,
+                          ease: "linear"
+                        }}
+                      />
+                    ))}
+                  </motion.g>
+
+                  {/* Decorative Elements */}
+                  <motion.g
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.5 }}
+                    transition={{ delay: 1 }}
+                  >
+                    {[45, 135, 225, 315].map((angle, i) => (
+                      <motion.path
+                        key={`deco-${i}`}
+                        d={`M200 200 L${200 + 180 * Math.cos(angle * Math.PI / 180)} ${200 + 180 * Math.sin(angle * Math.PI / 180)}`}
+                        stroke="currentColor"
+                        strokeWidth="1"
+                        strokeDasharray="4 4"
+                        className="text-gray-200"
                       />
                     ))}
                   </motion.g>
                 </svg>
+
+                {/* Speed Indicators */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.5 }}
+                  className="absolute top-4 left-4 bg-white/80 backdrop-blur-sm
+                           px-4 py-2 rounded-full border border-gray-200/50
+                           text-sm font-medium text-gray-600"
+                >
+                  1000 Mbps
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1.7 }}
+                  className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm
+                           px-4 py-2 rounded-full border border-gray-200/50
+                           text-sm font-medium text-gray-600"
+                >
+                  Fibră Optică
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -220,23 +271,12 @@ export default function PricingPage() {
       {/* Pricing Cards Section */}
       <section className="mb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {pricingPlans.map((plan, index) => (
-              <motion.div
-                key={plan.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <PricingCard {...plan} index={index} isInView={true} />
-              </motion.div>
-            ))}
-          </div>
+          <PricingCards />
         </div>
       </section>
 
       {/* Comparison Table */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -262,17 +302,13 @@ export default function PricingPage() {
                     <th className="py-6 px-6 text-left text-gray-500 font-medium w-1/4">
                       <span className="sr-only">Caracteristici</span>
                     </th>
-                    {[
-                      { name: 'Start', price: '299' },
-                      { name: 'Popular', price: '399', recommended: true },
-                      { name: 'Pro', price: '499' }
-                    ].map((plan) => (
+                    {defaultPlans.map((plan) => (
                       <th
-                        key={plan.name}
+                        key={plan.title}
                         className={`py-6 px-6 text-center w-1/4 relative
-                          ${plan.recommended ? 'text-primary' : 'text-gray-900'}`}
+                          ${plan.featured ? 'text-primary' : 'text-gray-900'}`}
                       >
-                        {plan.recommended && (
+                        {plan.featured && (
                           <div className="absolute -top-3 left-0 right-0">
                             <span className="px-4 py-1.5 bg-primary text-white text-sm
                                          font-medium rounded-full inline-block">
@@ -281,14 +317,14 @@ export default function PricingPage() {
                           </div>
                         )}
                         <div className="font-bold text-lg mb-2 mt-4">
-                          {plan.name}
+                          {plan.title}
                         </div>
                         <div className="flex items-baseline justify-center gap-1">
                           <span className={`text-2xl font-bold
-                            ${plan.recommended ? 'text-primary' : 'text-gray-900'}`}>
+                            ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
                             {plan.price}
                           </span>
-                          <span className="text-gray-500 text-sm">MDL/lună</span>
+                          <span className="text-gray-500 text-sm">lei/lună</span>
                         </div>
                       </th>
                     ))}
@@ -320,20 +356,20 @@ export default function PricingPage() {
                         <td className="py-4 px-6 text-left text-gray-600">
                           {feature.name}
                         </td>
-                        {(['start', 'popular', 'pro'] as const).map((plan) => (
-                          <td key={plan} className="py-4 px-6 text-center">
-                            {typeof feature[plan] === 'boolean' ? (
-                              feature[plan] ? (
+                        {(['start', 'popular', 'premium'] as const).map((planType) => (
+                          <td key={planType} className="py-4 px-6 text-center">
+                            {typeof feature[planType] === 'boolean' ? (
+                              feature[planType] ? (
                                 <CheckIcon className="w-5 h-5 text-primary mx-auto" />
                               ) : (
                                 <span className="block w-5 h-0.5 bg-gray-300 mx-auto rounded-full" />
                               )
-                            ) : feature[plan] === '-' ? (
+                            ) : feature[planType] === '-' ? (
                               <span className="text-gray-400">—</span>
                             ) : (
                               <span className={`font-medium
-                                ${plan === 'popular' ? 'text-primary' : 'text-gray-900'}`}>
-                                {feature[plan]}
+                                ${planType === 'popular' ? 'text-primary' : 'text-gray-900'}`}>
+                                {feature[planType]}
                               </span>
                             )}
                           </td>
@@ -347,16 +383,12 @@ export default function PricingPage() {
 
             {/* Mobile Version */}
             <div className="md:hidden space-y-8">
-              {[
-                { name: 'Start', price: '299' },
-                { name: 'Popular', price: '399', recommended: true },
-                { name: 'Pro', price: '499' }
-              ].map((plan) => (
+              {defaultPlans.map((plan) => (
                 <div
-                  key={plan.name}
+                  key={plan.title}
                   className="relative rounded-xl border border-gray-200 bg-white shadow-lg p-6"
                 >
-                  {plan.recommended && (
+                  {plan.featured && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <span className="px-4 py-1.5 bg-primary text-white text-sm
                                    font-medium rounded-full inline-block whitespace-nowrap">
@@ -367,15 +399,15 @@ export default function PricingPage() {
 
                   <div className="text-center mb-6">
                     <div className={`font-bold text-xl mb-2 mt-4
-                      ${plan.recommended ? 'text-primary' : 'text-gray-900'}`}>
-                      {plan.name}
+                      ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
+                      {plan.title}
                     </div>
                     <div className="flex items-baseline justify-center gap-1">
                       <span className={`text-3xl font-bold
-                        ${plan.recommended ? 'text-primary' : 'text-gray-900'}`}>
+                        ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
                         {plan.price}
                       </span>
-                      <span className="text-gray-500">MDL/lună</span>
+                      <span className="text-gray-500">lei/lună</span>
                     </div>
                   </div>
 
@@ -388,18 +420,21 @@ export default function PricingPage() {
                           {section.category}
                         </div>
                         <div className="space-y-2">
-                          {section.features.map((feature) => (
-                            <div key={feature.name} className="flex justify-between text-sm">
-                              <span className="text-gray-600">{feature.name}</span>
-                              <span className="font-medium text-gray-900">
-                                {typeof feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro'] === 'boolean'
-                                  ? (feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']
-                                    ? <CheckIcon className="w-5 h-5 text-primary" />
-                                    : <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />)
-                                  : feature[plan.name.toLowerCase() as 'start' | 'popular' | 'pro']}
-                              </span>
-                            </div>
-                          ))}
+                          {section.features.map((feature) => {
+                            const planType = plan.title.toLowerCase() as 'start' | 'popular' | 'premium';
+                            return (
+                              <div key={feature.name} className="flex justify-between text-sm">
+                                <span className="text-gray-600">{feature.name}</span>
+                                <span className="font-medium text-gray-900">
+                                  {typeof feature[planType] === 'boolean'
+                                    ? (feature[planType]
+                                      ? <CheckIcon className="w-5 h-5 text-primary" />
+                                      : <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />)
+                                    : feature[planType]}
+                                </span>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     ))}
@@ -412,7 +447,7 @@ export default function PricingPage() {
       </section>
 
       {/* Enhanced CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary/5 to-blue-500/5">
+      <section className="py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

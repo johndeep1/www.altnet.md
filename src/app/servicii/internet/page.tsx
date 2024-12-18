@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { ConsistentBackground } from '@/components/sections/HeroSection';
 
 const features = [
   {
@@ -74,9 +75,6 @@ export default function InternetPage() {
     offset: ["start start", "end end"]
   });
 
-  const yBg = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.5, 0]);
-
   // Navigation functions
   const handleAvailabilityCheck = () => {
     router.push('/acoperire');
@@ -92,71 +90,33 @@ export default function InternetPage() {
 
   return (
     <main ref={containerRef} className="min-h-screen relative">
-      {/* Floating Background Elements */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none"
-        style={{ y: yBg, opacity }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5" />
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-      </motion.div>
+      {/* Consistent Background */}
+      <ConsistentBackground />
 
       {/* Enhanced Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0">
-          {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-50" />
-
-          {/* Animated Particles */}
-          {particlePositions.map((pos, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-primary/20 rounded-full"
-              style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-              animate={{
-                y: [-20, 0, -20],
-                opacity: [0.2, 1, 0.2],
-                scale: [0.8, 1, 0.8]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: "easeInOut"
-              }}
-            />
-          ))}
-
-          {/* Decorative Network Lines */}
-          <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <motion.path
-              d="M0 50 Q 25 25, 50 50 T 100 50"
-              stroke="currentColor"
-              strokeWidth="0.1"
-              fill="none"
-              className="text-primary/20"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-            <motion.path
-              d="M0 60 Q 25 35, 50 60 T 100 60"
-              stroke="currentColor"
-              strokeWidth="0.1"
-              fill="none"
-              className="text-primary/10"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 2, delay: 0.5, ease: "easeInOut" }}
-            />
-          </svg>
-        </div>
+        {/* Floating Particles */}
+        {particlePositions.map((pos, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/20 rounded-full"
+            style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+            animate={{
+              y: [-20, 0, -20],
+              opacity: [0.2, 1, 0.2],
+              scale: [0.8, 1, 0.8]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Hero Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <motion.div
@@ -296,21 +256,29 @@ export default function InternetPage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
@@ -322,14 +290,21 @@ export default function InternetPage() {
             ))}
           </motion.div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
 
       {/* Features Grid */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -345,9 +320,10 @@ export default function InternetPage() {
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300"
+                className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/50"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-4">
                   {feature.icon}
@@ -358,11 +334,17 @@ export default function InternetPage() {
             ))}
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -473,11 +455,17 @@ export default function InternetPage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-primary/5 to-blue-500/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -491,35 +479,47 @@ export default function InternetPage() {
               Contactează-ne acum pentru a beneficia de cele mai bune oferte și servicii de internet
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleAvailabilityCheck}
                 className="px-8 py-4 bg-primary text-white rounded-xl font-medium
                        shadow-lg shadow-primary/25 hover:bg-primary/90 transition-colors"
               >
                 Verifică Disponibilitatea
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleContact}
-                className="px-8 py-4 bg-white text-gray-900 rounded-xl font-medium
-                       border border-gray-200 hover:bg-gray-50 transition-colors"
+                className="px-8 py-4 bg-white/60 backdrop-blur-sm text-gray-900 rounded-xl font-medium
+                       border border-gray-200/50 hover:bg-white/80 transition-colors"
               >
                 Contactează-ne
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleRequestOffer}
                 className="px-8 py-4 bg-primary/10 text-primary rounded-xl font-medium
                        hover:bg-primary/20 transition-colors"
               >
                 Solicită o Ofertă
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
 
       {/* Speed Comparison Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative py-24">
+        {/* Top Gradient */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -620,15 +620,9 @@ export default function InternetPage() {
             </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* Technology Showcase Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        </div>
-
-        {/* ... Continue with more sections ... */}
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
       </section>
     </main>
   );

@@ -4,6 +4,7 @@ import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/solid';
 import TestimonialCard from '../testimonials/TestimonialCard';
+import { ConsistentBackground } from './HeroSection';
 
 const testimonials = [
   {
@@ -47,27 +48,19 @@ export default function TestimonialsSection() {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
     <section className="py-32 relative overflow-hidden" ref={ref}>
-      {/* Modern Background Elements */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ opacity }}
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        <div className="absolute w-[800px] h-[800px] -right-96 top-0 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute w-[600px] h-[600px] -left-80 bottom-0 bg-violet-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
-      </motion.div>
+      {/* Consistent Background */}
+      <ConsistentBackground />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -81,15 +74,15 @@ export default function TestimonialsSection() {
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
             <span className="block mb-2">Ce Spun</span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-violet-600">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-primary">
               Clienții Noștri
             </span>
           </h2>
 
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Descoperă experiențele reale ale clienților noștri și vezi de ce ne aleg pentru serviciile lor digitale
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-6">
+            Descoperă experiențele reale ale clienților noștri cu serviciile Altnet
           </p>
         </motion.div>
 

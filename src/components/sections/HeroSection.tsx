@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const glowVariants = {
   initial: { scale: 1, opacity: 0.3 },
@@ -93,30 +94,29 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden min-h-screen -mt-24 pt-24 bg-gradient-to-br from-white via-gray-50/50 to-primary/5">
-      {/* Gradient Orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute -right-1/4 top-0 w-1/2 h-1/2 bg-gradient-to-br from-primary/20 to-transparent rounded-full blur-3xl"
-          variants={glowVariants}
-          initial="initial"
-          animate={isMounted ? "animate" : "initial"}
-        />
-        <motion.div
-          className="absolute -left-1/4 -bottom-1/4 w-1/2 h-1/2 bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-3xl"
-          variants={glowVariants}
-          initial="initial"
-          animate={isMounted ? "animate" : "initial"}
-        />
-      </div>
+    <section className="relative overflow-hidden min-h-screen -mt-24 pt-24">
+      {/* Consistent Background Pattern */}
+      <div className="absolute inset-0 -z-10">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white" />
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0"
-           style={{
-             backgroundImage: `radial-gradient(circle at 1px 1px, rgba(79, 70, 229, 0.05) 1px, transparent 0)`,
-             backgroundSize: '40px 40px'
-           }}
-      />
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+
+        {/* Primary color subtle gradient orbs */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          transition={{ duration: 1 }}
+          className="absolute inset-0"
+        >
+          <div className="absolute -right-1/4 top-0 w-1/2 h-1/2 bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-3xl" />
+          <div className="absolute -left-1/4 bottom-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/5 to-transparent rounded-full blur-3xl" />
+        </motion.div>
+
+        {/* Radial gradient overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-white/60 to-white/80" />
+      </div>
 
       <div className="relative z-10 h-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
@@ -172,40 +172,44 @@ export default function HeroSection() {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <motion.button
-                  initial={false}
-                  whileHover={isMounted ? { scale: 1.01, y: -1 } : {}}
-                  whileTap={isMounted ? { scale: 0.99 } : {}}
-                  className="group relative overflow-hidden bg-primary
-                           text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-primary/25"
-                >
-                  <div className="absolute inset-0 bg-white/20 translate-y-full
+                <Link href="/acoperire">
+                  <motion.button
+                    initial={false}
+                    whileHover={isMounted ? { scale: 1.01, y: -1 } : {}}
+                    whileTap={isMounted ? { scale: 0.99 } : {}}
+                    className="group relative overflow-hidden bg-primary
+                           text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-primary/25 w-full"
+                  >
+                    <div className="absolute inset-0 bg-white/20 translate-y-full
                                 group-hover:translate-y-0 transition-transform duration-500" />
-                  <span className="relative flex items-center justify-center gap-2">
-                    Verifică Acoperirea
-                    <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-500"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                </motion.button>
+                    <span className="relative flex items-center justify-center gap-2">
+                      Verifică Acoperirea
+                      <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-500"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </motion.button>
+                </Link>
 
-                <motion.button
-                  initial={false}
-                  whileHover={isMounted ? { scale: 1.01, y: -1 } : {}}
-                  whileTap={isMounted ? { scale: 0.99 } : {}}
-                  className="group relative overflow-hidden border-2 border-primary text-primary
+                <Link href="/preturi">
+                  <motion.button
+                    initial={false}
+                    whileHover={isMounted ? { scale: 1.01, y: -1 } : {}}
+                    whileTap={isMounted ? { scale: 0.99 } : {}}
+                    className="group relative overflow-hidden border-2 border-primary text-primary
                            px-8 py-4 rounded-xl font-medium hover:bg-primary hover:text-white
-                           transition-all duration-500"
-                >
-                  <span className="relative flex items-center justify-center gap-2">
-                    Vezi Pachete
-                    <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-500"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </motion.button>
+                           transition-all duration-500 w-full"
+                  >
+                    <span className="relative flex items-center justify-center gap-2">
+                      Vezi Pachete
+                      <svg className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-500"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </motion.button>
+                </Link>
               </div>
             </motion.div>
 
@@ -308,5 +312,32 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+// Create a reusable background component
+export function ConsistentBackground() {
+  return (
+    <div className="absolute inset-0 -z-10">
+      {/* Base gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white" />
+
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+
+      {/* Primary color subtle gradient orbs */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.8 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0"
+      >
+        <div className="absolute -right-1/4 top-0 w-1/2 h-1/2 bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute -left-1/4 bottom-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/5 to-transparent rounded-full blur-3xl" />
+      </motion.div>
+
+      {/* Radial gradient overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-white/60 to-white/80" />
+    </div>
   );
 }
