@@ -93,7 +93,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen relative">
       {/* Consistent Background */}
-      <ConsistentBackground />
+      {/* <ConsistentBackground /> */}
 
       <div className="relative">
         {/* Header Section */}

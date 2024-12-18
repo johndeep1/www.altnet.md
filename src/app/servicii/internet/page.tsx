@@ -87,7 +87,7 @@ export default function InternetPage() {
   return (
     <main ref={containerRef} className="min-h-screen relative">
       {/* Consistent Background */}
-      <ConsistentBackground />
+      {/* <ConsistentBackground /> */}
 
       {/* Enhanced Hero Section */}
       <section className="relative pt-32 pb-16 overflow-hidden">

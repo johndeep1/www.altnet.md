@@ -60,7 +60,7 @@ export default function PricingPage() {
   return (
     <main ref={containerRef} className="min-h-screen pt-32 pb-16 relative">
       {/* Consistent Background */}
-      <ConsistentBackground />
+      {/* <ConsistentBackground /> */}
 
       {/* Hero Section with 3D Element */}
       <section className="relative mb-24">

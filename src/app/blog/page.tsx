@@ -38,7 +38,7 @@ export default function BlogPage() {
   return (
     <main className="relative overflow-hidden">
       {/* Consistent Background */}
-      <ConsistentBackground />
+      {/* <ConsistentBackground /> */}
 
       {/* Hero Section */}
       <section className="relative min-h-[40vh] -mt-24 pt-24">
