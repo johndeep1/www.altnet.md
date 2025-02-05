@@ -1,31 +1,36 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Bars3Icon, XMarkIcon, ChevronDownIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ChevronDownIcon,
+  PhoneIcon,
+} from "@heroicons/react/24/outline";
 
 const navigation = [
   {
-    name: 'Servicii',
-    href: '/servicii',
+    name: "Servicii",
+    href: "/servicii",
     submenu: [
       {
-        name: 'Internet',
-        href: '/servicii/internet',
-        description: 'Internet prin fibră optică'
+        name: "Internet",
+        href: "/servicii/internet",
+        description: "Internet prin fibră optică",
       },
       {
-        name: 'Televiziune',
-        href: '/servicii/tv',
-        description: 'Televiziune digitală HD'
-      }
-    ]
+        name: "Televiziune",
+        href: "/servicii/tv",
+        description: "Televiziune digitală HD",
+      },
+    ],
   },
-  { name: 'Prețuri', href: '/preturi' },
-  { name: 'Acoperire', href: '/acoperire' },
-  { name: 'Contact', href: '/contact' },
+  { name: "Prețuri", href: "/preturi" },
+  { name: "Acoperire", href: "/acoperire" },
+  { name: "Contact", href: "/contact" },
 ];
 
 const MobileMenuItem = ({
@@ -47,18 +52,22 @@ const MobileMenuItem = ({
             onClick={() => setIsOpen(!isOpen)}
             className={`w-full text-left px-4 py-3 text-base font-medium rounded-xl
                      flex items-center justify-between
-                     transition-colors ${isActive ? 'text-primary' : 'text-gray-600'}`}
+                     transition-colors ${
+                       isActive ? "text-primary" : "text-gray-600"
+                     }`}
           >
             <span>{item.name}</span>
             <ChevronDownIcon
-              className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+              className={`w-5 h-5 transition-transform duration-200 ${
+                isOpen ? "rotate-180" : ""
+              }`}
             />
           </button>
           <AnimatePresence>
             {isOpen && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 className="pl-4"
               >
@@ -85,7 +94,9 @@ const MobileMenuItem = ({
           href={item.href}
           onClick={onClose}
           className={`block px-4 py-3 text-base font-medium rounded-xl
-                   transition-colors ${isActive ? 'text-primary' : 'text-gray-600'}`}
+                   transition-colors ${
+                     isActive ? "text-primary" : "text-gray-600"
+                   }`}
         >
           {item.name}
         </Link>
@@ -100,8 +111,11 @@ export default function Header() {
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
 
+  // Hide header on login page
+  if (pathname === "/login") return null;
+
   const isActiveLink = (href: string) => {
-    if (href === '/') return pathname === href;
+    if (href === "/") return pathname === href;
     return pathname.startsWith(href);
   };
 
@@ -110,8 +124,8 @@ export default function Header() {
       setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -123,9 +137,11 @@ export default function Header() {
       <header
         ref={headerRef}
         className={`fixed w-full z-40 transition-all duration-200
-                  ${isScrolled
-                    ? 'py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-200/20'
-                    : 'py-4 bg-transparent'}`}
+                  ${
+                    isScrolled
+                      ? "py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-200/20"
+                      : "py-4 bg-transparent"
+                  }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -142,27 +158,39 @@ export default function Header() {
                     <>
                       <button
                         className={`flex items-center gap-1 text-base font-medium transition-colors
-                                ${isActiveLink(item.href) ? 'text-primary' : 'text-gray-600 hover:text-primary'}`}
+                                ${
+                                  isActiveLink(item.href)
+                                    ? "text-primary"
+                                    : "text-gray-600 hover:text-primary"
+                                }`}
                       >
                         {item.name}
                         <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
                       </button>
 
                       {/* Submenu */}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 pointer-events-none
-                                  group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity">
-                        <div className="w-64 bg-white rounded-2xl shadow-xl shadow-gray-200/20 border border-gray-100
-                                    overflow-hidden p-2">
+                      <div
+                        className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 pointer-events-none
+                                  group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+                      >
+                        <div
+                          className="w-64 bg-white rounded-2xl shadow-xl shadow-gray-200/20 border border-gray-100
+                                    overflow-hidden p-2"
+                        >
                           {item.submenu.map((subitem) => (
                             <Link
                               key={subitem.name}
                               href={subitem.href}
                               className={`flex flex-col p-3 rounded-xl transition-colors
-                                      ${isActiveLink(subitem.href)
-                                  ? 'text-primary bg-primary/5'
-                                  : 'text-gray-600 hover:text-primary hover:bg-gray-50'}`}
+                                      ${
+                                        isActiveLink(subitem.href)
+                                          ? "text-primary bg-primary/5"
+                                          : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                                      }`}
                             >
-                              <span className="font-medium">{subitem.name}</span>
+                              <span className="font-medium">
+                                {subitem.name}
+                              </span>
                               <span className="text-sm text-gray-500 mt-0.5">
                                 {subitem.description}
                               </span>
@@ -175,9 +203,11 @@ export default function Header() {
                     <Link
                       href={item.href}
                       className={`text-base font-medium transition-colors
-                              ${isActiveLink(item.href)
-                          ? 'text-primary'
-                          : 'text-gray-600 hover:text-primary'}`}
+                              ${
+                                isActiveLink(item.href)
+                                  ? "text-primary"
+                                  : "text-gray-600 hover:text-primary"
+                              }`}
                     >
                       {item.name}
                     </Link>
@@ -217,9 +247,9 @@ export default function Header() {
 
             {/* Menu Panel */}
             <motion.div
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="fixed top-0 right-0 bottom-0 w-[320px] bg-white z-50 lg:hidden
                        shadow-2xl shadow-gray-200/20"
@@ -228,7 +258,9 @@ export default function Header() {
                 {/* Menu Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
                   <Link href="/" className="flex items-center">
-                    <span className="text-2xl font-bold text-primary">ALTNET</span>
+                    <span className="text-2xl font-bold text-primary">
+                      ALTNET
+                    </span>
                   </Link>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -263,8 +295,12 @@ export default function Header() {
                         <PhoneIcon className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900">Sună Acum</div>
-                        <div className="text-sm text-gray-500">+373 69 123 456</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          Sună Acum
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          +373 69 123 456
+                        </div>
                       </div>
                     </Link>
 
