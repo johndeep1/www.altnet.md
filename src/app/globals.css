@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'leaflet/dist/leaflet.css';
+@import "leaflet/dist/leaflet.css";
 
 .user-location-marker {
   background: transparent;
@@ -92,7 +92,8 @@
     transform: scale(0.33);
     opacity: 0.8;
   }
-  80%, 100% {
+  80%,
+  100% {
     transform: scale(3);
     opacity: 0;
   }
@@ -100,7 +101,7 @@
 
 .coverage-label {
   background: white;
-  border: 1px solid #22C55E;
+  border: 1px solid #22c55e;
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 12px;
@@ -112,7 +113,7 @@
   background: white;
   border-radius: 8px;
   padding: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Filter Dropdown Animations */
@@ -198,7 +199,7 @@
 /* Custom Scrollbar */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #E5E7EB transparent;
+  scrollbar-color: #e5e7eb transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -211,12 +212,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #E5E7EB;
+  background-color: #e5e7eb;
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #D1D5DB;
+  background-color: #d1d5db;
 }
 
 /* Animations */
@@ -292,7 +293,8 @@
 
 /* User location marker animation */
 @keyframes ping {
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }
@@ -328,7 +330,7 @@
   background: transparent;
   border: none;
   box-shadow: none;
-  color: #4F46E5;
+  color: #4f46e5;
   font-weight: 500;
 }
 
@@ -356,7 +358,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -373,7 +376,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -391,7 +395,8 @@
 
 /* Enhanced Background Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -400,7 +405,8 @@
 }
 
 @keyframes pulse-soft {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
   }
   50% {
@@ -424,7 +430,8 @@
 
 /* Particle animation */
 @keyframes particle-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
   25% {
@@ -445,7 +452,10 @@
 /* Grid pattern enhancement */
 .grid-pattern {
   background-size: 40px 40px;
-  background-image:
-    linear-gradient(to right, rgba(79, 70, 229, 0.05) 1px, transparent 1px),
+  background-image: linear-gradient(
+      to right,
+      rgba(79, 70, 229, 0.05) 1px,
+      transparent 1px
+    ),
     linear-gradient(to bottom, rgba(79, 70, 229, 0.05) 1px, transparent 1px);
 }

@@ -30,6 +30,7 @@ const navigation = [
   },
   { name: "Prețuri", href: "/preturi" },
   { name: "Acoperire", href: "/acoperire" },
+  { name: "Despre Noi", href: "/despre" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -147,7 +148,11 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-primary">ALTNET</span>
+              <img
+                src="/ALTNET-LOGO.svg"
+                alt="ALTNET Logo"
+                className="h-[70px] w-auto"
+              />
             </Link>
 
             {/* Desktop Menu */}

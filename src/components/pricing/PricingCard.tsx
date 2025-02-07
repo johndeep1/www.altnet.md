@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { motion } from "framer-motion";
+import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { AnimatedButton, ArrowIcon } from "@/components/ui/button-variants";
 
 interface PricingCardProps {
   title: string;
@@ -10,7 +11,6 @@ interface PricingCardProps {
   speed: string;
   features: Array<{ text: string; included: boolean }>;
   gradient: string;
-  icon: JSX.Element;
   featured?: boolean;
   popularFeatures: string[];
   index: number;
@@ -24,36 +24,39 @@ export default function PricingCard({
   speed,
   features,
   gradient,
-  icon,
   featured,
   popularFeatures,
   index,
-  isInView
+  isInView,
 }: PricingCardProps) {
   return (
-    <div className={`relative h-full ${featured ? 'lg:-my-8' : ''}`}>
+    <div className={`relative h-full ${featured ? "lg:-my-8" : ""}`}>
       <motion.div
         whileHover={{
           y: -8,
-          transition: { duration: 0.3, ease: "easeOut" }
+          transition: { duration: 0.3, ease: "easeOut" },
         }}
         className="h-full"
       >
         {/* Card Background with Glass Effect */}
-        <div className={`absolute inset-0 rounded-3xl transition-all duration-300
-                      ${featured
-                        ? 'bg-white/90 backdrop-blur-sm shadow-2xl shadow-primary/10'
-                        : 'bg-white/80 backdrop-blur-sm shadow-xl shadow-gray-200/70'
+        <div
+          className={`absolute inset-0 rounded-3xl transition-all duration-300
+                      ${
+                        featured
+                          ? "bg-white/90 backdrop-blur-sm shadow-2xl shadow-primary/10"
+                          : "bg-white/80 backdrop-blur-sm shadow-xl shadow-gray-200/70"
                       }`}
         />
 
-        <div className={`relative ${featured ? 'p-8 lg:p-10' : 'p-8'}`}>
+        <div className={`relative ${featured ? "p-8 lg:p-10" : "p-8"}`}>
           {/* Featured Badge */}
           {featured && (
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <div className={`px-4 py-1.5 rounded-full text-sm font-medium
+              <div
+                className={`px-4 py-1.5 rounded-full text-sm font-medium
                              bg-gradient-to-r ${gradient} text-white
-                             shadow-lg shadow-primary/20`}>
+                             shadow-lg shadow-primary/20`}
+              >
                 Cel mai popular
               </div>
             </div>
@@ -65,13 +68,15 @@ export default function PricingCard({
               whileHover={{
                 rotate: 5,
                 scale: 1.1,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.2 },
               }}
-              className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${gradient}
-                         flex items-center justify-center text-white mx-auto mb-6
-                         shadow-lg shadow-${gradient.split('-')[2]}/20`}
+              className="w-24 h-24 flex items-center justify-center mx-auto mb-6"
             >
-              {icon}
+              <img
+                src="/ALTNET-LOGO.svg"
+                alt="ALTNET Logo"
+                className={`w-full h-full`}
+              />
             </motion.div>
             <h3 className="text-2xl font-bold text-gray-900 mb-1">{title}</h3>
             <p className="text-gray-500 text-sm font-medium">{subtitle}</p>
@@ -80,13 +85,21 @@ export default function PricingCard({
           {/* Enhanced Price Section */}
           <div className="relative mb-8">
             {/* Price Tag Background */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 rounded-2xl`} />
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 rounded-2xl`}
+            />
 
             <div className="relative p-4 text-center">
               {/* Speed Indicator */}
               <div className="mb-2">
-                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium
-                              ${featured ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-600'}`}>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-sm font-medium
+                              ${
+                                featured
+                                  ? "bg-primary/10 text-primary"
+                                  : "bg-gray-100 text-gray-600"
+                              }`}
+                >
                   Până la {speed}
                 </span>
               </div>
@@ -94,8 +107,10 @@ export default function PricingCard({
               {/* Price Display */}
               <div className="flex items-baseline justify-center gap-1 mb-1">
                 <span className="text-sm text-gray-500">de la</span>
-                <span className={`text-5xl font-bold tracking-tight
-                              ${featured ? 'text-primary' : 'text-gray-900'}`}>
+                <span
+                  className={`text-5xl font-bold tracking-tight
+                              ${featured ? "text-primary" : "text-gray-900"}`}
+                >
                   {price}
                 </span>
                 <span className="text-xl text-gray-500">lei</span>
@@ -117,11 +132,13 @@ export default function PricingCard({
                   key={feature}
                   initial={{ opacity: 0, x: -10 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: (index * 0.1) + (i * 0.1) }}
+                  transition={{ delay: index * 0.1 + i * 0.1 }}
                   className="flex items-center text-sm text-gray-600"
                 >
-                  <span className={`w-5 h-5 rounded-full bg-gradient-to-br ${gradient}
-                                flex items-center justify-center mr-2 flex-shrink-0`}>
+                  <span
+                    className={`w-5 h-5 rounded-full bg-gradient-to-br ${gradient}
+                                flex items-center justify-center mr-2 flex-shrink-0`}
+                  >
                     <CheckIcon className="w-3 h-3 text-white" />
                   </span>
                   {feature}
@@ -137,20 +154,30 @@ export default function PricingCard({
                 key={feature.text}
                 initial={{ opacity: 0, x: -10 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: (index * 0.1) + (i * 0.1) }}
+                transition={{ delay: index * 0.1 + i * 0.1 }}
                 className="flex items-start text-sm"
               >
                 {feature.included ? (
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5
-                                ${featured ? 'bg-primary/10' : 'bg-gray-100'}`}>
-                    <CheckIcon className={`w-3 h-3 ${featured ? 'text-primary' : 'text-gray-500'}`} />
+                  <span
+                    className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5
+                                ${featured ? "bg-primary/10" : "bg-gray-100"}`}
+                  >
+                    <CheckIcon
+                      className={`w-3 h-3 ${
+                        featured ? "text-primary" : "text-gray-500"
+                      }`}
+                    />
                   </span>
                 ) : (
                   <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
                     <XMarkIcon className="w-3 h-3 text-gray-300" />
                   </span>
                 )}
-                <span className={feature.included ? 'text-gray-600' : 'text-gray-400'}>
+                <span
+                  className={
+                    feature.included ? "text-gray-600" : "text-gray-400"
+                  }
+                >
                   {feature.text}
                 </span>
               </motion.li>
@@ -158,35 +185,15 @@ export default function PricingCard({
           </ul>
 
           {/* Enhanced Action Button */}
-          <motion.button
-            whileHover={{
-              scale: 1.02,
-              transition: { duration: 0.2 }
-            }}
-            whileTap={{ scale: 0.98 }}
-            className={`w-full py-4 px-6 rounded-xl font-medium
-                       transition-all duration-200 relative overflow-hidden group
-                       ${featured
-                         ? `bg-gradient-to-r ${gradient} text-white
-                            shadow-lg hover:shadow-xl shadow-${gradient.split('-')[2]}/20`
-                         : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                       }`}
+          <AnimatedButton
+            variant={featured ? "primary" : "outline"}
+            className={`w-full ${
+              featured ? `bg-gradient-to-r ${gradient}` : ""
+            }`}
           >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              {featured ? 'Comandă Acum' : 'Alege Pachetul'}
-              <motion.span
-                animate={{ x: featured ? [0, 4, 0] : 0 }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut"
-                }}
-              >
-                →
-              </motion.span>
-            </span>
-          </motion.button>
+            {featured ? "Comandă Acum" : "Alege Pachetul"}
+            <ArrowIcon direction="right" />
+          </AnimatedButton>
         </div>
       </motion.div>
     </div>

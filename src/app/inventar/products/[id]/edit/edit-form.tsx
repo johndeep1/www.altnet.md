@@ -79,19 +79,38 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
         setValue("model", product.model || "");
         setValue("sku", product.sku || "");
         setValue("status", product.status);
-        if (product.specs?.socket) {
-          setValue("socket", product.specs.socket);
+
+        // Handle specs properly
+        if (product.specs) {
+          if (typeof product.specs === "string") {
+            try {
+              const parsedSpecs = JSON.parse(product.specs);
+              if (parsedSpecs.socket) {
+                setValue("socket", parsedSpecs.socket);
+                delete parsedSpecs.socket;
+              }
+              setSpecs(parsedSpecs);
+            } catch (e) {
+              console.error("Error parsing specs:", e);
+              setSpecs({});
+            }
+          } else {
+            // Handle specs as object
+            if (product.specs.socket) {
+              setValue("socket", product.specs.socket);
+              const { socket, ...otherSpecs } = product.specs;
+              setSpecs(otherSpecs);
+            } else {
+              setSpecs(product.specs);
+            }
+          }
+        } else {
+          setSpecs({});
         }
 
         // Set selected category
         setSelectedCategory(product.category.name);
         setImageUrls(product.images || []);
-        // Only set specs if they exist and are not empty
-        if (product.specs && Object.keys(product.specs).length > 0) {
-          const specsWithoutSocket = { ...product.specs };
-          delete specsWithoutSocket.socket; // Remove socket from specs as it's handled separately
-          setSpecs(specsWithoutSocket);
-        }
       } catch (error) {
         console.error("Error fetching product:", error);
         setError("Failed to load product");
@@ -143,7 +162,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
 
   const onSubmit = async (data: ProductFormData) => {
     try {
-      // Only include specs if they exist and have entries
+      // Prepare specs for submission
       const specsToSubmit =
         Object.keys(specs).length > 0
           ? selectedCategory === "CPU"

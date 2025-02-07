@@ -57,6 +57,8 @@ export default function ProductsPage() {
     });
     if (response.ok) {
       setProducts(products.filter((product) => product.id !== id));
+      setIsDeleteModalOpen(false);
+      setProductToDelete(null);
     }
   };
 
@@ -112,11 +114,19 @@ export default function ProductsPage() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-600">{error}</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-600">
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -125,54 +135,54 @@ export default function ProductsPage() {
         <div className="mb-8">
           <Link
             href="/inventar"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+            className="inline-flex items-center text-sm bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Înapoi la Panou
           </Link>
         </div>
 
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Produse</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-foreground">Produse</h1>
           <Link
             href="/inventar/products/new"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 shadow-sm transition-colors"
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Adaugă Produs
           </Link>
         </div>
 
-        <div className="mt-8 rounded-md border">
+        <div className="mt-8 rounded-lg border bg-card">
           <div className="relative w-full overflow-auto">
             <table className="w-full caption-bottom text-sm">
-              <thead className="[&_tr]:border-b">
-                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Nume
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Categorie
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Preț
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Stoc
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Status
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Acțiuni
                   </th>
                 </tr>
               </thead>
-              <tbody className="[&_tr:last-child]:border-0">
+              <tbody>
                 {products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                    className="border-b transition-colors hover:bg-muted/50"
                   >
                     <td className="p-4 align-middle">{product.name}</td>
                     <td className="p-4 align-middle">
@@ -181,15 +191,27 @@ export default function ProductsPage() {
                     <td className="p-4 align-middle">
                       {product.price.toString()} Lei
                     </td>
-                    <td className="p-4 align-middle">{product.stock}</td>
                     <td className="p-4 align-middle">
                       <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                          product.status === "ACTIVE"
-                            ? "bg-green-100 text-green-800"
-                            : product.status === "OUTOFSTOCK"
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
+                          product.stock === 0
                             ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
+                            : product.stock < 5
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
+                      >
+                        {product.stock}
+                      </span>
+                    </td>
+                    <td className="p-4 align-middle">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
+                          product.status === "ACTIVE"
+                            ? "bg-green-600 text-white"
+                            : product.status === "OUTOFSTOCK"
+                            ? "bg-red-600 text-white"
+                            : "bg-yellow-600 text-white"
                         }`}
                       >
                         {statusMessages[product.status]}
@@ -199,28 +221,28 @@ export default function ProductsPage() {
                       <div className="flex gap-2">
                         <Link
                           href={`/inventar/products/${product.id}/edit`}
-                          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                          className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 shadow-sm transition-colors"
                         >
                           Editează
                         </Link>
                         {product.status === "OUTOFSTOCK" ? (
                           <button
                             onClick={() => handleSetBackInStock(product.id)}
-                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-green-50 hover:bg-green-100 text-green-600 h-9 px-3"
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-green-600 text-white hover:bg-green-700 h-9 px-4 shadow-sm transition-colors"
                           >
                             Adaugă în Stoc
                           </button>
                         ) : (
                           <button
                             onClick={() => handleSetOutOfStock(product.id)}
-                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-red-50 hover:bg-red-100 text-red-600 h-9 px-3"
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 h-9 px-4 shadow-sm transition-colors"
                           >
                             Marchează Stoc Epuizat
                           </button>
                         )}
                         <button
                           onClick={() => openDeleteModal(product)}
-                          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                          className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 h-9 px-4 shadow-sm transition-colors"
                         >
                           Șterge
                         </button>
@@ -246,7 +268,11 @@ export default function ProductsPage() {
           }
         }}
         title="Șterge Produsul"
-        message={`Sigur doriți să ștergeți produsul "${productToDelete?.name}"?`}
+        message={
+          <div className="text-foreground">
+            Sigur doriți să ștergeți produsul "{productToDelete?.name}"?
+          </div>
+        }
         confirmText="Șterge"
         cancelText="Anulează"
       />

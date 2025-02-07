@@ -1,13 +1,8 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import PricingCard from './PricingCard';
-import {
-  BoltIcon,
-  RocketLaunchIcon,
-  SparklesIcon,
-} from '@heroicons/react/24/outline';
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import PricingCard from "./PricingCard";
 
 export interface PricingPlan {
   title: string;
@@ -15,7 +10,6 @@ export interface PricingPlan {
   price: number;
   speed: string;
   gradient: string;
-  icon: JSX.Element;
   features: Array<{ text: string; included: boolean }>;
   popularFeatures: string[];
   featured?: boolean;
@@ -30,32 +24,28 @@ export const defaultPlans: PricingPlan[] = [
   {
     title: "Start",
     subtitle: "Pentru început",
-    price: 299,
+    price: 120,
     speed: "300 Mbps",
     gradient: "from-blue-500 via-blue-600 to-blue-700",
-    icon: <BoltIcon className="w-6 h-6" />,
     features: [
       { text: "Internet de mare viteză", included: true },
       { text: "Router WiFi 6", included: true },
       { text: "Instalare gratuită", included: true },
       { text: "TV Digital", included: false },
-      { text: "Telefonie fixă", included: false },
     ],
     popularFeatures: ["Viteză garantată", "Asistență 24/7"],
   },
   {
     title: "Popular",
     subtitle: "Cel mai ales",
-    price: 399,
+    price: 150,
     speed: "500 Mbps",
     gradient: "from-primary via-primary-dark to-violet-600",
-    icon: <RocketLaunchIcon className="w-6 h-6" />,
     features: [
       { text: "Internet de mare viteză", included: true },
       { text: "Router WiFi 6", included: true },
       { text: "Instalare gratuită", included: true },
       { text: "TV Digital HD", included: true },
-      { text: "Telefonie fixă", included: true },
     ],
     popularFeatures: ["TV pe mobil inclus", "Gaming optimizat"],
     featured: true,
@@ -63,22 +53,23 @@ export const defaultPlans: PricingPlan[] = [
   {
     title: "Premium",
     subtitle: "Pentru pretențioși",
-    price: 499,
+    price: 200,
     speed: "1000 Mbps",
     gradient: "from-violet-500 via-purple-600 to-purple-700",
-    icon: <SparklesIcon className="w-6 h-6" />,
     features: [
       { text: "Internet Gigabit", included: true },
       { text: "Router WiFi 6E", included: true },
       { text: "Instalare prioritară", included: true },
       { text: "TV Digital 4K", included: true },
-      { text: "Telefonie fixă nelimitată", included: true },
     ],
     popularFeatures: ["IP Static inclus", "SLA garantat"],
   },
 ];
 
-export default function PricingCards({ plans = defaultPlans, className = '' }: PricingCardsProps) {
+export default function PricingCards({
+  plans = defaultPlans,
+  className = "",
+}: PricingCardsProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10%" });
 
@@ -93,14 +84,10 @@ export default function PricingCards({ plans = defaultPlans, className = '' }: P
             transition={{
               duration: 0.5,
               delay: index * 0.1,
-              ease: [0.23, 1, 0.32, 1]
+              ease: [0.23, 1, 0.32, 1],
             }}
           >
-            <PricingCard
-              {...plan}
-              index={index}
-              isInView={isInView}
-            />
+            <PricingCard {...plan} index={index} isInView={isInView} />
           </motion.div>
         ))}
       </motion.div>

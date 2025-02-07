@@ -17,6 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ro">
+      <head>
+        <meta name="altnet" content="Altnet" />
+      </head>
       <body className={inter.className}>
         <Layout>{children}</Layout>
       </body>

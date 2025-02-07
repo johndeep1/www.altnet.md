@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
   RocketLaunchIcon,
   UserGroupIcon,
@@ -8,74 +8,77 @@ import {
   SparklesIcon,
   ShieldCheckIcon,
   TrophyIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 const values = [
   {
     icon: <RocketLaunchIcon className="w-6 h-6" />,
-    title: 'Inovație',
-    description: 'Adoptăm cele mai noi tehnologii pentru a oferi servicii de top'
+    title: "Inovație",
+    description:
+      "Adoptăm cele mai noi tehnologii pentru a oferi servicii de top",
   },
   {
     icon: <UserGroupIcon className="w-6 h-6" />,
-    title: 'Orientare spre Client',
-    description: 'Punem nevoile clienților noștri pe primul loc'
+    title: "Orientare spre Client",
+    description: "Punem nevoile clienților noștri pe primul loc",
   },
   {
     icon: <HeartIcon className="w-6 h-6" />,
-    title: 'Pasiune',
-    description: 'Suntem pasionați de tehnologie și servicii de calitate'
+    title: "Pasiune",
+    description: "Suntem pasionați de tehnologie și servicii de calitate",
   },
   {
     icon: <SparklesIcon className="w-6 h-6" />,
-    title: 'Calitate',
-    description: 'Oferim servicii premium la standarde înalte'
+    title: "Calitate",
+    description: "Oferim servicii premium la standarde înalte",
   },
   {
     icon: <ShieldCheckIcon className="w-6 h-6" />,
-    title: 'Încredere',
-    description: 'Construim relații de lungă durată bazate pe încredere'
+    title: "Încredere",
+    description: "Construim relații de lungă durată bazate pe încredere",
   },
   {
     icon: <TrophyIcon className="w-6 h-6" />,
-    title: 'Excelență',
-    description: 'Tindem spre excelență în tot ceea ce facem'
-  }
+    title: "Excelență",
+    description: "Tindem spre excelență în tot ceea ce facem",
+  },
 ];
 
 const stats = [
-  { value: '15k+', label: 'Clienți Activi' },
-  { value: '98%', label: 'Clienți Mulțumiți' },
-  { value: '24/7', label: 'Suport Tehnic' },
-  { value: '10+', label: 'Ani de Experiență' }
+  { value: "15k+", label: "Clienți Activi" },
+  { value: "98%", label: "Clienți Mulțumiți" },
+  { value: "24/7", label: "Suport Tehnic" },
+  { value: "10+", label: "Ani de Experiență" },
 ];
 
 const timeline = [
   {
-    year: '2013',
-    title: 'Începutul Călătoriei',
-    description: 'ALTNET își începe activitatea cu o viziune clară: internet rapid și accesibil pentru toți.'
+    year: "2013",
+    title: "Începutul Călătoriei",
+    description:
+      "ALTNET își începe activitatea cu o viziune clară: internet rapid și accesibil pentru toți.",
   },
   {
-    year: '2015',
-    title: 'Extinderea Rețelei',
-    description: 'Implementarea infrastructurii de fibră optică în primele regiuni.'
+    year: "2015",
+    title: "Extinderea Rețelei",
+    description:
+      "Implementarea infrastructurii de fibră optică în primele regiuni.",
   },
   {
-    year: '2017',
-    title: 'Lansarea TV Digital',
-    description: 'Introducerea serviciilor de televiziune digitală HD.'
+    year: "2017",
+    title: "Lansarea TV Digital",
+    description: "Introducerea serviciilor de televiziune digitală HD.",
   },
   {
-    year: '2020',
-    title: 'Inovație Tehnologică',
-    description: 'Upgrade-ul rețelei la viteze de până la 1 Gbps.'
+    year: "2020",
+    title: "Inovație Tehnologică",
+    description: "Upgrade-ul rețelei la viteze de până la 1 Gbps.",
   },
   {
-    year: '2023',
-    title: 'Prezent',
-    description: 'Continuăm să inovăm și să extindem serviciile noastre.'
-  }
+    year: "2023",
+    title: "Prezent",
+    description: "Continuăm să inovăm și să extindem serviciile noastre.",
+  },
 ];
 
 export default function DesprePage() {
@@ -92,15 +95,42 @@ export default function DesprePage() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-              <span className="block mb-2">Despre</span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-primary">
-                ALTNET
-              </span>
-            </h1>
-            <p className="mt-6 text-xl text-gray-600">
-              Conectăm oamenii prin tehnologie de ultimă generație și servicii de înaltă calitate
-            </p>
+            <div className="flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="w-32 h-32 mb-6 relative"
+              >
+                <img
+                  src="/ALTNET-LOGO.svg"
+                  alt="ALTNET Logo"
+                  className="w-full h-full object-contain"
+                />
+                <motion.div
+                  className="absolute inset-0 bg-primary/10 rounded-full"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.1, 0.3],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                />
+              </motion.div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+                <span className="block mb-2">Despre</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-primary">
+                  ALTNET
+                </span>
+              </h1>
+              <p className="mt-6 text-xl text-gray-600">
+                Conectăm oamenii prin tehnologie de ultimă generație și servicii
+                de înaltă calitate
+              </p>
+            </div>
           </motion.div>
         </div>
 
@@ -119,16 +149,20 @@ export default function DesprePage() {
               transition={{ duration: 0.8 }}
               className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-gray-200/20"
             >
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Misiunea Noastră</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Misiunea Noastră
+              </h2>
               <div className="prose prose-lg text-gray-600">
                 <p>
-                  La ALTNET, ne-am asumat misiunea de a transforma modul în care oamenii se conectează și comunică.
-                  Prin infrastructura noastră de fibră optică de ultimă generație, oferim servicii de internet și
-                  televiziune digitală la cele mai înalte standarde.
+                  La ALTNET, ne-am asumat misiunea de a transforma modul în care
+                  oamenii se conectează și comunică. Prin infrastructura noastră
+                  de fibră optică de ultimă generație, oferim servicii de
+                  internet și televiziune digitală la cele mai înalte standarde.
                 </p>
                 <p>
-                  Ne angajăm să fim mereu în fruntea inovației tehnologice, oferind clienților noștri cele mai
-                  bune soluții pentru nevoile lor de comunicare și divertisment.
+                  Ne angajăm să fim mereu în fruntea inovației tehnologice,
+                  oferind clienților noștri cele mai bune soluții pentru nevoile
+                  lor de comunicare și divertisment.
                 </p>
               </div>
             </motion.div>
@@ -144,7 +178,9 @@ export default function DesprePage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="bg-white/60 backdrop-blur-sm rounded-2xl p-8 shadow-lg shadow-gray-200/20 text-center"
                 >
-                  <div className="text-4xl font-bold text-primary mb-2">{stat.value}</div>
+                  <div className="text-4xl font-bold text-primary mb-2">
+                    {stat.value}
+                  </div>
                   <div className="text-sm text-gray-600">{stat.label}</div>
                 </motion.div>
               ))}
@@ -166,7 +202,9 @@ export default function DesprePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-gray-900">Valorile Noastre</h2>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Valorile Noastre
+            </h2>
             <p className="mt-4 text-xl text-gray-600">
               Principiile care ne ghidează în fiecare zi
             </p>
@@ -185,7 +223,9 @@ export default function DesprePage() {
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
                   {value.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{value.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {value.title}
+                </h3>
                 <p className="text-gray-600">{value.description}</p>
               </motion.div>
             ))}
@@ -206,7 +246,9 @@ export default function DesprePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-gray-900">Istoria Noastră</h2>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Istoria Noastră
+            </h2>
             <p className="mt-4 text-xl text-gray-600">
               O călătorie de succes în lumea telecomunicațiilor
             </p>
@@ -229,8 +271,12 @@ export default function DesprePage() {
                 >
                   <div className="flex items-center w-full">
                     <div className="w-1/2 pr-8 text-right">
-                      <div className="text-xl font-bold text-primary">{item.year}</div>
-                      <div className="text-lg font-semibold text-gray-900">{item.title}</div>
+                      <div className="text-xl font-bold text-primary">
+                        {item.year}
+                      </div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        {item.title}
+                      </div>
                       <div className="text-gray-600">{item.description}</div>
                     </div>
                     <div className="w-4 h-4 bg-primary rounded-full relative z-10">
@@ -239,9 +285,15 @@ export default function DesprePage() {
                     <div className="w-1/2 pl-8">
                       {index % 2 === 1 && (
                         <>
-                          <div className="text-xl font-bold text-primary">{item.year}</div>
-                          <div className="text-lg font-semibold text-gray-900">{item.title}</div>
-                          <div className="text-gray-600">{item.description}</div>
+                          <div className="text-xl font-bold text-primary">
+                            {item.year}
+                          </div>
+                          <div className="text-lg font-semibold text-gray-900">
+                            {item.title}
+                          </div>
+                          <div className="text-gray-600">
+                            {item.description}
+                          </div>
                         </>
                       )}
                     </div>

@@ -70,7 +70,7 @@ export async function PATCH(
       where: { id: params.id },
       data: {
         ...validatedData,
-        specs,
+        specs: specs ? specs : undefined,
       },
       include: { category: true },
     });

@@ -138,11 +138,19 @@ export default function InventoryPage() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-600">{error}</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-600">
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -151,44 +159,44 @@ export default function InventoryPage() {
         <div className="mb-8">
           <Link
             href="/inventar"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+            className="inline-flex items-center text-sm bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Înapoi la Panou
           </Link>
         </div>
 
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Inventar</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold text-foreground">Inventar</h1>
         </div>
 
-        <div className="mt-8 rounded-md border">
+        <div className="mt-8 rounded-lg border bg-card">
           <div className="relative w-full overflow-auto">
             <table className="w-full caption-bottom text-sm">
-              <thead className="[&_tr]:border-b">
-                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Nume Produs
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Categorie
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Stoc Actual
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Status
                   </th>
-                  <th className="h-12 px-4 text-left align-middle font-medium">
+                  <th className="h-12 px-4 text-left align-middle font-medium text-foreground">
                     Acțiuni
                   </th>
                 </tr>
               </thead>
-              <tbody className="[&_tr:last-child]:border-0">
+              <tbody>
                 {products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                    className="border-b transition-colors hover:bg-muted/50"
                   >
                     <td className="p-4 align-middle">{product.name}</td>
                     <td className="p-4 align-middle">
@@ -196,12 +204,12 @@ export default function InventoryPage() {
                     </td>
                     <td className="p-4 align-middle">
                       <span
-                        className={`font-medium ${
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
                           product.stock === 0
-                            ? "text-red-600"
+                            ? "bg-red-100 text-red-800"
                             : product.stock < 5
-                            ? "text-yellow-600"
-                            : "text-green-600"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-green-100 text-green-800"
                         }`}
                       >
                         {product.stock}
@@ -209,12 +217,12 @@ export default function InventoryPage() {
                     </td>
                     <td className="p-4 align-middle">
                       <span
-                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
                           product.status === "ACTIVE"
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-green-600 text-white"
                             : product.status === "OUTOFSTOCK"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
+                            ? "bg-red-600 text-white"
+                            : "bg-yellow-600 text-white"
                         }`}
                       >
                         {statusMessages[product.status]}
@@ -224,21 +232,21 @@ export default function InventoryPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => openUpdateModal(product)}
-                          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                          className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 shadow-sm transition-colors"
                         >
                           Actualizează Stoc
                         </button>
                         {product.status === "OUTOFSTOCK" ? (
                           <button
                             onClick={() => handleSetBackInStock(product.id)}
-                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-green-50 hover:bg-green-100 text-green-600 h-9 px-3"
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-green-600 text-white hover:bg-green-700 h-9 px-4 shadow-sm transition-colors"
                           >
                             Adaugă în Stoc
                           </button>
                         ) : (
                           <button
                             onClick={() => handleSetOutOfStock(product.id)}
-                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-red-50 hover:bg-red-100 text-red-600 h-9 px-3"
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-red-600 text-white hover:bg-red-700 h-9 px-4 shadow-sm transition-colors"
                           >
                             Marchează Stoc Epuizat
                           </button>
@@ -269,22 +277,26 @@ export default function InventoryPage() {
         title="Actualizare Stoc"
         message={
           <div className="space-y-4">
-            <p>
+            <p className="text-foreground">
               Actualizați stocul pentru produsul:{" "}
               <span className="font-medium">{selectedProduct?.name}</span>
             </p>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Stoc Nou:</label>
+              <label className="text-sm font-medium text-foreground">
+                Stoc Nou:
+              </label>
               <input
                 type="number"
                 min="0"
                 value={newStock}
                 onChange={(e) => setNewStock(Number(e.target.value))}
-                className="flex h-10 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               />
             </div>
             {updateError && (
-              <p className="text-sm text-red-600">{updateError}</p>
+              <p className="text-sm text-red-600 bg-red-50 p-2 rounded-md">
+                {updateError}
+              </p>
             )}
           </div>
         }

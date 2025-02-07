@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import InventarHeader from "./header";
+import InventarHeader from "@/app/inventar/header";
 
 const inter = Inter({ subsets: ["latin"] });
 

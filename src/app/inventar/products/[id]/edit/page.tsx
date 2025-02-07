@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import EditProductForm from "./edit-form";
+import EditProductForm from "@/app/inventar/products/[id]/edit/edit-form";
 
 export default function EditProductPage({
   params,
