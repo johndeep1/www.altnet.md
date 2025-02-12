@@ -1,55 +1,112 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import PricingCards, { defaultPlans } from '@/components/pricing/PricingCards';
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { motion } from "framer-motion";
+import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import PricingCards, { defaultPlans } from "@/components/pricing/PricingCards";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 const comparisonFeatures = [
   {
-    category: 'Internet',
+    category: "Internet",
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+        />
       </svg>
     ),
     features: [
-      { name: 'Viteză Download', start: '300 Mbps', popular: '500 Mbps', premium: '1000 Mbps' },
-      { name: 'Viteză Upload', start: '300 Mbps', popular: '500 Mbps', premium: '1000 Mbps' },
-      { name: 'Router WiFi', start: 'WiFi 6', popular: 'WiFi 6', premium: 'WiFi 6E' },
-      { name: 'IP Static', start: false, popular: true, premium: true },
-      { name: 'IPv6', start: true, popular: true, premium: true },
-      { name: 'Instalare', start: 'Gratuită', popular: 'Gratuită', premium: 'Prioritară' },
-    ]
+      {
+        name: "Viteză Download",
+        start: "300 Mbps",
+        popular: "500 Mbps",
+        premium: "1000 Mbps",
+      },
+      {
+        name: "Viteză Upload",
+        start: "300 Mbps",
+        popular: "500 Mbps",
+        premium: "1000 Mbps",
+      },
+      {
+        name: "Router WiFi",
+        start: "WiFi 6",
+        popular: "WiFi 6",
+        premium: "WiFi 6E",
+      },
+      { name: "IP Static", start: false, popular: true, premium: true },
+      { name: "IPv6", start: true, popular: true, premium: true },
+      {
+        name: "Instalare",
+        start: "Gratuită",
+        popular: "Gratuită",
+        premium: "Prioritară",
+      },
+    ],
   },
   {
-    category: 'TV Digital',
+    category: "TV Digital",
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+        />
       </svg>
     ),
     features: [
-      { name: 'Canale TV', start: false, popular: 'HD', premium: '4K' },
-      { name: 'TV pe mobil', start: false, popular: true, premium: true },
-      { name: 'Multi-screen', start: false, popular: '2 devices', premium: '4 devices' },
-    ]
+      { name: "Canale TV", start: false, popular: "HD", premium: "4K" },
+      { name: "TV pe mobil", start: false, popular: true, premium: true },
+      {
+        name: "Multi-screen",
+        start: false,
+        popular: "2 devices",
+        premium: "4 devices",
+      },
+    ],
   },
   {
-    category: 'Telefonie',
+    category: "Telefonie",
     icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+        />
       </svg>
     ),
     features: [
-      { name: 'Telefonie fixă', start: false, popular: true, premium: 'Nelimitată' },
-    ]
-  }
+      {
+        name: "Telefonie fixă",
+        start: false,
+        popular: true,
+        premium: "Nelimitată",
+      },
+    ],
+  },
 ];
 
 export default function PricingPage() {
@@ -74,10 +131,11 @@ export default function PricingPage() {
                 Pachete și <span className="text-primary">Prețuri</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Alege pachetul perfect pentru tine cu servicii de calitate la prețuri competitive
+                Alege pachetul perfect pentru tine cu servicii de calitate la
+                prețuri competitive
               </p>
               <div className="flex flex-wrap gap-4">
-                {['Internet', 'TV', 'Telefonie'].map((service) => (
+                {["Internet", "TV", "Telefonie"].map((service) => (
                   <motion.div
                     key={service}
                     whileHover={{ scale: 1.05 }}
@@ -151,10 +209,14 @@ export default function PricingPage() {
 
                     {/* Connection Points */}
                     {[
-                      [120, 120], [280, 120], // Top points
-                      [120, 280], [280, 280], // Bottom points
-                      [100, 200], [300, 200], // Side points
-                      [200, 100], [200, 300]  // Top and bottom center points
+                      [120, 120],
+                      [280, 120], // Top points
+                      [120, 280],
+                      [280, 280], // Bottom points
+                      [100, 200],
+                      [300, 200], // Side points
+                      [200, 100],
+                      [200, 300], // Top and bottom center points
                     ].map(([cx, cy], i) => (
                       <motion.g key={i}>
                         {/* Connection Line */}
@@ -178,7 +240,7 @@ export default function PricingPage() {
                           className="fill-primary"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          transition={{ delay: 0.5 + (i * 0.1) }}
+                          transition={{ delay: 0.5 + i * 0.1 }}
                         />
                         {/* Pulse Effect */}
                         <motion.circle
@@ -191,7 +253,7 @@ export default function PricingPage() {
                           transition={{
                             duration: 2,
                             repeat: Infinity,
-                            delay: 1 + (i * 0.2)
+                            delay: 1 + i * 0.2,
                           }}
                         />
                       </motion.g>
@@ -211,7 +273,7 @@ export default function PricingPage() {
                           duration: 3,
                           repeat: Infinity,
                           delay: i * 0.75,
-                          ease: "linear"
+                          ease: "linear",
                         }}
                       />
                     ))}
@@ -226,7 +288,9 @@ export default function PricingPage() {
                     {[45, 135, 225, 315].map((angle, i) => (
                       <motion.path
                         key={`deco-${i}`}
-                        d={`M200 200 L${200 + 180 * Math.cos(angle * Math.PI / 180)} ${200 + 180 * Math.sin(angle * Math.PI / 180)}`}
+                        d={`M200 200 L${
+                          200 + 180 * Math.cos((angle * Math.PI) / 180)
+                        } ${200 + 180 * Math.sin((angle * Math.PI) / 180)}`}
                         stroke="currentColor"
                         strokeWidth="1"
                         strokeDasharray="4 4"
@@ -301,12 +365,14 @@ export default function PricingPage() {
                       <th
                         key={plan.title}
                         className={`py-6 px-6 text-center w-1/4 relative
-                          ${plan.featured ? 'text-primary' : 'text-gray-900'}`}
+                          ${plan.featured ? "text-primary" : "text-gray-900"}`}
                       >
                         {plan.featured && (
                           <div className="absolute -top-3 left-0 right-0">
-                            <span className="px-4 py-1.5 bg-primary text-white text-sm
-                                         font-medium rounded-full inline-block">
+                            <span
+                              className="px-4 py-1.5 bg-primary text-white text-sm
+                                         font-medium rounded-full inline-block"
+                            >
                               Recomandat
                             </span>
                           </div>
@@ -315,11 +381,17 @@ export default function PricingPage() {
                           {plan.title}
                         </div>
                         <div className="flex items-baseline justify-center gap-1">
-                          <span className={`text-2xl font-bold
-                            ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
+                          <span
+                            className={`text-2xl font-bold
+                            ${
+                              plan.featured ? "text-primary" : "text-gray-900"
+                            }`}
+                          >
                             {plan.price}
                           </span>
-                          <span className="text-gray-500 text-sm">lei/lună</span>
+                          <span className="text-gray-500 text-sm">
+                            lei/lună
+                          </span>
                         </div>
                       </th>
                     ))}
@@ -327,7 +399,10 @@ export default function PricingPage() {
                 </thead>
                 <tbody>
                   {comparisonFeatures.map((section, sectionIndex) => [
-                    <tr key={`section-${section.category}`} className="border-t border-gray-100">
+                    <tr
+                      key={`section-${section.category}`}
+                      className="border-t border-gray-100"
+                    >
                       <td
                         colSpan={4}
                         className="py-4 px-6 text-left text-gray-900 font-semibold
@@ -345,32 +420,45 @@ export default function PricingPage() {
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: (sectionIndex * 0.1) + (featureIndex * 0.05) }}
+                        transition={{
+                          delay: sectionIndex * 0.1 + featureIndex * 0.05,
+                        }}
                         className="border-t border-gray-100 hover:bg-gray-50/50"
                       >
                         <td className="py-4 px-6 text-left text-gray-600">
                           {feature.name}
                         </td>
-                        {(['start', 'popular', 'premium'] as const).map((planType) => (
-                          <td key={planType} className="py-4 px-6 text-center">
-                            {typeof feature[planType] === 'boolean' ? (
-                              feature[planType] ? (
-                                <CheckIcon className="w-5 h-5 text-primary mx-auto" />
+                        {(["start", "popular", "premium"] as const).map(
+                          (planType) => (
+                            <td
+                              key={planType}
+                              className="py-4 px-6 text-center"
+                            >
+                              {typeof feature[planType] === "boolean" ? (
+                                feature[planType] ? (
+                                  <CheckIcon className="w-5 h-5 text-primary mx-auto" />
+                                ) : (
+                                  <span className="block w-5 h-0.5 bg-gray-300 mx-auto rounded-full" />
+                                )
+                              ) : feature[planType] === "-" ? (
+                                <span className="text-gray-400">—</span>
                               ) : (
-                                <span className="block w-5 h-0.5 bg-gray-300 mx-auto rounded-full" />
-                              )
-                            ) : feature[planType] === '-' ? (
-                              <span className="text-gray-400">—</span>
-                            ) : (
-                              <span className={`font-medium
-                                ${planType === 'popular' ? 'text-primary' : 'text-gray-900'}`}>
-                                {feature[planType]}
-                              </span>
-                            )}
-                          </td>
-                        ))}
+                                <span
+                                  className={`font-medium
+                                ${
+                                  planType === "popular"
+                                    ? "text-primary"
+                                    : "text-gray-900"
+                                }`}
+                                >
+                                  {feature[planType]}
+                                </span>
+                              )}
+                            </td>
+                          )
+                        )}
                       </motion.tr>
-                    ))
+                    )),
                   ])}
                 </tbody>
               </table>
@@ -385,21 +473,27 @@ export default function PricingPage() {
                 >
                   {plan.featured && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="px-4 py-1.5 bg-primary text-white text-sm
-                                   font-medium rounded-full inline-block whitespace-nowrap">
+                      <span
+                        className="px-4 py-1.5 bg-primary text-white text-sm
+                                   font-medium rounded-full inline-block whitespace-nowrap"
+                      >
                         Recomandat
                       </span>
                     </div>
                   )}
 
                   <div className="text-center mb-6">
-                    <div className={`font-bold text-xl mb-2 mt-4
-                      ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
+                    <div
+                      className={`font-bold text-xl mb-2 mt-4
+                      ${plan.featured ? "text-primary" : "text-gray-900"}`}
+                    >
                       {plan.title}
                     </div>
                     <div className="flex items-baseline justify-center gap-1">
-                      <span className={`text-3xl font-bold
-                        ${plan.featured ? 'text-primary' : 'text-gray-900'}`}>
+                      <span
+                        className={`text-3xl font-bold
+                        ${plan.featured ? "text-primary" : "text-gray-900"}`}
+                      >
                         {plan.price}
                       </span>
                       <span className="text-gray-500">lei/lună</span>
@@ -416,16 +510,28 @@ export default function PricingPage() {
                         </div>
                         <div className="space-y-2">
                           {section.features.map((feature) => {
-                            const planType = plan.title.toLowerCase() as 'start' | 'popular' | 'premium';
+                            const planType = plan.title.toLowerCase() as
+                              | "start"
+                              | "popular"
+                              | "premium";
                             return (
-                              <div key={feature.name} className="flex justify-between text-sm">
-                                <span className="text-gray-600">{feature.name}</span>
+                              <div
+                                key={feature.name}
+                                className="flex justify-between text-sm"
+                              >
+                                <span className="text-gray-600">
+                                  {feature.name}
+                                </span>
                                 <span className="font-medium text-gray-900">
-                                  {typeof feature[planType] === 'boolean'
-                                    ? (feature[planType]
-                                      ? <CheckIcon className="w-5 h-5 text-primary" />
-                                      : <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />)
-                                    : feature[planType]}
+                                  {typeof feature[planType] === "boolean" ? (
+                                    feature[planType] ? (
+                                      <CheckIcon className="w-5 h-5 text-primary" />
+                                    ) : (
+                                      <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />
+                                    )
+                                  ) : (
+                                    feature[planType]
+                                  )}
                                 </span>
                               </div>
                             );
@@ -454,12 +560,13 @@ export default function PricingPage() {
               Pregătit să Începi?
             </h2>
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Contactează-ne pentru o ofertă personalizată sau pentru mai multe detalii
+              Contactează-ne pentru o ofertă personalizată sau pentru mai multe
+              detalii
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => router.push('/contact')}
+              onClick={() => router.push("/contact")}
               className="px-8 py-4 bg-primary text-white rounded-xl font-medium
                      shadow-lg shadow-primary/25 hover:bg-primary/90 transition-colors"
             >

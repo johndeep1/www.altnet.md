@@ -4,14 +4,31 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   Bars3Icon,
   XMarkIcon,
   ChevronDownIcon,
   PhoneIcon,
+  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { ShoppingCart } from "lucide-react";
+import dynamic from "next/dynamic";
 
-const navigation = [
+interface HeaderProps {
+  cartButton?: React.ReactNode;
+  customNavigation?: Array<{
+    name: string;
+    href: string;
+    submenu?: Array<{
+      name: string;
+      href: string;
+      description?: string;
+    }>;
+  }>;
+}
+
+const mainNavigation = [
   {
     name: "Servicii",
     href: "/servicii",
@@ -31,7 +48,7 @@ const navigation = [
   { name: "Prețuri", href: "/preturi" },
   { name: "Acoperire", href: "/acoperire" },
   { name: "Despre Noi", href: "/despre" },
-  { name: "Contact", href: "/contact" },
+  { name: "Magazin", href: "/magazin" },
 ];
 
 const MobileMenuItem = ({
@@ -106,18 +123,23 @@ const MobileMenuItem = ({
   );
 };
 
-export default function Header() {
+export default function Header({
+  cartButton,
+  customNavigation,
+}: HeaderProps = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
+  const isMagazin = pathname.startsWith("/magazin");
 
   // Hide header on login page
   if (pathname === "/login") return null;
 
   const isActiveLink = (href: string) => {
     if (href === "/") return pathname === href;
-    return pathname.startsWith(href);
+    if (href === "/magazin" && pathname === "/magazin") return true;
+    return pathname.startsWith(href) && href !== "/magazin";
   };
 
   useEffect(() => {
@@ -133,6 +155,9 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  // Use customNavigation if provided, otherwise use the default navigation
+  const navigation = customNavigation || (isMagazin ? [] : mainNavigation);
+
   return (
     <>
       <header
@@ -147,7 +172,10 @@ export default function Header() {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link
+              href={isMagazin ? "/magazin" : "/"}
+              className="flex items-center"
+            >
               <img
                 src="/ALTNET-LOGO.svg"
                 alt="ALTNET Logo"
@@ -179,28 +207,48 @@ export default function Header() {
                                   group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
                       >
                         <div
-                          className="w-64 bg-white rounded-2xl shadow-xl shadow-gray-200/20 border border-gray-100
-                                    overflow-hidden p-2"
+                          className="w-80 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl shadow-gray-200/20 border border-gray-100
+                                    overflow-hidden"
                         >
-                          {item.submenu.map((subitem) => (
-                            <Link
-                              key={subitem.name}
-                              href={subitem.href}
-                              className={`flex flex-col p-3 rounded-xl transition-colors
+                          {/* Search Bar - Only show for categories */}
+                          {item.name === "Categorii" && (
+                            <div className="p-3 border-b border-gray-100">
+                              <div className="relative">
+                                <input
+                                  type="text"
+                                  placeholder="Caută categorii..."
+                                  className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50/50 border border-gray-200/50 rounded-xl
+                                           focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Scrollable Content */}
+                          <div className="max-h-[calc(100vh-300px)] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent hover:scrollbar-thumb-gray-300">
+                            {item.submenu.map((subitem) => (
+                              <Link
+                                key={subitem.name}
+                                href={subitem.href}
+                                className={`flex flex-col p-3 rounded-xl transition-colors
                                       ${
                                         isActiveLink(subitem.href)
                                           ? "text-primary bg-primary/5"
                                           : "text-gray-600 hover:text-primary hover:bg-gray-50"
                                       }`}
-                            >
-                              <span className="font-medium">
-                                {subitem.name}
-                              </span>
-                              <span className="text-sm text-gray-500 mt-0.5">
-                                {subitem.description}
-                              </span>
-                            </Link>
-                          ))}
+                              >
+                                <span className="font-medium">
+                                  {subitem.name}
+                                </span>
+                                {subitem.description && (
+                                  <span className="text-sm text-gray-500 mt-0.5 line-clamp-2">
+                                    {subitem.description}
+                                  </span>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </>
@@ -232,6 +280,19 @@ export default function Header() {
                 <Bars3Icon className="w-6 h-6 text-gray-600" />
               )}
             </button>
+
+            {/* Contact and Cart Buttons */}
+            <div className="hidden lg:flex lg:items-center lg:gap-4">
+              <Link
+                href={isMagazin ? "/contact" : "/contact"}
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors"
+              >
+                <PhoneIcon className="w-4 h-4" />
+                <span>Contact</span>
+              </Link>
+
+              {isMagazin && cartButton}
+            </div>
           </div>
         </nav>
       </header>
@@ -262,7 +323,10 @@ export default function Header() {
               <div className="flex flex-col h-full">
                 {/* Menu Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                  <Link href="/" className="flex items-center">
+                  <Link
+                    href={isMagazin ? "/magazin" : "/"}
+                    className="flex items-center"
+                  >
                     <span className="text-2xl font-bold text-primary">
                       ALTNET
                     </span>
@@ -311,13 +375,20 @@ export default function Header() {
 
                     {/* Contact Button */}
                     <Link
-                      href="/contact"
+                      href={isMagazin ? "/magazin/contact" : "/contact"}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium
                                text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors"
                     >
                       Contactează-ne
                     </Link>
+
+                    {/* Cart Button (Only for Magazin) */}
+                    {isMagazin && (
+                      <div onClick={() => setIsMobileMenuOpen(false)}>
+                        {cartButton}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

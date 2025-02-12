@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatedButton, ArrowIcon } from "@/components/ui/button-variants";
+import Link from "next/link";
 
 interface PricingCardProps {
   title: string;
@@ -185,15 +186,17 @@ export default function PricingCard({
           </ul>
 
           {/* Enhanced Action Button */}
-          <AnimatedButton
-            variant={featured ? "primary" : "outline"}
-            className={`w-full ${
-              featured ? `bg-gradient-to-r ${gradient}` : ""
-            }`}
-          >
-            {featured ? "Comandă Acum" : "Alege Pachetul"}
-            <ArrowIcon direction="right" />
-          </AnimatedButton>
+          <Link href={`/pachete/${title.toLowerCase()}`}>
+            <AnimatedButton
+              variant={featured ? "primary" : "outline"}
+              className={`w-full ${
+                featured ? `bg-gradient-to-r ${gradient}` : ""
+              }`}
+            >
+              {featured ? "Comandă Acum" : "Alege Pachetul"}
+              <ArrowIcon direction="right" />
+            </AnimatedButton>
+          </Link>
         </div>
       </motion.div>
     </div>
