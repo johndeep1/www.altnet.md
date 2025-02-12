@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -19,6 +18,7 @@ import { Badge } from "../../components/ui/badge";
 import { useCart } from "../../lib/cart";
 import { ExpandableDescription } from "../../components/ui/expandable-description";
 import { RecommendedProducts } from "../../components/recommended-products";
+import { ProductImage } from "../../components/ui/product-image";
 
 interface Product {
   id: string;
@@ -128,11 +128,12 @@ export default function ProductClient({ productId }: { productId: string }) {
           {/* Product Images */}
           <div className="space-y-4">
             <div className="relative aspect-square">
-              <Image
-                src={getImageUrl(product.images[currentImageIndex])}
+              <ProductImage
+                src={
+                  product.images[currentImageIndex] ||
+                  "/images/default-product.jpg"
+                }
                 alt={product.name}
-                fill
-                className="object-cover rounded-lg"
                 priority={currentImageIndex === 0}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
               />
@@ -170,11 +171,9 @@ export default function ProductClient({ productId }: { productId: string }) {
                           : "border-transparent"
                       }`}
                   >
-                    <Image
-                      src={getImageUrl(image)}
+                    <ProductImage
+                      src={image}
                       alt={`${product.name} ${index + 1}`}
-                      fill
-                      className="object-cover"
                     />
                   </button>
                 ))}

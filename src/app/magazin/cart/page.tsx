@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import { Button } from "../components/ui/button";
@@ -12,6 +11,7 @@ import { Label } from "../components/ui/label";
 import { formatPrice, getImageUrl } from "../lib/utils";
 import { useCart } from "../lib/cart";
 import { toast } from "sonner";
+import { ProductImage } from "../components/ui/product-image";
 
 interface ProductStock {
   id: string;
@@ -197,12 +197,7 @@ export default function CartPage() {
                   {index > 0 && <Separator className="my-6" />}
                   <div className="flex gap-4">
                     <div className="relative w-24 h-24 flex-shrink-0">
-                      <Image
-                        src={getImageUrl(item.image)}
-                        alt={item.name}
-                        fill
-                        className="object-cover rounded-md"
-                      />
+                      <ProductImage src={item.image} alt={item.name} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <Link

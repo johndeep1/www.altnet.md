@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Card,
@@ -12,6 +11,8 @@ import {
   CardFooter,
 } from "./ui/card";
 import { formatPrice, getImageUrl } from "../lib/utils";
+import { ProductImage } from "./ui/product-image";
+import { ExpandableDescription } from "./ui/expandable-description";
 
 interface Product {
   id: string;
@@ -19,7 +20,7 @@ interface Product {
   description: string;
   price: number;
   images: string[];
-  updatedAt: string;
+  stock: number;
 }
 
 export function RecentProducts() {
@@ -27,7 +28,7 @@ export function RecentProducts() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    async function fetchProducts() {
       try {
         const response = await fetch("/magazin/api/products/recent");
         if (!response.ok) throw new Error("Failed to fetch products");
@@ -38,7 +39,7 @@ export function RecentProducts() {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     fetchProducts();
   }, []);
@@ -52,8 +53,8 @@ export function RecentProducts() {
               <Card key={i} className="animate-pulse">
                 <CardImage className="bg-muted" />
                 <CardContent className="mt-4">
-                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
-                  <div className="h-4 bg-muted rounded w-1/2" />
+                  <div className="h-4 w-3/4 bg-muted rounded mb-2" />
+                  <div className="h-4 w-1/2 bg-muted rounded" />
                 </CardContent>
               </Card>
             ))}
@@ -63,9 +64,7 @@ export function RecentProducts() {
     );
   }
 
-  if (products.length === 0) {
-    return null;
-  }
+  if (products.length === 0) return null;
 
   return (
     <section className="py-16">
@@ -82,7 +81,7 @@ export function RecentProducts() {
             >
               <Card className="border border-border/50 hover:border-primary/50 transition-colors">
                 <CardImage>
-                  <Image
+                  <ProductImage
                     src={getImageUrl(product.images[0])}
                     alt={product.name}
                     fill
@@ -91,15 +90,21 @@ export function RecentProducts() {
                   />
                 </CardImage>
                 <CardContent>
-                  <CardTitle className="mb-2 line-clamp-1">
-                    {product.name}
-                  </CardTitle>
-                  <CardDescription>{product.description}</CardDescription>
+                  <CardTitle className="line-clamp-1">{product.name}</CardTitle>
+                  <ExpandableDescription
+                    text={product.description}
+                    className="mt-2"
+                  />
                 </CardContent>
-                <CardFooter>
-                  <p className="text-lg font-bold text-primary">
+                <CardFooter className="justify-between">
+                  <span className="font-medium text-primary">
                     {formatPrice(product.price)} MDL
-                  </p>
+                  </span>
+                  {product.stock > 0 ? (
+                    <span className="text-sm text-green-600">În stoc</span>
+                  ) : (
+                    <span className="text-sm text-red-600">Stoc epuizat</span>
+                  )}
                 </CardFooter>
               </Card>
             </Link>
