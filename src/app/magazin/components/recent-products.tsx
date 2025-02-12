@@ -11,7 +11,7 @@ import {
   CardDescription,
   CardFooter,
 } from "./ui/card";
-import { formatPrice } from "../lib/utils";
+import { formatPrice, getImageUrl } from "../lib/utils";
 
 interface Product {
   id: string;
@@ -83,7 +83,7 @@ export function RecentProducts() {
               <Card className="border border-border/50 hover:border-primary/50 transition-colors">
                 <CardImage>
                   <Image
-                    src={product.images[0] || "/images/default-product.jpg"}
+                    src={getImageUrl(product.images[0])}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"

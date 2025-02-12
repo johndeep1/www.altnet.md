@@ -9,7 +9,7 @@ import { Card } from "../components/ui/card";
 import { Separator } from "../components/ui/separator";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { formatPrice } from "../lib/utils";
+import { formatPrice, getImageUrl } from "../lib/utils";
 import { useCart } from "../lib/cart";
 import { toast } from "sonner";
 
@@ -198,7 +198,7 @@ export default function CartPage() {
                   <div className="flex gap-4">
                     <div className="relative w-24 h-24 flex-shrink-0">
                       <Image
-                        src={item.image}
+                        src={getImageUrl(item.image)}
                         alt={item.name}
                         fill
                         className="object-cover rounded-md"

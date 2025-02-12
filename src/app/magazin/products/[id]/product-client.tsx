@@ -14,7 +14,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
-import { formatPrice } from "../../lib/utils";
+import { formatPrice, getImageUrl } from "../../lib/utils";
 import { Badge } from "../../components/ui/badge";
 import { useCart } from "../../lib/cart";
 import { ExpandableDescription } from "../../components/ui/expandable-description";
@@ -129,14 +129,12 @@ export default function ProductClient({ productId }: { productId: string }) {
           <div className="space-y-4">
             <div className="relative aspect-square">
               <Image
-                src={
-                  product.images[currentImageIndex] ||
-                  "/images/default-product.jpg"
-                }
+                src={getImageUrl(product.images[currentImageIndex])}
                 alt={product.name}
                 fill
                 className="object-cover rounded-lg"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={currentImageIndex === 0}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
               />
               {product.images.length > 1 && (
                 <>
@@ -173,7 +171,7 @@ export default function ProductClient({ productId }: { productId: string }) {
                       }`}
                   >
                     <Image
-                      src={image}
+                      src={getImageUrl(image)}
                       alt={`${product.name} ${index + 1}`}
                       fill
                       className="object-cover"
