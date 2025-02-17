@@ -34,7 +34,7 @@ export default function NewProductPage() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
   });
@@ -97,192 +97,196 @@ export default function NewProductPage() {
   const isCPU = selectedCategoryName === "CPU";
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="mb-8">
-        <Link
-          href="/inventar/products"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Înapoi la Produse
-        </Link>
+    <div className="min-h-screen bg-white">
+      {/* Header Section */}
+      <div className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/inventar/products"
+                className="inline-flex items-center text-sm bg-gray-100 text-gray-900 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors duration-200"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Înapoi la Produse
+              </Link>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                Adaugă Produs Nou
+              </h1>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="mx-auto max-w-2xl">
-        <h1 className="mb-8 text-3xl font-bold">Adauga produs</h1>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-2xl mx-auto">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="p-6 space-y-6">
+                {/* Basic Information */}
+                <div className="space-y-6">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Informații de Bază
+                  </h2>
+                  <div className="grid grid-cols-1 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Nume Produs
+                      </label>
+                      <input
+                        {...register("name")}
+                        type="text"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                      {errors.name && (
+                        <p className="text-sm text-red-600">{errors.name.message}</p>
+                      )}
+                    </div>
 
-        {error && (
-          <div className="mb-4 p-4 text-sm text-red-800 bg-red-100 rounded-md">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Nume
-              </label>
-              <input
-                {...register("name")}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Product name"
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Descriere
-              </label>
-              <textarea
-                {...register("description")}
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Product description"
-              />
-              {errors.description && (
-                <p className="text-sm text-red-500">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Preț
-                </label>
-                <input
-                  {...register("price")}
-                  type="number"
-                  step="0.01"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  placeholder="0.00"
-                />
-                {errors.price && (
-                  <p className="text-sm text-red-500">{errors.price.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Stoc
-                </label>
-                <input
-                  {...register("stock")}
-                  type="number"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  placeholder="0"
-                />
-                {errors.stock && (
-                  <p className="text-sm text-red-500">{errors.stock.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Categorie
-              </label>
-              <select
-                {...register("categoryId")}
-                onChange={(e) => {
-                  const category = categories.find(
-                    (c) => c.id === e.target.value
-                  );
-                  setSelectedCategory(category?.name || "");
-                }}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Select a category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              {errors.categoryId && (
-                <p className="text-sm text-red-500">
-                  {errors.categoryId.message}
-                </p>
-              )}
-            </div>
-
-            {isCPU && (
-              <>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    Socket
-                  </label>
-                  <input
-                    {...register("socket")}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="CPU Socket (e.g., AM4, LGA1700)"
-                  />
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Descriere
+                      </label>
+                      <textarea
+                        {...register("description")}
+                        rows={4}
+                        className="flex w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                      {errors.description && (
+                        <p className="text-sm text-red-600">
+                          {errors.description.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    SKU
-                  </label>
-                  <input
-                    {...register("sku")}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    placeholder="SKU"
-                  />
-                  {errors.sku && (
-                    <p className="text-sm text-red-500">{errors.sku.message}</p>
-                  )}
+                {/* Pricing and Stock */}
+                <div className="space-y-6">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Preț și Stoc
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Preț (MDL)
+                      </label>
+                      <input
+                        {...register("price")}
+                        type="number"
+                        step="0.01"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                      {errors.price && (
+                        <p className="text-sm text-red-600">{errors.price.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Stoc
+                      </label>
+                      <input
+                        {...register("stock")}
+                        type="number"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                      {errors.stock && (
+                        <p className="text-sm text-red-600">{errors.stock.message}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </>
-            )}
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Brand
-              </label>
-              <input
-                {...register("brand")}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Brand name"
-              />
-              {errors.brand && (
-                <p className="text-sm text-red-500">{errors.brand.message}</p>
-              )}
+                {/* Additional Details */}
+                <div className="space-y-6">
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Detalii Adiționale
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Brand
+                      </label>
+                      <input
+                        {...register("brand")}
+                        type="text"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                      {errors.brand && (
+                        <p className="text-sm text-red-600">{errors.brand.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Model
+                      </label>
+                      <input
+                        {...register("model")}
+                        type="text"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        SKU
+                      </label>
+                      <input
+                        {...register("sku")}
+                        type="text"
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-gray-700">
+                        Categorie
+                      </label>
+                      <select
+                        {...register("categoryId")}
+                        className="flex h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+                      >
+                        <option value="">Selectează categoria</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.categoryId && (
+                        <p className="text-sm text-red-600">
+                          {errors.categoryId.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Actions */}
+              <div className="border-t border-gray-200 px-6 py-4">
+                <div className="flex justify-end gap-3">
+                  <Link
+                    href="/inventar/products"
+                    className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 transition-colors duration-200"
+                  >
+                    Anulează
+                  </Link>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? "Se creează..." : "Creează Produs"}
+                  </button>
+                </div>
+              </div>
             </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Model
-              </label>
-              <input
-                {...register("model")}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Model number"
-              />
-              {errors.model && (
-                <p className="text-sm text-red-500">{errors.model.message}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-end space-x-4">
-            <Link
-              href="/inventar/products"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground h-10 px-4"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4"
-            >
-              Creaza produs
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

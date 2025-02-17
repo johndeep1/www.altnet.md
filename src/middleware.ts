@@ -61,9 +61,14 @@ export function middleware(request: NextRequest) {
     });
   }
 
+  // Allow public access to /magazin routes
+  if (request.nextUrl.pathname.startsWith("/magazin")) {
+    return NextResponse.next();
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/login", "/inventar/:path*"],
+  matcher: ["/login", "/inventar/:path*", "/magazin/:path*"],
 };

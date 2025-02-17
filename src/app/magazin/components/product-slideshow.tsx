@@ -4,8 +4,9 @@ import { useEffect, useState, useRef, TouchEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Package, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DEFAULT_IMAGE = "/images/default-category.jpg";
 
@@ -49,7 +50,7 @@ export function ProductSlideshow() {
 
     const interval = setInterval(() => {
       setCurrentIndex((current) => (current + 1) % categories.length);
-    }, 5000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [categories.length, isHovered]);
@@ -106,13 +107,24 @@ export function ProductSlideshow() {
   }
 
   return (
-    <section className="py-16 bg-gradient-to-b from-background to-secondary/5">
-      <div className="container px-4 md:px-6">
-        <div className="flex flex-col items-center mb-12 text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl">
-            Categorii Populare
+    <section className="relative py-24 overflow-hidden">
+      {/* Background Pattern and Gradient */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-secondary/5 to-background blur-3xl" />
+        <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background to-transparent" />
+      </div>
+
+      <div className="container relative px-4 md:px-6">
+        {/* Section Header */}
+        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+          <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-full mb-4">
+            <Package className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+            Categorii <span className="text-primary">Populare</span>
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-[700px] text-lg">
+          <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl">
             Descoperă cele mai populare categorii de produse și găsește exact ce
             cauți
           </p>
@@ -125,61 +137,64 @@ export function ProductSlideshow() {
         >
           <div
             ref={slideRef}
-            className="relative aspect-[21/9] overflow-hidden rounded-2xl shadow-2xl"
+            className="relative aspect-[16/9] overflow-hidden rounded-2xl shadow-2xl bg-background/5 backdrop-blur-sm"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            {categories.map((category, index) => (
-              <Link
-                key={category.id}
-                href={`/magazin/categories/${category.id}`}
-                className={cn(
-                  "absolute inset-0 transition-all duration-700 transform",
-                  index === currentIndex
-                    ? "opacity-100 translate-x-0 scale-100"
-                    : index < currentIndex
-                    ? "opacity-0 -translate-x-full scale-95"
-                    : "opacity-0 translate-x-full scale-95"
-                )}
-              >
-                <div className="relative w-full h-full group">
-                  <Image
-                    src={getImageUrl(category)}
-                    alt={category.name}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    priority={index === currentIndex}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/20" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12">
-                    <div className="max-w-[700px] transform transition-all duration-700 translate-y-0 group-hover:-translate-y-2">
-                      <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3">
-                        {category.name}
-                      </h3>
-                      {category.description && (
-                        <p className="text-lg text-white/90 line-clamp-2 md:line-clamp-3">
-                          {category.description}
-                        </p>
-                      )}
-                      <div className="mt-4 inline-flex">
-                        <Button
-                          variant="secondary"
-                          className="group/btn relative overflow-hidden btn-ghost"
-                          onClick={(e) => e.preventDefault()}
+            <AnimatePresence initial={false} mode="wait">
+              {categories.map((category, index) => (
+                index === currentIndex && (
+                  <motion.div
+                    key={category.id}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0"
+                  >
+                    <Link href={`/magazin/categories/${category.id}`}>
+                      <div className="relative w-full h-full group">
+                        <Image
+                          src={getImageUrl(category)}
+                          alt={category.name}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          priority
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12"
                         >
-                          <span className="relative z-10">
-                            Explorează categoria
-                          </span>
-                          <span className="absolute inset-0 bg-primary transform -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-300" />
-                        </Button>
+                          <div className="max-w-[700px] transform transition-all duration-700 group-hover:-translate-y-2">
+                            <div className="flex items-center gap-2 text-primary mb-4">
+                              <Package className="w-5 h-5" />
+                              <span className="text-sm font-medium">Categorie Populară</span>
+                            </div>
+                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                              {category.name}
+                            </h3>
+                            {category.description && (
+                              <p className="text-lg text-white/90 line-clamp-2 md:line-clamp-3 mb-6">
+                                {category.description}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2 group/btn">
+                              <span className="text-white font-medium">Explorează Categoria</span>
+                              <ArrowRight className="w-5 h-5 text-white transform transition-transform duration-300 group-hover/btn:translate-x-1" />
+                            </div>
+                          </div>
+                        </motion.div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                    </Link>
+                  </motion.div>
+                )
+              ))}
+            </AnimatePresence>
           </div>
 
           {/* Navigation Buttons */}
@@ -188,8 +203,8 @@ export function ProductSlideshow() {
               variant="ghost"
               size="icon"
               className={cn(
-                "h-11 w-11 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 pointer-events-auto transition-opacity duration-300",
-                isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
+                "h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 pointer-events-auto transition-all duration-300 border border-border/50",
+                isHovered ? "opacity-100 scale-100" : "opacity-0 scale-90 md:opacity-100 md:scale-100"
               )}
               onClick={(e) => {
                 e.preventDefault();
@@ -202,8 +217,8 @@ export function ProductSlideshow() {
               variant="ghost"
               size="icon"
               className={cn(
-                "h-11 w-11 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 pointer-events-auto transition-opacity duration-300",
-                isHovered ? "opacity-100" : "opacity-0 md:opacity-100"
+                "h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 pointer-events-auto transition-all duration-300 border border-border/50",
+                isHovered ? "opacity-100 scale-100" : "opacity-0 scale-90 md:opacity-100 md:scale-100"
               )}
               onClick={(e) => {
                 e.preventDefault();
@@ -222,7 +237,7 @@ export function ProductSlideshow() {
                 className={cn(
                   "w-2.5 h-2.5 rounded-full transition-all duration-300",
                   index === currentIndex
-                    ? "bg-primary w-6"
+                    ? "bg-primary w-8"
                     : "bg-primary/30 hover:bg-primary/50"
                 )}
                 onClick={() => setCurrentIndex(index)}

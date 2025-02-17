@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import InventarHeader from "@/app/inventar/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +18,11 @@ export default function InventarLayout({
   return (
     <div
       className={cn(
-        "inventar-section min-h-screen bg-background font-sans antialiased",
+        "min-h-screen bg-white font-sans antialiased mt-24",
         inter.className
       )}
     >
-      <InventarHeader />
-      <main className="container mx-auto px-4">{children}</main>
+      {children}
     </div>
   );
 }

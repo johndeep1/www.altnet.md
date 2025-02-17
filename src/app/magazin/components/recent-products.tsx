@@ -1,18 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  Card,
-  CardImage,
-  CardContent,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from "./ui/card";
-import { formatPrice, getImageUrl } from "../lib/utils";
-import { ProductImage } from "./ui/product-image";
-import { ExpandableDescription } from "./ui/expandable-description";
+import { ProductCard } from "./ui/product-card";
 
 interface Product {
   id: string;
@@ -50,13 +39,16 @@ export function RecentProducts() {
         <div className="container px-4 md:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardImage className="bg-muted" />
-                <CardContent className="mt-4">
-                  <div className="h-4 w-3/4 bg-muted rounded mb-2" />
-                  <div className="h-4 w-1/2 bg-muted rounded" />
-                </CardContent>
-              </Card>
+              <div
+                key={i}
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm animate-pulse"
+              >
+                <div className="aspect-[4/3] bg-gray-100" />
+                <div className="p-4">
+                  <div className="h-4 w-3/4 bg-gray-100 rounded mb-2" />
+                  <div className="h-4 w-1/2 bg-gray-100 rounded" />
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -74,40 +66,7 @@ export function RecentProducts() {
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/magazin/products/${product.id}`}
-              className="block group"
-            >
-              <Card className="border border-border/50 hover:border-primary/50 transition-colors">
-                <CardImage>
-                  <ProductImage
-                    src={getImageUrl(product.images[0])}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  />
-                </CardImage>
-                <CardContent>
-                  <CardTitle className="line-clamp-1">{product.name}</CardTitle>
-                  <ExpandableDescription
-                    text={product.description}
-                    className="mt-2"
-                  />
-                </CardContent>
-                <CardFooter className="justify-between">
-                  <span className="font-medium text-primary">
-                    {formatPrice(product.price)} MDL
-                  </span>
-                  {product.stock > 0 ? (
-                    <span className="text-sm text-green-600">În stoc</span>
-                  ) : (
-                    <span className="text-sm text-red-600">Stoc epuizat</span>
-                  )}
-                </CardFooter>
-              </Card>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>

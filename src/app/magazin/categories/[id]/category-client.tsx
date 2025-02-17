@@ -16,6 +16,7 @@ import { ProductFilters } from "../../components/product-filters";
 import { formatPrice } from "../../lib/utils";
 import { ProductImage } from "../../components/ui/product-image";
 import { ExpandableDescription } from "../../components/ui/expandable-description";
+import { ProductCard } from "../../components/ui/product-card";
 
 interface Product {
   id: string;
@@ -159,26 +160,40 @@ export default function CategoryClient({ categoryId }: { categoryId: string }) {
   const maxPrice = Math.max(...prices, 10000);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Category Header */}
-      <section className="bg-primary/5 border-b">
-        <div className="container px-4 md:px-6 py-16">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-            {category.name}
-          </h1>
-          {category.description && (
-            <p className="mt-4 text-lg text-muted-foreground max-w-[700px]">
-              {category.description}
-            </p>
-          )}
+      <section className="relative py-16 overflow-hidden border-b border-gray-200/50">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        {/* Animated Background Gradient */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-secondary/5 to-background blur-3xl"></div>
+        </div>
+
+        <div className="container relative px-4 md:px-6">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+              {category.name}
+            </h1>
+            {category.description && (
+              <p className="mt-4 text-lg text-muted-foreground max-w-[700px] leading-relaxed">
+                {category.description}
+              </p>
+            )}
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4">
+              <span>{filteredProducts.length} produse</span>
+              <span>•</span>
+              <span>{category.name}</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="container px-4 md:px-6 py-6">
-        <div className="flex flex-col md:flex-row gap-6">
+      <div className="container px-4 md:px-6 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
-          <aside className="md:w-[300px] flex-shrink-0">
-            <div className="sticky top-28">
+          <aside className="lg:w-[300px] flex-shrink-0">
+            <div className="sticky top-28 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200/50 shadow-sm p-6">
               <ProductFilters
                 minPrice={minPrice}
                 maxPrice={maxPrice}
@@ -191,52 +206,34 @@ export default function CategoryClient({ categoryId }: { categoryId: string }) {
 
           {/* Products Grid */}
           <main className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/magazin/products/${product.id}`}
-                    className="block group"
-                  >
-                    <Card className="overflow-hidden border border-border/50 hover:border-primary/50 transition-colors">
-                      <CardImage>
-                        <ProductImage
-                          src={
-                            product.images[0] || "/images/default-product.jpg"
-                          }
-                          alt={product.name}
-                        />
-                      </CardImage>
-                      <CardContent>
-                        <CardTitle>{product.name}</CardTitle>
-                        <ExpandableDescription
-                          text={product.description}
-                          className="mt-2"
-                        />
-                      </CardContent>
-                      <CardFooter>
-                        <span className="font-medium text-primary">
-                          {formatPrice(product.price)} MDL
-                        </span>
-                        {product.stock > 0 ? (
-                          <span className="text-sm text-green-600">
-                            În stoc
-                          </span>
-                        ) : (
-                          <span className="text-sm text-red-600">
-                            Stoc epuizat
-                          </span>
-                        )}
-                      </CardFooter>
-                    </Card>
-                  </Link>
+                  <ProductCard key={product.id} product={product} />
                 ))
               ) : (
-                <div className="col-span-full text-center py-12">
-                  <h3 className="text-lg font-medium text-muted-foreground">
-                    Nu există produse care să corespundă filtrelor selectate.
+                <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <svg
+                      className="w-8 h-8 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">
+                    Nu am găsit produse
                   </h3>
+                  <p className="text-muted-foreground max-w-sm">
+                    Nu există produse care să corespundă filtrelor selectate. Încercați să ajustați filtrele.
+                  </p>
                 </div>
               )}
             </div>

@@ -162,11 +162,11 @@ export default function Header({
     <>
       <header
         ref={headerRef}
-        className={`fixed w-full z-40 transition-all duration-200
+        className={`fixed w-full z-40 transition-colors duration-200
                   ${
                     isScrolled
-                      ? "py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-200/20"
-                      : "py-4 bg-transparent"
+                      ? "py-3 bg-white shadow-lg shadow-gray-200/20"
+                      : "py-4 bg-white"
                   }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

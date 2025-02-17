@@ -25,33 +25,12 @@ const services = [
     features: ["150+ canale HD", "4K disponibil", "Smart TV Apps"],
   },
   {
-    title: "Telefonie IP",
-    description: "Comunicare crystal-clear cu tehnologie VoIP avansată",
-    icon: <PhoneIcon className="w-8 h-8" />,
-    gradient: "from-purple-500 to-violet-500",
-    features: ["Apeluri HD", "Număr portabil", "Minute nelimitate"],
-  },
-  {
-    title: "Gaming Optimizat",
-    description: "Conexiune dedicată pentru gaming cu latență minimă",
-    icon: <RocketLaunchIcon className="w-8 h-8" />,
-    gradient: "from-rose-500 to-pink-500",
-    features: ["Ping optimizat", "QoS Gaming", "Anti-DDoS"],
-  },
-  {
     title: "Securitate Avansată",
     description: "Protecție completă pentru toate dispozitivele tale",
     icon: <ShieldCheckIcon className="w-8 h-8" />,
     gradient: "from-amber-500 to-orange-500",
     features: ["Firewall", "Control Parental", "VPN inclus"],
   },
-  {
-    title: "Smart Home Ready",
-    description: "Soluții integrate pentru casa ta inteligentă",
-    icon: <DevicePhoneMobileIcon className="w-8 h-8" />,
-    gradient: "from-teal-500 to-emerald-500",
-    features: ["IoT Support", "Smart Control", "Auto-configurare"],
-  }
 ];
 
 export default function ServicesSection() {

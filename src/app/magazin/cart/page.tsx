@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
+import { Minus, Plus, Trash2, Loader2, ShoppingCart, AlertTriangle } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Separator } from "../components/ui/separator";
@@ -151,14 +151,20 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="container px-4 md:px-6 py-16">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Coșul tău este gol</h1>
+      <div className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="mb-6 relative">
+            <div className="absolute inset-0 bg-primary/5 rounded-full animate-pulse" />
+            <ShoppingCart className="w-16 h-16 mx-auto text-primary/40" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">Coșul tău este gol</h1>
           <p className="text-muted-foreground mb-8">
-            Nu ai adăugat încă niciun produs în coș.
+            Nu ai adăugat încă niciun produs în coș. Explorează magazinul nostru pentru a găsi produsele perfecte pentru tine.
           </p>
           <Link href="/magazin">
-            <Button>Continuă cumpărăturile</Button>
+            <Button size="lg" className="px-8">
+              Continuă cumpărăturile
+            </Button>
           </Link>
         </div>
       </div>
@@ -169,13 +175,13 @@ export default function CartPage() {
     return (
       <div className="container px-4 md:px-6 py-16">
         <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-muted rounded w-1/4" />
+          <div className="h-8 bg-gray-100 rounded-lg w-1/4" />
           <div className="grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-8">
-              <div className="h-[200px] bg-muted rounded" />
+              <div className="h-[200px] bg-gray-100 rounded-xl" />
             </div>
             <div className="lg:col-span-4">
-              <div className="h-[400px] bg-muted rounded" />
+              <div className="h-[400px] bg-gray-100 rounded-xl" />
             </div>
           </div>
         </div>
@@ -184,98 +190,112 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container px-4 md:px-6 py-6">
-      <h1 className="text-3xl font-bold mb-8">Coșul meu</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container px-4 md:px-6 py-8 md:py-12">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Coșul meu</h1>
+          <Button
+            variant="ghost"
+            onClick={clearCart}
+            disabled={isSubmitting}
+            className="text-muted-foreground hover:text-destructive"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Golește coșul
+          </Button>
+        </div>
 
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Cart Items */}
-        <div className="lg:col-span-8">
-          <Card>
-            <div className="p-6 space-y-6">
-              {items.map((item, index) => (
-                <div key={item.id}>
-                  {index > 0 && <Separator className="my-6" />}
-                  <div className="flex gap-4">
-                    <div className="relative w-24 h-24 flex-shrink-0">
-                      <ProductImage src={item.image} alt={item.name} />
+        <div className="grid gap-8 lg:grid-cols-12">
+          {/* Cart Items */}
+          <div className="lg:col-span-8 space-y-6">
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"
+              >
+                <div className="p-6">
+                  <div className="flex gap-6">
+                    <div className="relative w-32 h-32 flex-shrink-0 rounded-lg overflow-hidden bg-gray-50">
+                      <ProductImage
+                        src={item.image}
+                        alt={item.name}
+                        className="object-contain hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <Link
-                        href={`/magazin/products/${item.id}`}
-                        className="text-lg font-semibold hover:text-primary"
-                      >
-                        {item.name}
-                      </Link>
-                      <div className="mt-1 text-sm text-muted-foreground">
-                        {formatPrice(item.price)} MDL
-                      </div>
-                      <div className="mt-4 flex items-center gap-4">
-                        <div className="flex items-center">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity - 1)
-                            }
-                            disabled={item.quantity <= 1}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <Link
+                            href={`/magazin/products/${item.id}`}
+                            className="text-lg font-semibold text-gray-900 hover:text-primary transition-colors line-clamp-2"
                           >
-                            <Minus className="h-4 w-4" />
-                          </Button>
-                          <span className="w-12 text-center">
-                            {item.quantity}
-                          </span>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity + 1)
-                            }
-                            disabled={
-                              item.quantity >= (stockLevels[item.id] || 0)
-                            }
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
+                            {item.name}
+                          </Link>
+                          <div className="mt-1 text-sm text-muted-foreground">
+                            Preț unitar: {formatPrice(item.price)} MDL
+                          </div>
                         </div>
                         <Button
                           variant="ghost"
                           size="icon"
                           onClick={() => removeItem(item.id)}
-                          className="text-destructive hover:text-white"
+                          className="text-muted-foreground hover:text-destructive"
                         >
-                          <Trash2 className="h-4 w-4 " />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                      {stockLevels[item.id] < item.quantity && (
-                        <p className="mt-2 text-sm text-destructive">
-                          Doar {stockLevels[item.id]} produse disponibile în
-                          stoc.
-                        </p>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium">
-                        {formatPrice(item.price * item.quantity)} MDL
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex items-center bg-gray-50 rounded-lg p-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                            disabled={item.quantity <= 1}
+                            className="h-8 w-8"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <span className="w-12 text-center font-medium">{item.quantity}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                            disabled={item.quantity >= (stockLevels[item.id] || 0)}
+                            className="h-8 w-8"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="font-semibold text-lg text-gray-900">
+                          {formatPrice(item.price * item.quantity)} MDL
+                        </div>
                       </div>
+                      {stockLevels[item.id] < item.quantity && (
+                        <div className="mt-2 flex items-center gap-2 text-sm text-destructive">
+                          <AlertTriangle className="h-4 w-4" />
+                          <span>Doar {stockLevels[item.id]} produse disponibile în stoc.</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </Card>
-        </div>
+              </div>
+            ))}
+          </div>
 
-        {/* Order Summary */}
-        <div className="lg:col-span-4">
-          <div className="sticky top-24">
-            <Card>
-              <div className="p-6">
-                <h2 className="text-lg font-semibold mb-4">Sumar comandă</h2>
-                <div className="space-y-6">
+          {/* Order Summary */}
+          <div className="lg:col-span-4">
+            <div className="sticky top-24 space-y-6">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-6">Sumar comandă</h2>
+
                   {/* Customer Information */}
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Nume și Prenume</Label>
+                      <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                        Nume și Prenume
+                      </Label>
                       <Input
                         id="name"
                         value={customerInfo.name}
@@ -286,10 +306,13 @@ export default function CartPage() {
                           }))
                         }
                         placeholder="Ion Creangă"
+                        className="h-10"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         type="email"
@@ -301,10 +324,13 @@ export default function CartPage() {
                           }))
                         }
                         placeholder="ion.creanga@mail.md"
+                        className="h-10"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Telefon</Label>
+                      <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                        Telefon
+                      </Label>
                       <Input
                         id="phone"
                         type="tel"
@@ -316,31 +342,32 @@ export default function CartPage() {
                           }))
                         }
                         placeholder="+373 69 123 456"
+                        className="h-10"
                       />
                     </div>
                   </div>
 
-                  <Separator />
+                  <Separator className="my-6" />
 
                   {/* Price Summary */}
                   <div className="space-y-4">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between text-base">
                       <span className="text-muted-foreground">Subtotal</span>
-                      <span>{formatPrice(total)} MDL</span>
+                      <span className="font-medium text-gray-900">{formatPrice(total)} MDL</span>
                     </div>
 
                     <Separator />
-                    <div className="flex justify-between font-medium">
+
+                    <div className="flex justify-between text-lg font-semibold text-gray-900">
                       <span>Total</span>
                       <span>{formatPrice(total)} MDL</span>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="space-y-4">
+                  <div className="mt-6 space-y-4">
                     <Button
-                      className="w-full"
-                      size="lg"
+                      className="w-full h-11 text-base"
                       onClick={handleSubmitOrder}
                       disabled={
                         !customerInfo.name ||
@@ -351,25 +378,17 @@ export default function CartPage() {
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                           Se procesează...
                         </>
                       ) : (
                         "Finalizează comanda"
                       )}
                     </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={clearCart}
-                      disabled={isSubmitting}
-                    >
-                      Golește coșul
-                    </Button>
                   </div>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
