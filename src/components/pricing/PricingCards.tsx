@@ -38,7 +38,7 @@ export const defaultPlans: PricingPlan[] = [
   {
     title: "Popular",
     subtitle: "Cel mai ales",
-    price: 150,
+    price: 130,
     speed: "600 Mbps",
     gradient: "from-primary via-primary-dark to-violet-600",
     features: [
