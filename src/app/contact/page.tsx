@@ -89,13 +89,53 @@ export default function ContactPage() {
   });
 
   const [sending, setSending] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: 'success' | 'error' | null; message: string | null }>({
+    type: null,
+    message: null
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
-    // Add your form submission logic here
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setSending(false);
+    setFormStatus({ type: null, message: null });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'A apărut o eroare la trimiterea mesajului');
+      }
+
+      // Clear the form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+
+      setFormStatus({
+        type: 'success',
+        message: 'Mesajul a fost trimis cu succes! Vom reveni cu un răspuns în cel mai scurt timp.'
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'A apărut o eroare la trimiterea mesajului'
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -284,22 +324,65 @@ export default function ContactPage() {
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={sending}
-                    className="w-full py-3.5 bg-primary text-white rounded-xl font-medium
-                             shadow-lg shadow-primary/25 hover:bg-primary/90
-                             transition-colors relative overflow-hidden"
+                    className="w-full py-3.5 bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl font-medium
+                             shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40
+                             transition-all duration-300 relative overflow-hidden group"
                   >
-                    <span className={`transition-opacity ${sending ? 'opacity-0' : 'opacity-100'}`}>
-                      Trimite Mesajul
-                    </span>
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent
+                                  -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700"></div>
+                    <div className="flex items-center justify-center">
+                      <span className={`transition-opacity ${sending ? 'opacity-0' : 'opacity-100'} flex items-center`}>
+                        <svg
+                          className="w-5 h-5 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          ></path>
+                        </svg>
+                        Trimite Mesajul
+                      </span>
+                    </div>
                     {sending && (
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                       </div>
                     )}
                   </motion.button>
+
+                  {/* Form Status Message */}
+                  {formStatus.message && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`mt-4 p-4 rounded-xl ${
+                        formStatus.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
+                        'bg-red-50 text-red-800 border border-red-200'
+                      }`}
+                    >
+                      <div className="flex items-start">
+                        {formStatus.type === 'success' ? (
+                          <svg className="w-5 h-5 mr-2 mt-0.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                          </svg>
+                        ) : (
+                          <svg className="w-5 h-5 mr-2 mt-0.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                          </svg>
+                        )}
+                        <span>{formStatus.message}</span>
+                      </div>
+                    </motion.div>
+                  )}
                 </form>
               </motion.div>
 

@@ -9,7 +9,7 @@ import { Separator } from "../components/ui/separator";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { formatPrice, getImageUrl } from "../lib/utils";
-import { useCart } from "../lib/cart";
+import { useCart, CartItem } from "../lib/cart";
 import { toast } from "sonner";
 import { ProductImage } from "../components/ui/product-image";
 
@@ -51,8 +51,8 @@ export default function CartPage() {
           throw new Error("Invalid response format from stock API");
         }
 
-        const stockMap = data.reduce(
-          (acc, { id, stock }) => ({
+        const stockMap = data.reduce<Record<string, number>>(
+          (acc, { id, stock }: ProductStock) => ({
             ...acc,
             [id]: stock,
           }),
@@ -79,7 +79,7 @@ export default function CartPage() {
     } else {
       setIsLoading(false);
     }
-  }, [items.map((item) => item.id).join(",")]);
+  }, [items, updateQuantity]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -107,8 +107,8 @@ export default function CartPage() {
     const orderNumber = generateOrderNumber();
 
     try {
-      // First, create the order
-      const orderResponse = await fetch("/magazin/api/orders", {
+      // Create the order and send emails
+      const orderResponse = await fetch("/api/magazin/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,14 +123,15 @@ export default function CartPage() {
             name: item.name,
             price: item.price,
             quantity: item.quantity,
+            image: item.image
           })),
           total,
         }),
       });
 
       if (!orderResponse.ok) {
-        const error = await orderResponse.text();
-        throw new Error(error);
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.error || "An error occurred while processing your order");
       }
 
       toast.success(
@@ -208,7 +209,7 @@ export default function CartPage() {
         <div className="grid gap-8 lg:grid-cols-12">
           {/* Cart Items */}
           <div className="lg:col-span-8 space-y-6">
-            {items.map((item, index) => (
+            {items.map((item) => (
               <div
                 key={item.id}
                 className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200"

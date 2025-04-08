@@ -41,7 +41,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = (newItem: Omit<CartItem, "quantity">) => {
     setItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === newItem.id);
-      
+
       if (existingItem) {
         return currentItems.map((item) =>
           item.id === newItem.id
@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeItem = (id: string) => {
-    setItems((currentItems) => 
+    setItems((currentItems) =>
       currentItems.filter((item) => item.id !== id)
     );
   };
@@ -78,7 +78,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
-  
+
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -107,4 +107,4 @@ export function useCart() {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;
-} 
+}

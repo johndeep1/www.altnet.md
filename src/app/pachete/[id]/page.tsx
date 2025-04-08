@@ -35,13 +35,25 @@ export default function PackageFormPage() {
     setSending(true);
 
     try {
-      // Here you would typically send the data to your backend
-      console.log("Submitting form data:", {
-        ...formData,
-        plan: selectedPlan.title,
+      // Send the form data to the API endpoint
+      const response = await fetch("/api/pachete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          planTitle: selectedPlan.title,
+          planSpeed: selectedPlan.speed,
+          planPrice: selectedPlan.price,
+        }),
       });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "A apărut o eroare la trimiterea comenzii");
+      }
+
       toast.success(
         "Comanda a fost trimisă cu succes! Vă vom contacta în curând."
       );
@@ -56,7 +68,11 @@ export default function PackageFormPage() {
       });
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("A apărut o eroare. Vă rugăm să încercați din nou.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "A apărut o eroare. Vă rugăm să încercați din nou."
+      );
     } finally {
       setSending(false);
     }
