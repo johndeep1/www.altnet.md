@@ -19,23 +19,23 @@ const contactMethods = [
   {
     icon: <PhoneIcon className="w-6 h-6" />,
     title: 'Telefon',
-    value: '+373 69 123 456',
+    value: '+373 268 85 555',
     description: 'Luni - Vineri: 8:00 - 18:00',
     action: 'Sună Acum',
-    href: 'tel:+37369123456'
+    href: 'tel:+37326885555'
   },
   {
     icon: <EnvelopeIcon className="w-6 h-6" />,
     title: 'Email',
-    value: 'info@altnet.md',
+    value: 'sales@altnet.md',
     description: 'Răspundem în maxim 24 ore',
     action: 'Scrie-ne',
-    href: 'mailto:info@altnet.md'
+    href: 'mailto:sales@altnet.md'
   },
   {
     icon: <MapPinIcon className="w-6 h-6" />,
     title: 'Adresă',
-    value: 'Str. Principală 123, Ialoveni',
+    value: 'Alexandru cel Bun 57, Ialoveni, Moldova',
     description: 'Vizitează-ne la oficiu',
     action: 'Vezi pe Hartă',
     href: '#map'
@@ -96,17 +96,17 @@ export default function ContactPage() {
 
       <div className="relative">
         {/* Header Section */}
-        <section className="relative pt-32 pb-16 overflow-hidden">
+        <section className="relative pt-32 pb-8 overflow-hidden">
           {/* Top Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-16"
+              className="text-center mb-12"
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
                 Contactează-<span className="text-primary">ne</span>
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -117,16 +117,16 @@ export default function ContactPage() {
           </div>
 
           {/* Bottom Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white/50" />
         </section>
 
         {/* Contact Methods Section */}
-        <section className="relative py-16">
+        <section className="relative py-10">
           {/* Top Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {contactMethods.map((method, index) => (
                 <motion.a
                   key={method.title}
@@ -134,23 +134,23 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl bg-white/60 backdrop-blur-sm p-8
+                  className="group relative overflow-hidden rounded-2xl bg-white/60 backdrop-blur-sm p-6
                            border border-gray-200/50 shadow-lg hover:shadow-xl
                            transition-all duration-300 cursor-pointer"
                 >
                   <div className="relative z-10">
                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center
-                                  justify-center text-primary mb-6 group-hover:scale-110
+                                  justify-center text-primary mb-4 group-hover:scale-110
                                   transition-transform duration-300">
                       {method.icon}
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">
                       {method.title}
                     </h3>
                     <p className="text-lg font-medium text-gray-900 mb-1">
                       {method.value}
                     </p>
-                    <p className="text-sm text-gray-600 mb-6">
+                    <p className="text-sm text-gray-600 mb-4">
                       {method.description}
                     </p>
                     <span className="text-primary font-medium inline-flex items-center gap-2">
@@ -175,64 +175,64 @@ export default function ContactPage() {
           </div>
 
           {/* Bottom Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white/50" />
         </section>
 
         {/* Contact Form and Map Section */}
-        <section className="relative py-16">
+        <section className="relative py-12">
           {/* Top Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Contact Form */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-8"
+                className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-6 order-2 lg:order-1"
               >
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Nume Complet
                       </label>
                       <input
                         type="text"
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200/50
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200/50
                                  focus:ring-2 focus:ring-primary/20 focus:border-primary
                                  transition-colors bg-white/80"
-                        placeholder="Ion Popescu"
+                        placeholder="Nume și Prenume"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Email
                       </label>
                       <input
                         type="email"
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200/50
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200/50
                                  focus:ring-2 focus:ring-primary/20 focus:border-primary
                                  transition-colors bg-white/80"
-                        placeholder="ion.popescu@example.com"
+                        placeholder="exemplu@email.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Telefon
                       </label>
                       <input
                         type="tel"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200/50
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200/50
                                  focus:ring-2 focus:ring-primary/20 focus:border-primary
                                  transition-colors bg-white/80"
                         placeholder="+373 69 123 456"
@@ -241,7 +241,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
                         Subiect
                       </label>
                       <CustomSelect
@@ -254,13 +254,13 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Mesaj
                     </label>
                     <textarea
                       required
                       rows={4}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200/50
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200/50
                                focus:ring-2 focus:ring-primary/20 focus:border-primary
                                transition-colors bg-white/80"
                       placeholder="Cum te putem ajuta?"
@@ -274,7 +274,7 @@ export default function ContactPage() {
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={sending}
-                    className="w-full py-4 bg-primary text-white rounded-xl font-medium
+                    className="w-full py-3.5 bg-primary text-white rounded-xl font-medium
                              shadow-lg shadow-primary/25 hover:bg-primary/90
                              transition-colors relative overflow-hidden"
                   >
@@ -298,14 +298,14 @@ export default function ContactPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden"
+                className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden order-1 lg:order-2"
                 id="map"
               >
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2723.813943085349!2d28.77364847746949!3d46.94569577113691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40c97f6fac31bb87%3A0x2f538bcb370b6f01!2sAltNet!5e0!3m2!1sen!2s!4v1734528911635!5m2!1sen!2s"
                   width="100%"
                   height="100%"
-                  style={{ border: 0, minHeight: '500px' }}
+                  style={{ border: 0, minHeight: '450px' }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -316,13 +316,13 @@ export default function ContactPage() {
           </div>
 
           {/* Bottom Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white/50" />
         </section>
 
         {/* Working Hours Section */}
-        <section className="relative py-16">
+        <section className="relative py-10">
           {/* Top Gradient */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -330,7 +330,7 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <div className="inline-flex items-center gap-2 text-gray-600 bg-white/60 backdrop-blur-sm px-6 py-3 rounded-full border border-gray-200/50">
+              <div className="inline-flex items-center gap-2 text-gray-600 bg-white/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-gray-200/50">
                 <ClockIcon className="w-5 h-5" />
                 Program de lucru: Luni - Vineri: 8:00 - 20:00 | Sâmbătă: 9:00 - 17:00
               </div>
@@ -338,7 +338,7 @@ export default function ContactPage() {
           </div>
 
           {/* Bottom Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white/50" />
         </section>
       </div>
     </main>

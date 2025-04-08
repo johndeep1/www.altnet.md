@@ -25,8 +25,8 @@ export default function Header() {
 
   const magazinNavigation = [
     {
-      name: "Pagina Principală",
-      href: "/",
+      name: "Produse",
+      href: "/magazin",
     },
     {
       name: "Categorii",

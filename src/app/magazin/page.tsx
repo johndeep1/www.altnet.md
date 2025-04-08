@@ -6,20 +6,11 @@ import { RecentProducts } from "./components/recent-products";
 
 export const revalidate = 3600; // Revalidate every hour
 
-const ClientHeroSection = dynamic(
-  () =>
-    import("./components/client-hero-section").then(
-      (mod) => mod.ClientHeroSection
-    ),
-  {
-    ssr: true,
-  }
-);
 
 export default function Home() {
   return (
     <main>
-      <ClientHeroSection />
+<ProductSlideshow />
       <Suspense
         fallback={
           <div className="container px-4 md:px-6 py-6">
@@ -37,7 +28,7 @@ export default function Home() {
         <CategoriesSection />
       </Suspense>
       <RecentProducts />
-      <ProductSlideshow />
+
     </main>
   );
 }

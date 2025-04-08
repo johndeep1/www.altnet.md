@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ShoppingCart } from "lucide-react";
 import dynamic from "next/dynamic";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
 
 interface HeaderProps {
   cartButton?: React.ReactNode;
@@ -173,7 +174,7 @@ export default function Header({
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link
-              href={isMagazin ? "/magazin" : "/"}
+              href="/"
               className="flex items-center"
             >
               <img
@@ -283,12 +284,17 @@ export default function Header({
 
             {/* Contact and Cart Buttons */}
             <div className="hidden lg:flex lg:items-center lg:gap-4">
-              <Link
-                href={isMagazin ? "/contact" : "/contact"}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors"
-              >
-                <PhoneIcon className="w-4 h-4" />
-                <span>Contact</span>
+              <Link href={isMagazin ? "/contact" : "/contact"}>
+                <ShimmerButton
+                  background="#22C55E"
+                  shimmerColor="#ffffff"
+                  className="inline-flex items-center gap-2 px-5 py-[10px] text-sm font-medium"
+                >
+                  <PhoneIcon className="w-4 h-4 text-white" />
+                  <span className="whitespace-pre-wrap text-center font-medium leading-none tracking-tight text-white">
+                    Contact
+                  </span>
+                </ShimmerButton>
               </Link>
 
               {isMagazin && cartButton}
@@ -324,7 +330,7 @@ export default function Header({
                 {/* Menu Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
                   <Link
-                    href={isMagazin ? "/magazin" : "/"}
+                    href="/"
                     className="flex items-center"
                   >
                     <span className="text-2xl font-bold text-primary">
@@ -375,7 +381,7 @@ export default function Header({
 
                     {/* Contact Button */}
                     <Link
-                      href={isMagazin ? "/magazin/contact" : "/contact"}
+                      href="/contact"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium
                                text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors"

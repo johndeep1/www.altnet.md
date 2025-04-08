@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useRef, TouchEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, Package, ArrowRight } from "lucide-react";
 import { cn } from "../lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoPlay from "embla-carousel-autoplay";
 
 const DEFAULT_IMAGE = "/images/default-category.jpg";
 
@@ -19,15 +20,26 @@ interface Category {
 
 export function ProductSlideshow() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const slideRef = useRef<HTMLDivElement>(null);
 
-  const minSwipeDistance = 50;
+  // Initialize Embla Carousel with autoplay (stops on hover)
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      skipSnaps: false,
+    },
+    [
+      AutoPlay({
+        delay: 4000,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true
+      })
+    ]
+  );
 
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -45,48 +57,28 @@ export function ProductSlideshow() {
     fetchCategories();
   }, []);
 
+  // Sync current index with Embla's selected slide
   useEffect(() => {
-    if (categories.length === 0 || isHovered) return;
+    if (!emblaApi) return;
 
-    const interval = setInterval(() => {
-      setCurrentIndex((current) => (current + 1) % categories.length);
-    }, 4000);
+    const onSelect = () => {
+      setCurrentIndex(emblaApi.selectedScrollSnap());
+    };
 
-    return () => clearInterval(interval);
-  }, [categories.length, isHovered]);
+    emblaApi.on("select", onSelect);
 
-  const nextSlide = () => {
-    setCurrentIndex((current) => (current + 1) % categories.length);
-  };
+    // Initial call to set the first index
+    onSelect();
 
-  const prevSlide = () => {
-    setCurrentIndex(
-      (current) => (current - 1 + categories.length) % categories.length
-    );
-  };
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi]);
 
-  const onTouchStart = (e: TouchEvent) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-
-    if (isLeftSwipe) {
-      nextSlide();
-    } else if (isRightSwipe) {
-      prevSlide();
-    }
-  };
+  // Navigation functions
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
 
   const getImageUrl = (category: Category) => {
     if (!category.image) return DEFAULT_IMAGE;
@@ -107,7 +99,7 @@ export function ProductSlideshow() {
   }
 
   return (
-    <section className="relative py-24 overflow-hidden">
+    <section className="relative py-6 overflow-hidden">
       {/* Background Pattern and Gradient */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       <div className="absolute inset-0">
@@ -116,42 +108,19 @@ export function ProductSlideshow() {
       </div>
 
       <div className="container relative px-4 md:px-6">
-        {/* Section Header */}
-        <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
-          <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-full mb-4">
-            <Package className="w-5 h-5 text-primary" />
-          </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-            Categorii <span className="text-primary">Populare</span>
-          </h2>
-          <p className="mx-auto max-w-[700px] text-muted-foreground text-lg md:text-xl">
-            Descoperă cele mai populare categorii de produse și găsește exact ce
-            cauți
-          </p>
-        </div>
-
         <div
           className="relative max-w-7xl mx-auto"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <div
-            ref={slideRef}
-            className="relative aspect-[16/9] overflow-hidden rounded-2xl shadow-2xl bg-background/5 backdrop-blur-sm"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            <AnimatePresence initial={false} mode="wait">
-              {categories.map((category, index) => (
-                index === currentIndex && (
-                  <motion.div
+          {/* Embla Carousel */}
+          <div className="relative overflow-hidden rounded-2xl bg-background/5 backdrop-blur-sm">
+            <div ref={emblaRef} className="overflow-hidden">
+              <div className="flex touch-pan-y">
+                {categories.map((category) => (
+                  <div
                     key={category.id}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0"
+                    className="relative aspect-[10/6] md:aspect-[10/4] min-w-full"
                   >
                     <Link href={`/magazin/categories/${category.id}`}>
                       <div className="relative w-full h-full group">
@@ -164,37 +133,34 @@ export function ProductSlideshow() {
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="absolute inset-0 flex flex-col justify-end p-6 md:p-8 lg:p-12"
+                        <div
+                          className="absolute inset-0 flex flex-col justify-end p-4 sm:p-6 md:p-8 lg:p-12 transform transition-transform duration-500"
                         >
                           <div className="max-w-[700px] transform transition-all duration-700 group-hover:-translate-y-2">
-                            <div className="flex items-center gap-2 text-primary mb-4">
-                              <Package className="w-5 h-5" />
-                              <span className="text-sm font-medium">Categorie Populară</span>
+                            <div className="flex items-center gap-1 sm:gap-2 text-primary mb-2 sm:mb-4">
+                              <Package className="w-4 h-4 sm:w-5 sm:h-5" />
+                              <span className="text-xs sm:text-sm font-medium">Categorie Populară</span>
                             </div>
-                            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+                            <h3 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4">
                               {category.name}
                             </h3>
                             {category.description && (
-                              <p className="text-lg text-white/90 line-clamp-2 md:line-clamp-3 mb-6">
+                              <p className="text-sm sm:text-base md:text-lg text-white/90 line-clamp-2 md:line-clamp-3 mb-3 sm:mb-6">
                                 {category.description}
                               </p>
                             )}
                             <div className="flex items-center gap-2 group/btn">
-                              <span className="text-white font-medium">Explorează Categoria</span>
-                              <ArrowRight className="w-5 h-5 text-white transform transition-transform duration-300 group-hover/btn:translate-x-1" />
+                              <span className="text-sm sm:text-base text-white font-medium">Explorează Categoria</span>
+                              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white transform transition-transform duration-300 group-hover/btn:translate-x-1" />
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                       </div>
                     </Link>
-                  </motion.div>
-                )
-              ))}
-            </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Navigation Buttons */}
@@ -208,7 +174,7 @@ export function ProductSlideshow() {
               )}
               onClick={(e) => {
                 e.preventDefault();
-                prevSlide();
+                scrollPrev();
               }}
             >
               <ChevronLeft className="h-6 w-6" />
@@ -222,7 +188,7 @@ export function ProductSlideshow() {
               )}
               onClick={(e) => {
                 e.preventDefault();
-                nextSlide();
+                scrollNext();
               }}
             >
               <ChevronRight className="h-6 w-6" />
@@ -230,7 +196,7 @@ export function ProductSlideshow() {
           </div>
 
           {/* Dots Navigation */}
-          <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3">
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
             {categories.map((_, index) => (
               <button
                 key={index}
@@ -240,7 +206,7 @@ export function ProductSlideshow() {
                     ? "bg-primary w-8"
                     : "bg-primary/30 hover:bg-primary/50"
                 )}
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => scrollTo(index)}
               />
             ))}
           </div>

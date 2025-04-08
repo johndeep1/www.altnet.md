@@ -12,19 +12,11 @@ const features = [
     description:
       "Infrastructură modernă de fibră optică pentru viteze ultra-rapide și stabilitate maximă.",
     icon: (
-      <svg
+      <img
+        src="/altnet-related/ALTNET-INTERNET.svg"
+        alt="Fibră Optică"
         className="w-6 h-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M13 10V3L4 14h7v7l9-11h-7z"
-        />
-      </svg>
+      />
     ),
   },
   {
@@ -32,19 +24,11 @@ const features = [
     description:
       "Rețea dezvoltată în continuu pentru a acoperi cât mai multe zone din Ialoveni.",
     icon: (
-      <svg
+      <img
+        src="/altnet-related/ALTNET-WIFI.svg"
+        alt="Acoperire Extinsă"
         className="w-6 h-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
+      />
     ),
   },
   {
@@ -184,34 +168,6 @@ export default function InternetPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="relative py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8"
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 text-center border border-gray-200/50 shadow-sm hover:shadow-lg transition-all"
-              >
-                <div className="text-4xl font-bold text-primary mb-2">
-                  {stat.value}
-                  {stat.suffix}
-                </div>
-                <div className="text-gray-600">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* Features Grid */}
       <section className="relative py-16 bg-gradient-to-b from-white to-gray-50/50">
@@ -254,152 +210,7 @@ export default function InternetPage() {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="relative py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200/50 p-8 lg:p-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Beneficii Pentru Tine
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {benefits.map((benefit, index) => (
-                    <motion.div
-                      key={benefit}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-center gap-3 bg-white/60 p-4 rounded-xl border border-gray-200/50"
-                    >
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-primary"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 font-medium">
-                        {benefit}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
 
-              {/* Network Illustration */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                <svg
-                  className="w-full h-auto"
-                  viewBox="0 0 400 300"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Main Router */}
-                  <motion.path
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 2, ease: "easeInOut" }}
-                    d="M200 150 L100 100 L300 100 L200 150"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="text-primary"
-                  />
-
-                  {/* Connection Lines */}
-                  <motion.g
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                  >
-                    <path
-                      d="M200 150 L150 200 M200 150 L250 200"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeDasharray="5,5"
-                      className="text-gray-400"
-                    />
-                  </motion.g>
-
-                  {/* Devices */}
-                  <motion.g
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 1, duration: 0.5 }}
-                  >
-                    <circle
-                      cx="150"
-                      cy="200"
-                      r="20"
-                      className="fill-primary/20"
-                    />
-                    <circle
-                      cx="250"
-                      cy="200"
-                      r="20"
-                      className="fill-primary/20"
-                    />
-                    <circle
-                      cx="200"
-                      cy="150"
-                      r="25"
-                      className="fill-primary/30"
-                    />
-                  </motion.g>
-
-                  {/* Wireless Signals */}
-                  <motion.g
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 1, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                  >
-                    <path
-                      d="M200 120 Q150 100 100 120 M200 120 Q250 100 300 120"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-primary/50"
-                    />
-                    <path
-                      d="M200 110 Q150 80 80 110 M200 110 Q250 80 320 110"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-primary/30"
-                    />
-                  </motion.g>
-
-                  {/* Connection Points */}
-                  <motion.g
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 1.5, duration: 0.5 }}
-                  >
-                    <circle cx="100" cy="100" r="8" className="fill-primary" />
-                    <circle cx="300" cy="100" r="8" className="fill-primary" />
-                  </motion.g>
-                </svg>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Speed Comparison Section */}
       <section className="relative py-24">
@@ -515,6 +326,18 @@ export default function InternetPage() {
                         </svg>
                       </motion.div>
                       <div className="text-center">
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.5, duration: 0.5 }}
+                          className="mb-2"
+                        >
+                          <img
+                            src="/altnet-related/ALTNET-WIFI.svg"
+                            alt="High-Speed Internet"
+                            className="w-12 h-12 mx-auto"
+                          />
+                        </motion.div>
                         <span className="text-5xl font-bold text-primary">
                           1000
                         </span>

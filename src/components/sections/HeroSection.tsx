@@ -47,75 +47,19 @@ const NetworkIcon = () => (
 const features = [
   {
     name: "Internet",
-    icon: (
-      <svg
-        className="w-6 h-6 text-primary"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9h18"
-        />
-      </svg>
-    ),
+    icon: "/altnet-related/ALTNET-INTERNET.svg",
   },
   {
     name: "TV",
-    icon: (
-      <svg
-        className="w-6 h-6 text-primary"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-        />
-      </svg>
-    ),
+    icon: "/altnet-related/ALTNET-TV.svg",
   },
   {
     name: "Telefonie",
-    icon: (
-      <svg
-        className="w-6 h-6 text-primary"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-        />
-      </svg>
-    ),
+    icon: "/altnet-related/ALTNET-TELEFON.svg",
   },
   {
     name: "Gaming",
-    icon: (
-      <svg
-        className="w-6 h-6 text-primary"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-        />
-      </svg>
-    ),
+    icon: "/altnet-related/ALTNET-WIFI.svg",
   },
 ];
 
@@ -294,7 +238,15 @@ export default function HeroSection() {
                     }}
                   >
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                      {feature.icon}
+                      {typeof feature.icon === "string" ? (
+                        <img
+                          src={feature.icon}
+                          alt={feature.name}
+                          className="w-6 h-6"
+                        />
+                      ) : (
+                        feature.icon
+                      )}
                     </div>
                     <span className="text-gray-800 font-medium">
                       {feature.name}
