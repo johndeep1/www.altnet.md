@@ -49,7 +49,8 @@ const mainNavigation = [
   { name: "Prețuri", href: "/preturi" },
   { name: "Acoperire", href: "/acoperire" },
   { name: "Despre Noi", href: "/despre" },
-  { name: "Magazin", href: "/magazin" },
+    { name: "Magazin", href: "/magazin" },
+  { name: "Achitare online", href: "https://oplata.md/altnet" },
 ];
 
 const MobileMenuItem = ({

@@ -32,16 +32,13 @@ const mainNavigation: FooterSection[] = [
       { name: "Internet", href: "/servicii/internet" },
       { name: "TV Digital", href: "/servicii/tv" },
       { name: "Prețuri", href: "/preturi" },
-      { name: "Business", href: "/business" },
     ],
   },
   {
     title: "Magazin",
     links: [
       { name: "Produse", href: "/magazin" },
-      { name: "Livrare", href: "/magazin/delivery" },
-      { name: "Returnări", href: "/magazin/returns" },
-      { name: "Termeni și Condiții", href: "/magazin/terms" },
+
     ],
   },
 ];

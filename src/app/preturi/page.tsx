@@ -6,6 +6,15 @@ import { useRouter } from "next/navigation";
 import PricingCards, { defaultPlans } from "@/components/pricing/PricingCards";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
+// First define an interface for the feature type
+interface ComparisonFeature {
+  name: string;
+  tv: string | boolean;
+  popular: string | boolean;
+  premium: string | boolean;
+  highlight?: boolean;
+}
+
 const comparisonFeatures = [
   {
     category: "Internet",
@@ -27,31 +36,31 @@ const comparisonFeatures = [
     features: [
       {
         name: "Viteză Download",
-        start: "300 Mbps",
-        popular: "500 Mbps",
+        tv: "-",
+        popular: "600 Mbps",
         premium: "1000 Mbps",
       },
       {
         name: "Viteză Upload",
-        start: "300 Mbps",
-        popular: "500 Mbps",
+        tv: "-",
+        popular: "600 Mbps",
         premium: "1000 Mbps",
       },
       {
         name: "Router WiFi",
-        start: "WiFi 6",
+        tv: "-",
         popular: "WiFi 6",
         premium: "WiFi 6E",
       },
-      { name: "IP Static", start: false, popular: true, premium: true },
-      { name: "IPv6", start: true, popular: true, premium: true },
+      { name: "IP Static", tv: false, popular: true, premium: true },
+      { name: "IPv6", tv: false, popular: true, premium: true },
       {
         name: "Instalare",
-        start: "Gratuită",
+        tv: "Gratuită",
         popular: "Gratuită",
         premium: "Prioritară",
       },
-    ],
+    ] as ComparisonFeature[],
   },
   {
     category: "TV Digital",
@@ -71,42 +80,24 @@ const comparisonFeatures = [
       </svg>
     ),
     features: [
-      { name: "Canale TV", start: false, popular: "HD", premium: "4K" },
-      { name: "TV pe mobil", start: false, popular: true, premium: true },
+      { name: "Canale TV", tv: "200+ canale", popular: "HD", premium: "Premium" },
+      { name: "TV pe mobil", tv: true, popular: true, premium: true },
       {
         name: "Multi-screen",
-        start: false,
+        tv: "1 device",
         popular: "2 devices",
         premium: "4 devices",
       },
-    ],
-  },
-  {
-    category: "Telefonie",
-    icon: (
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-        />
-      </svg>
-    ),
-    features: [
       {
-        name: "Telefonie fixă",
-        start: false,
-        popular: true,
-        premium: "Nelimitată",
+        name: "Cadou Televizor",
+        tv: false,
+        popular: false,
+        premium: "45 inch",
+        highlight: true,
       },
-    ],
+    ] as ComparisonFeature[],
   },
+
 ];
 
 export default function PricingPage() {
@@ -135,7 +126,7 @@ export default function PricingPage() {
                 prețuri competitive
               </p>
               <div className="flex flex-wrap gap-4">
-                {["Internet", "TV", "Telefonie"].map((service) => (
+                {["Internet", "TV"].map((service) => (
                   <motion.div
                     key={service}
                     whileHover={{ scale: 1.05 }}
@@ -423,16 +414,24 @@ export default function PricingPage() {
                         transition={{
                           delay: sectionIndex * 0.1 + featureIndex * 0.05,
                         }}
-                        className="border-t border-gray-100 hover:bg-gray-50/50"
+                        className={`border-t border-gray-100 hover:bg-gray-50/50 ${
+                          feature.highlight ? "bg-primary/5" : ""
+                        }`}
                       >
-                        <td className="py-4 px-6 text-left text-gray-600">
+                        <td className={`py-4 px-6 text-left ${
+                          feature.highlight ? "font-medium text-primary" : "text-gray-600"
+                        }`}>
                           {feature.name}
                         </td>
-                        {(["start", "popular", "premium"] as const).map(
+                        {(["tv", "popular", "premium"] as const).map(
                           (planType) => (
                             <td
                               key={planType}
-                              className="py-4 px-6 text-center"
+                              className={`py-4 px-6 text-center ${
+                                feature.highlight && planType === "premium"
+                                  ? "font-bold text-primary"
+                                  : ""
+                              }`}
                             >
                               {typeof feature[planType] === "boolean" ? (
                                 feature[planType] ? (
@@ -446,8 +445,10 @@ export default function PricingPage() {
                                 <span
                                   className={`font-medium
                                 ${
-                                  planType === "popular"
+                                  planType === "popular" && !feature.highlight
                                     ? "text-primary"
+                                    : feature.highlight && planType === "premium"
+                                    ? "text-primary bg-primary/10 px-2 py-1 rounded-md inline-block"
                                     : "text-gray-900"
                                 }`}
                                 >
@@ -511,18 +512,26 @@ export default function PricingPage() {
                         <div className="space-y-2">
                           {section.features.map((feature) => {
                             const planType = plan.title.toLowerCase() as
-                              | "start"
+                              | "tv"
                               | "popular"
                               | "premium";
                             return (
                               <div
                                 key={feature.name}
-                                className="flex justify-between text-sm"
+                                className={`flex justify-between text-sm ${
+                                  feature.highlight ? "bg-primary/5 p-2 rounded-lg" : ""
+                                }`}
                               >
-                                <span className="text-gray-600">
+                                <span className={`${
+                                  feature.highlight ? "font-medium text-primary" : "text-gray-600"
+                                }`}>
                                   {feature.name}
                                 </span>
-                                <span className="font-medium text-gray-900">
+                                <span className={`font-medium ${
+                                  feature.highlight && planType === "premium"
+                                    ? "text-primary bg-primary/10 px-2 py-1 rounded-md"
+                                    : "text-gray-900"
+                                }`}>
                                   {typeof feature[planType] === "boolean" ? (
                                     feature[planType] ? (
                                       <CheckIcon className="w-5 h-5 text-primary" />

@@ -58,6 +58,34 @@ const locations = [
     hasOffice: false,
     coverage: "Acoperire completă",
     icon: MapPin,
+    },
+    {
+    name: "Satul Suruceni",
+    type: "village",
+    hasOffice: false,
+    coverage: "Acoperire completă",
+    icon: MapPin,
+    },
+        {
+    name: "Satul Hansca",
+    type: "village",
+    hasOffice: false,
+    coverage: "Acoperire completă",
+    icon: MapPin,
+    },
+    {
+    name: "Satul Pojăreni",
+    type: "village",
+    hasOffice: false,
+    coverage: "Acoperire completă",
+    icon: MapPin,
+  },
+    {
+    name: "Satul Malcoci",
+    type: "village",
+    hasOffice: false,
+    coverage: "Acoperire completă",
+    icon: MapPin,
   },
 ];
 
@@ -123,25 +151,68 @@ export default function CoverageSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/50"
+                whileHover={{
+                  y: -5,
+                  transition: { duration: 0.2, ease: "easeOut" },
+                }}
+                className="group relative bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200/50 overflow-hidden"
               >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                {/* Decorative gradient backdrop */}
+                <div className="absolute -inset-1 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+
+                {/* Decorative dots */}
+                <div className="absolute top-0 right-0 h-20 w-20 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                  <div className="absolute top-4 right-4 w-1.5 h-1.5 bg-primary rounded-full" />
+                  <div className="absolute top-4 right-8 w-1 h-1 bg-primary rounded-full" />
+                  <div className="absolute top-8 right-4 w-1 h-1 bg-primary rounded-full" />
+                </div>
+
+                <div className="relative flex items-start gap-4">
+                  <motion.div
+                    className="w-12 h-12 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center text-primary z-10"
+                    whileHover={{
+                      rotate: [0, -5, 5, 0],
+                      transition: { duration: 0.5 }
+                    }}
+                  >
                     <location.icon className="w-6 h-6" />
-                  </div>
+                  </motion.div>
+
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
                       {location.name}
                     </h3>
-                    <p className="text-gray-600 mb-4">{location.coverage}</p>
-                    {location.hasOffice && (
-                      <div className="flex items-center gap-2 text-sm text-primary">
+
+                    <div className="relative">
+                      <span className="inline-block px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm mb-4">
+                        {location.coverage}
+                      </span>
+                    </div>
+
+                    {location.hasOffice ? (
+                      <motion.div
+                        initial={{ opacity: 0.8 }}
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center gap-2 text-sm text-primary bg-primary/5 px-3 py-1.5 rounded-lg w-fit"
+                      >
                         <Building2 className="w-4 h-4" />
                         <span>{location.officeCount} oficiu disponibil</span>
-                      </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0.8 }}
+                        whileHover={{ scale: 1.05 }}
+                        className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg w-fit"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        <span>Acoperire completă</span>
+                      </motion.div>
                     )}
                   </div>
                 </div>
+
+                {/* Bottom gradient decoration */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
               </motion.div>
             ))}
           </div>

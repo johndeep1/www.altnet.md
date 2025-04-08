@@ -10,7 +10,7 @@ interface PricingCardProps {
   subtitle: string;
   price: number;
   speed: string;
-  features: Array<{ text: string; included: boolean }>;
+  features: Array<{ text: string; included: boolean; highlight?: boolean }>;
   gradient: string;
   featured?: boolean;
   popularFeatures: string[];
@@ -175,9 +175,12 @@ export default function PricingCard({
                   </span>
                 )}
                 <span
-                  className={
-                    feature.included ? "text-gray-600" : "text-gray-400"
-                  }
+                  className={`
+                    ${feature.included ? "text-gray-600" : "text-gray-400"}
+                    ${feature.highlight
+                      ? "font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md"
+                      : ""}
+                  `}
                 >
                   {feature.text}
                 </span>

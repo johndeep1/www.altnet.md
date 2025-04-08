@@ -20,9 +20,18 @@ const contactMethods = [
     icon: <PhoneIcon className="w-6 h-6" />,
     title: 'Telefon',
     value: '+373 268 85 555',
-    description: 'Luni - Vineri: 8:00 - 18:00',
+    description: 'Luni - Sâmbătă: 8:00 - 19:00  Duminică: 9:00 - 17:00',
+
     action: 'Sună Acum',
     href: 'tel:+37326885555'
+  },
+  {
+    icon: <PhoneIcon className="w-6 h-6 text-[#7360F2]" />,
+    title: 'Viber',
+    value: '+373 789 66 177',
+    description: 'Disponibil pentru mesaje și apeluri',
+    action: 'Contactează-ne pe Viber',
+    href: 'viber://chat?number=%2B373789661770'
   },
   {
     icon: <EnvelopeIcon className="w-6 h-6" />,
@@ -126,7 +135,7 @@ export default function ContactPage() {
           <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {contactMethods.map((method, index) => (
                 <motion.a
                   key={method.title}
@@ -139,9 +148,10 @@ export default function ContactPage() {
                            transition-all duration-300 cursor-pointer"
                 >
                   <div className="relative z-10">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center
-                                  justify-center text-primary mb-4 group-hover:scale-110
-                                  transition-transform duration-300">
+                    <div
+                      className={`w-12 h-12 ${method.title === 'Viber' ? 'bg-[#7360F2]/10' : 'bg-primary/10'} rounded-xl flex items-center
+                                  justify-center ${method.title === 'Viber' ? 'text-[#7360F2]' : 'text-primary'} mb-4 group-hover:scale-110
+                                  transition-transform duration-300`}>
                       {method.icon}
                     </div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-1">
@@ -332,7 +342,7 @@ export default function ContactPage() {
             >
               <div className="inline-flex items-center gap-2 text-gray-600 bg-white/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-gray-200/50">
                 <ClockIcon className="w-5 h-5" />
-                Program de lucru: Luni - Vineri: 8:00 - 20:00 | Sâmbătă: 9:00 - 17:00
+                Program de lucru: Luni - Sâmbătă: 8:00 - 19:00 | Duminică: 9:00 - 17:00
               </div>
             </motion.div>
           </div>

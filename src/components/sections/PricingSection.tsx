@@ -78,7 +78,7 @@ export default function PricingSection() {
           className="mt-16 text-center"
         >
           <p className="text-sm text-gray-500">
-            Toate prețurile includ TVA. Contractul minim este de 12 luni.
+            Toate prețurile includ TVA. Contractul minim este de 24 luni.
             <br />
             <span className="text-primary hover:underline cursor-pointer">
               Vezi termenii și condițiile

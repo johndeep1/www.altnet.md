@@ -21,8 +21,8 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "Adrian Vatcarau",
-    role: "Game Developer",
+    name: "Matcas Marin",
+    role: "Antreprenor",
     image:
       "https://img.freepik.com/free-photo/curly-man-with-broad-smile-shows-perfect-teeth-being-amused-by-interesting-talk-has-bushy-curly-dark-hair-stands-indoor-against-white-blank-wall_273609-17092.jpg?semt=ais_hybrid",
     content:

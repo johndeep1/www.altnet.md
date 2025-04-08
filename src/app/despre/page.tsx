@@ -48,37 +48,44 @@ const stats = [
   { value: "15k+", label: "Clienți Activi" },
   { value: "98%", label: "Clienți Mulțumiți" },
   { value: "24/7", label: "Suport Tehnic" },
-  { value: "10+", label: "Ani de Experiență" },
+  { value: "21+", label: "Ani de Experiență" },
 ];
 
 const timeline = [
   {
-    year: "2013",
+    year: "2004",
     title: "Începutul Călătoriei",
     description:
       "ALTNET își începe activitatea cu o viziune clară: internet rapid și accesibil pentru toți.",
   },
   {
-    year: "2015",
+    year: "2008",
     title: "Extinderea Rețelei",
     description:
       "Implementarea infrastructurii de fibră optică în primele regiuni.",
   },
   {
-    year: "2017",
+    year: "2014",
     title: "Lansarea TV Digital",
     description: "Introducerea serviciilor de televiziune digitală HD.",
   },
   {
-    year: "2020",
+    year: "2018",
     title: "Inovație Tehnologică",
     description: "Upgrade-ul rețelei la viteze de până la 1 Gbps.",
   },
   {
-    year: "2023",
+    year: "2022",
+    title: "Extinderea Rețelei in tot Raionul",
+    description: "Extinderea rețelei de fibră optică în toate localitățile raionului.",
+    },
+    {
+    year: "2025",
     title: "Prezent",
-    description: "Continuăm să inovăm și să extindem serviciile noastre.",
+    description:
+      "Continuăm să inovăm și să extindem serviciile noastre.",
   },
+
 ];
 
 export default function DesprePage() {
@@ -87,7 +94,7 @@ export default function DesprePage() {
       {/* Consistent Background for entire page */}
 
       {/* Hero Section */}
-      <section className="relative min-h-[60vh] -mt-24 pt-24">
+      <section className="relative min-h-[60vh] -mt-24 pt-32">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

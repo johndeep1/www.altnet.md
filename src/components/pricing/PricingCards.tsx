@@ -10,7 +10,7 @@ export interface PricingPlan {
   price: number;
   speed: string;
   gradient: string;
-  features: Array<{ text: string; included: boolean }>;
+  features: Array<{ text: string; included: boolean; highlight?: boolean }>;
   popularFeatures: string[];
   featured?: boolean;
 }
@@ -22,24 +22,24 @@ interface PricingCardsProps {
 
 export const defaultPlans: PricingPlan[] = [
   {
-    title: "Start",
-    subtitle: "Pentru început",
-    price: 120,
-    speed: "300 Mbps",
+    title: "TV",
+    subtitle: "Televiziune digitală",
+    price: 79,
+    speed: "200+ canale",
     gradient: "from-blue-500 via-blue-600 to-blue-700",
     features: [
-      { text: "Internet de mare viteză", included: true },
-      { text: "Router WiFi 6", included: true },
+      { text: "Canale HD incluse", included: true },
+      { text: "Acces TV pe mobil", included: true },
       { text: "Instalare gratuită", included: true },
-      { text: "TV Digital", included: false },
+      { text: "Internet", included: false },
     ],
-    popularFeatures: ["Viteză garantată", "Asistență 24/7"],
+    popularFeatures: ["200+ canale TV", "Canale HD incluse"],
   },
   {
     title: "Popular",
     subtitle: "Cel mai ales",
     price: 150,
-    speed: "500 Mbps",
+    speed: "600 Mbps",
     gradient: "from-primary via-primary-dark to-violet-600",
     features: [
       { text: "Internet de mare viteză", included: true },
@@ -53,16 +53,16 @@ export const defaultPlans: PricingPlan[] = [
   {
     title: "Premium",
     subtitle: "Pentru pretențioși",
-    price: 200,
+    price: 295,
     speed: "1000 Mbps",
     gradient: "from-violet-500 via-purple-600 to-purple-700",
     features: [
       { text: "Internet Gigabit", included: true },
       { text: "Router WiFi 6E", included: true },
+      { text: "Cadou Televizor 45 inch", included: true, highlight: true },
       { text: "Instalare prioritară", included: true },
-      { text: "TV Digital 4K", included: true },
     ],
-    popularFeatures: ["IP Static inclus", "SLA garantat"],
+    popularFeatures: ["TV Premium inclus", "IP Static inclus"],
   },
 ];
 
