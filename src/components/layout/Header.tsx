@@ -363,7 +363,7 @@ export default function Header({
                   <div className="space-y-4">
                     {/* Phone */}
                     <Link
-                      href="tel:+37369123456"
+                      href="tel:+37326885555"
                       className="flex items-center gap-3 p-3 rounded-xl bg-gray-50
                                hover:bg-gray-100 transition-colors"
                     >
@@ -375,7 +375,7 @@ export default function Header({
                           Sună Acum
                         </div>
                         <div className="text-sm text-gray-500">
-                          +373 69 123 456
+                          +373 26 885 555
                         </div>
                       </div>
                     </Link>
