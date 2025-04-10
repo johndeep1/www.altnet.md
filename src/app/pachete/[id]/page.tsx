@@ -29,7 +29,7 @@ export function generateMetadataForClient(planId: string) {
     },
     "offers": {
       "@type": "Offer",
-      "price": typeof plan.price === 'string' ? plan.price.replace(/[^\d]/g, '') : plan.price,
+      "price": String(plan.price),
       "priceCurrency": "MDL",
       "availability": "https://schema.org/InStock"
     }

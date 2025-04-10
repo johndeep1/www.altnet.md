@@ -28,7 +28,6 @@ const nextConfig = {
 
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizeServerReact: true,
   },
 
