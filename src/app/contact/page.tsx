@@ -285,7 +285,7 @@ export default function ContactPage() {
                         className="w-full px-4 py-2.5 rounded-xl border border-gray-200/50
                                  focus:ring-2 focus:ring-primary/20 focus:border-primary
                                  transition-colors bg-white/80"
-                        placeholder="+373 69 123 456"
+                        placeholder="+373 268 85 555"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
