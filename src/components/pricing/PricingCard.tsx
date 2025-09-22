@@ -4,13 +4,15 @@ import { motion } from "framer-motion";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatedButton, ArrowIcon } from "@/components/ui/button-variants";
 import Link from "next/link";
+import type { PricingFeature } from "@/data/pricing-plans";
 
 interface PricingCardProps {
+  slug: string;
   title: string;
   subtitle: string;
   price: number;
   speed: string;
-  features: Array<{ text: string; included: boolean; highlight?: boolean }>;
+  features: PricingFeature[];
   gradient: string;
   featured?: boolean;
   popularFeatures: string[];
@@ -19,6 +21,7 @@ interface PricingCardProps {
 }
 
 export default function PricingCard({
+  slug,
   title,
   subtitle,
   price,
@@ -189,7 +192,7 @@ export default function PricingCard({
           </ul>
 
           {/* Enhanced Action Button */}
-          <Link href={`/pachete/${title.toLowerCase()}`}>
+          <Link href={`/pachete/${slug}`}>
             <AnimatedButton
               variant={featured ? "primary" : "outline"}
               className={`w-full ${

@@ -1,49 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { defaultPlans } from "@/components/pricing/PricingCards";
 import {
   PhoneIcon,
   MapPinIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
+import type { PricingPlan } from "@/data/pricing-plans";
 
-// This special function creates dynamic metadata for each package
-export function generateMetadataForClient(planId: string) {
-  const plan = defaultPlans.find((p) => p.title.toLowerCase() === planId);
-
-  if (!plan) return null;
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": `Pachet ${plan.title} - Altnet`,
-    "description": `Internet prin fibră optică cu viteza de ${plan.speed} la doar ${plan.price} lei/lună. Instalare gratuită și asistență tehnică permanentă.`,
-    "brand": {
-      "@type": "Brand",
-      "name": "Altnet"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": String(plan.price),
-      "priceCurrency": "MDL",
-      "availability": "https://schema.org/InStock"
-    }
-  };
-
-  return {
-    title: `Pachet ${plan.title} - Viteză ${plan.speed} - Altnet Moldova`,
-    description: `Comandă pachetul de internet ${plan.title} cu viteza de ${plan.speed} la doar ${plan.price} lei/lună. Instalare gratuită și asistență tehnică permanentă.`,
-    schema: JSON.stringify(schema)
-  };
+interface PackageOrderFormProps {
+  plan: PricingPlan;
 }
 
-export default function PackageFormPage() {
-  const params = useParams();
-  const [selectedPlan, setSelectedPlan] = useState(defaultPlans[0]);
+export default function PackageOrderForm({ plan }: PackageOrderFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -53,37 +24,11 @@ export default function PackageFormPage() {
   });
   const [sending, setSending] = useState(false);
 
-  useEffect(() => {
-    const plan = defaultPlans.find((p) => p.title.toLowerCase() === params.id);
-    if (plan) {
-      setSelectedPlan(plan);
-
-      // Instead of setting metadata state, add structured data directly to the page
-      if (typeof document !== 'undefined') {
-        const metaData = generateMetadataForClient(params.id as string);
-        if (metaData) {
-          // Add structured data script
-          const existingScript = document.getElementById('product-schema');
-          if (existingScript) {
-            existingScript.remove();
-          }
-
-          const script = document.createElement('script');
-          script.id = 'product-schema';
-          script.type = 'application/ld+json';
-          script.innerHTML = metaData.schema;
-          document.head.appendChild(script);
-        }
-      }
-    }
-  }, [params.id]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSending(true);
 
     try {
-      // Send the form data to the API endpoint
       const response = await fetch("/api/pachete", {
         method: "POST",
         headers: {
@@ -91,9 +36,9 @@ export default function PackageFormPage() {
         },
         body: JSON.stringify({
           ...formData,
-          planTitle: selectedPlan.title,
-          planSpeed: selectedPlan.speed,
-          planPrice: selectedPlan.price,
+          planTitle: plan.title,
+          planSpeed: plan.speed,
+          planPrice: plan.price,
         }),
       });
 
@@ -106,7 +51,6 @@ export default function PackageFormPage() {
         "Comanda a fost trimisă cu succes! Vă vom contacta în curând."
       );
 
-      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -148,13 +92,12 @@ export default function PackageFormPage() {
               className="text-center mb-16"
             >
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Comandă Pachetul{" "}
-                <span className="text-primary">{selectedPlan.title}</span>
+                Comandă Pachetul {" "}
+                <span className="text-primary">{plan.title}</span>
               </h1>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Completați formularul pentru a comanda pachetul{" "}
-                {selectedPlan.title} cu viteza de {selectedPlan.speed} la prețul
-                de {selectedPlan.price} lei/lună
+                Completați formularul pentru a comanda pachetul {plan.title} cu viteza
+                de {plan.speed} la prețul de {plan.price} lei/lună
               </p>
             </motion.div>
           </div>
@@ -165,7 +108,6 @@ export default function PackageFormPage() {
 
         {/* Form Section */}
         <section className="relative py-16">
-          {/* Top Gradient */}
           <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-t from-transparent to-white/50" />
 
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,7 +145,7 @@ export default function PackageFormPage() {
                       className="w-full px-4 py-3 rounded-xl border border-gray-200/50
                                focus:ring-2 focus:ring-primary/20 focus:border-primary
                                transition-colors bg-white/80"
-                      placeholder="ion.popescu@example.com"
+                      placeholder="nume@exemplu.md"
                       value={formData.email}
                       onChange={handleChange}
                     />
@@ -222,14 +164,14 @@ export default function PackageFormPage() {
                       className="w-full px-4 py-3 rounded-xl border border-gray-200/50
                                focus:ring-2 focus:ring-primary/20 focus:border-primary
                                transition-colors bg-white/80"
-                      placeholder="+373 69 123 456"
+                      placeholder="+373 68 000 000"
                       value={formData.phone}
                       onChange={handleChange}
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Adresa
+                      Adresă Instalare
                     </label>
                     <input
                       type="text"
@@ -238,7 +180,7 @@ export default function PackageFormPage() {
                       className="w-full px-4 py-3 rounded-xl border border-gray-200/50
                                focus:ring-2 focus:ring-primary/20 focus:border-primary
                                transition-colors bg-white/80"
-                      placeholder="Strada, numărul casei/apartamentului, orașul"
+                      placeholder="Strada Independenței 10, Ialoveni"
                       value={formData.address}
                       onChange={handleChange}
                     />
@@ -247,7 +189,7 @@ export default function PackageFormPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Informații Adiționale (opțional)
+                    Informații adiționale
                   </label>
                   <textarea
                     name="additionalInfo"
@@ -255,59 +197,58 @@ export default function PackageFormPage() {
                     className="w-full px-4 py-3 rounded-xl border border-gray-200/50
                              focus:ring-2 focus:ring-primary/20 focus:border-primary
                              transition-colors bg-white/80"
-                    placeholder="Adăugați orice informații suplimentare care ne-ar putea ajuta..."
+                    placeholder="Menționați detalii suplimentare despre locație sau preferințe"
                     value={formData.additionalInfo}
                     onChange={handleChange}
                   />
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                <button
                   type="submit"
                   disabled={sending}
-                  className="w-full py-4 bg-primary text-white rounded-xl font-medium
-                           shadow-lg shadow-primary/25 hover:bg-primary/90
-                           transition-colors relative overflow-hidden"
+                  className="w-full inline-flex items-center justify-center px-6 py-3 rounded-xl
+                           bg-gradient-to-r from-primary via-primary-dark to-primary text-white
+                           font-semibold shadow-lg shadow-primary/20 transition-transform duration-200
+                           hover:scale-[1.01] disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <span
-                    className={`transition-opacity ${
-                      sending ? "opacity-0" : "opacity-100"
-                    }`}
-                  >
-                    Trimite Comanda
-                  </span>
-                  {sending && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg
-                        className="animate-spin h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    </div>
-                  )}
-                </motion.button>
+                  {sending ? "Se trimite comanda..." : "Trimite Comanda"}
+                </button>
               </form>
             </motion.div>
           </div>
+        </section>
 
-          {/* Bottom Gradient */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white/50" />
+        {/* Contact Section */}
+        <section className="py-16 bg-white/80">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            >
+              <div className="bg-gray-50 border border-gray-200/60 rounded-2xl p-6">
+                <PhoneIcon className="w-6 h-6 text-primary mb-4" />
+                <h3 className="font-semibold text-gray-900 mb-2">Telefon</h3>
+                <p className="text-sm text-gray-600">+373 268 85 555</p>
+                <p className="text-sm text-gray-600">+373 789 66 177</p>
+              </div>
+              <div className="bg-gray-50 border border-gray-200/60 rounded-2xl p-6">
+                <EnvelopeIcon className="w-6 h-6 text-primary mb-4" />
+                <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
+                <p className="text-sm text-gray-600">sales@altnet.md</p>
+                <p className="text-sm text-gray-600">support@altnet.md</p>
+              </div>
+              <div className="bg-gray-50 border border-gray-200/60 rounded-2xl p-6">
+                <MapPinIcon className="w-6 h-6 text-primary mb-4" />
+                <h3 className="font-semibold text-gray-900 mb-2">Adresă</h3>
+                <p className="text-sm text-gray-600">
+                  Str. Alexandru cel Bun 55
+                  <br />
+                  Ialoveni, Moldova
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </section>
       </div>
     </main>

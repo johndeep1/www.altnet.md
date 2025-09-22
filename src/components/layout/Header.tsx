@@ -48,7 +48,6 @@ const mainNavigation = [
   },
   { name: "Prețuri", href: "/preturi" },
   { name: "Acoperire", href: "/acoperire" },
-  { name: "Test Viteză", href: "/testare-viteza" },
   { name: "Despre Noi", href: "/despre" },
     { name: "Magazin", href: "/magazin" },
   { name: "Achitare online", href: "https://oplata.md/altnet" },

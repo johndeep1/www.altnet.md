@@ -199,6 +199,23 @@ export default function DashboardPage() {
           </Link>
 
           <Link
+            href="/inventar/packages"
+            className="group rounded-xl border border-gray-200 bg-white shadow-sm p-6 transition-all duration-200 hover:shadow-md"
+          >
+            <div className="flex flex-row items-center space-x-4">
+              <div className="rounded-lg bg-gray-100 p-2 group-hover:bg-gray-900 group-hover:text-white transition-colors duration-200">
+                <Settings className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Pachete</h3>
+                <p className="text-sm text-gray-500">
+                  Configurează pachetele pentru pagina principală
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
             href="/inventar/categories"
             className="group rounded-xl border border-gray-200 bg-white shadow-sm p-6 transition-all duration-200 hover:shadow-md"
           >

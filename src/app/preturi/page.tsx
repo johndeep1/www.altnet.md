@@ -1,9 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import PricingCards, { defaultPlans } from "@/components/pricing/PricingCards";
+import PricingCards from "@/components/pricing/PricingCards";
+import type { PricingPlan } from "@/data/pricing-plans";
+import { defaultPlans } from "@/data/pricing-plans";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 // First define an interface for the feature type
@@ -103,6 +105,50 @@ const comparisonFeatures = [
 export default function PricingPage() {
   const router = useRouter();
   const containerRef = useRef(null);
+  const [plans, setPlans] = useState<PricingPlan[]>(defaultPlans);
+
+  const pricingPlans = useMemo(() => {
+    return plans.length ? plans : defaultPlans;
+  }, [plans]);
+
+  const comparisonPlans = useMemo(() => {
+    const primary = pricingPlans.slice(0, 3);
+    if (primary.length === 3) return primary;
+
+    const fallback: PricingPlan[] = [...primary];
+    for (const plan of defaultPlans) {
+      if (fallback.length >= 3) break;
+      if (!fallback.some((item) => item.slug === plan.slug)) {
+        fallback.push(plan);
+      }
+    }
+
+    return fallback.slice(0, 3);
+  }, [pricingPlans]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchPlans() {
+      try {
+        const response = await fetch("/api/packages");
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!isMounted) return;
+        if (Array.isArray(data) && data.length) {
+          setPlans(data);
+        }
+      } catch (error) {
+        console.error("Failed to load pricing plans", error);
+      }
+    }
+
+    fetchPlans();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <main ref={containerRef} className="min-h-screen pt-32 pb-16 relative">
@@ -321,7 +367,7 @@ export default function PricingPage() {
       {/* Pricing Cards Section */}
       <section className="mb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <PricingCards />
+          <PricingCards plans={pricingPlans} />
         </div>
       </section>
 
@@ -352,7 +398,7 @@ export default function PricingPage() {
                     <th className="py-6 px-6 text-left text-gray-500 font-medium w-1/4">
                       <span className="sr-only">Caracteristici</span>
                     </th>
-                    {defaultPlans.map((plan) => (
+                    {comparisonPlans.map((plan) => (
                       <th
                         key={plan.title}
                         className={`py-6 px-6 text-center w-1/4 relative
@@ -423,8 +469,13 @@ export default function PricingPage() {
                         }`}>
                           {feature.name}
                         </td>
-                        {(["tv", "popular", "premium"] as const).map(
-                          (planType) => (
+                        {comparisonPlans.map((_, columnIndex) => {
+                          const planType = columnIndex === 0
+                            ? "tv"
+                            : columnIndex === 1
+                            ? "popular"
+                            : "premium";
+                          return (
                             <td
                               key={planType}
                               className={`py-4 px-6 text-center ${
@@ -456,8 +507,8 @@ export default function PricingPage() {
                                 </span>
                               )}
                             </td>
-                          )
-                        )}
+                          );
+                        })}
                       </motion.tr>
                     )),
                   ])}
@@ -467,7 +518,7 @@ export default function PricingPage() {
 
             {/* Mobile Version */}
             <div className="md:hidden space-y-8">
-              {defaultPlans.map((plan) => (
+              {comparisonPlans.map((plan, index) => (
                 <div
                   key={plan.title}
                   className="relative rounded-xl border border-gray-200 bg-white shadow-lg p-6"
@@ -511,10 +562,11 @@ export default function PricingPage() {
                         </div>
                         <div className="space-y-2">
                           {section.features.map((feature) => {
-                            const planType = plan.title.toLowerCase() as
-                              | "tv"
-                              | "popular"
-                              | "premium";
+                            const planType = index === 0
+                              ? "tv"
+                              : index === 1
+                              ? "popular"
+                              : "premium";
                             return (
                               <div
                                 key={feature.name}
@@ -538,6 +590,8 @@ export default function PricingPage() {
                                     ) : (
                                       <span className="block w-5 h-0.5 bg-gray-300 rounded-full" />
                                     )
+                                  ) : feature[planType] === "-" ? (
+                                    <span className="text-gray-400">—</span>
                                   ) : (
                                     feature[planType]
                                   )}

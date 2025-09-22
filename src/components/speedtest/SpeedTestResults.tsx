@@ -69,7 +69,7 @@ export function SpeedTestResults({ result }: SpeedTestResultsProps) {
 ⚡ Ping: ${formatPing(result.ping)}
 🗓️ ${new Date(result.timestamp).toLocaleString('ro-RO')}
 
-Testează și tu pe altnet.md/testare-viteza`;
+Descoperă ofertele noastre pe altnet.md`;
 
     if (navigator.share) {
       try {
