@@ -1,38 +1,37 @@
 import Link from "next/link";
 import { Card } from "./ui/card";
-import prisma from "../lib/prisma";
 import { unstable_cache } from "next/cache";
 import { CategoryImage } from "./ui/category-image";
 import { ArrowRight, Package } from "lucide-react";
-
-interface Category {
-  id: string;
-  name: string;
-  description: string | null;
-  image: string | null;
-  products: { id: string }[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import {
+  PUBLIC_API_BASE_URL,
+  buildQueryString,
+  parseListResponse,
+} from "@/lib/backend-api";
+import {
+  mapPublicCategory,
+  type StorefrontCategory,
+} from "@/lib/catalog-mappers";
 
 const getCachedCategories = unstable_cache(
-  async () => {
-    const categories = await prisma.category.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        image: true,
-        createdAt: true,
-        updatedAt: true,
-        products: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-    return categories;
+  async (): Promise<StorefrontCategory[]> => {
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/categories${buildQueryString({
+        limit: 100,
+        offset: 0,
+      })}`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const payload = await response.json();
+    const { data } = parseListResponse<Record<string, unknown>>(payload);
+    return data.map(mapPublicCategory).sort((a, b) => a.name.localeCompare(b.name));
   },
   ["categories"],
   { revalidate: 60, tags: ["categories"] }
@@ -105,7 +104,7 @@ export async function CategoriesSection() {
                       <div className="flex items-center gap-2 text-white/80">
                         <Package className="w-4 h-4" />
                         <span className="text-sm sm:text-base">
-                          {category.products.length} produse
+                          {category.productCount} produse
                         </span>
                       </div>
                       <div className="flex items-center gap-1 text-primary-foreground">

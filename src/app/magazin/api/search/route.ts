@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "../../lib/prisma";
+import {
+  PUBLIC_API_BASE_URL,
+  buildQueryString,
+  parseListResponse,
+} from "@/lib/backend-api";
+import { mapPublicProductSummary } from "@/lib/catalog-mappers";
 
 export async function GET(request: Request) {
   try {
@@ -10,36 +15,24 @@ export async function GET(request: Request) {
       return NextResponse.json([], { status: 200 });
     }
 
-    const products = await prisma.product.findMany({
-      where: {
-        OR: [
-          {
-            name: {
-              contains: query,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: query,
-              mode: "insensitive",
-            },
-          },
-        ],
-        status: "ACTIVE",
-      },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        price: true,
-        images: true,
-      },
-      take: 5, // Limit to 5 results
-      orderBy: {
-        updatedAt: "desc",
-      },
-    });
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/products${buildQueryString({
+        search: query,
+        limit: 5,
+        offset: 0,
+      })}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const { data } = parseListResponse<Record<string, unknown>>(payload);
+    const products = data.map(mapPublicProductSummary);
 
     return NextResponse.json(products, {
       headers: {

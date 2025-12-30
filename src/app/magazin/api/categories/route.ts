@@ -1,32 +1,40 @@
-import prisma from "../../lib/prisma";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import {
+  PUBLIC_API_BASE_URL,
+  buildQueryString,
+  parseListResponse,
+} from "@/lib/backend-api";
+import { mapPublicCategory } from "@/lib/catalog-mappers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60; // Revalidate every minute
 
 export async function GET() {
   try {
-    const categories = await prisma.category.findMany({
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        image: true,
-        products: {
-          select: {
-            id: true,
-          },
-        },
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/categories${buildQueryString({
+        limit: 100,
+        offset: 0,
+      })}`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const { data } = parseListResponse<Record<string, unknown>>(payload);
+    const categories = data.map(mapPublicCategory).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
 
     // Revalidate the home page and categories pages
-    revalidatePath("/");
-    revalidatePath("/categories");
+    revalidatePath("/magazin");
+    revalidatePath("/magazin/categories");
 
     return NextResponse.json(categories, {
       headers: {

@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { notFound } from "next/navigation";
-import prisma from "@/app/magazin/lib/prisma";
 import { defaultPlans } from "@/data/pricing-plans";
 import type { PricingPlan } from "@/data/pricing-plans";
+import { cache } from "react";
+import {
+  mapServicePackageToPricingPlan,
+  type ServicePackagePlan,
+} from "@/lib/packagePlans";
+import {
+  PUBLIC_API_BASE_URL,
+  buildQueryString,
+  parseListResponse,
+} from "@/lib/backend-api";
 import PackageOrderForm from "./PackageOrderForm";
-import { mapPackagePlanToPricingPlan } from "@/lib/packagePlans";
 
 const buildPlanSchema = (plan: PricingPlan) => ({
   "@context": "https://schema.org",
@@ -24,26 +32,44 @@ const buildPlanSchema = (plan: PricingPlan) => ({
   },
 });
 
+const fetchPackagePlans = cache(async (): Promise<PricingPlan[]> => {
+  try {
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/service-packages${buildQueryString({
+        limit: 100,
+        offset: 0,
+      })}`,
+      {
+        next: { revalidate: 300 },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const { data } = parseListResponse<ServicePackagePlan>(payload);
+    return data.map((plan) => mapServicePackageToPricingPlan(plan));
+  } catch (error) {
+    console.error("Failed to load package plans", error);
+    return defaultPlans;
+  }
+});
+
 async function getPlanBySlug(slug: string): Promise<PricingPlan> {
   const normalizedSlug = slug.toLowerCase();
+  const plans = await fetchPackagePlans();
 
-  const plan = await prisma.packagePlan.findUnique({
-    where: { slug: normalizedSlug },
-  });
-
-  if (plan) {
-    return mapPackagePlanToPricingPlan(plan);
-  }
-
-  const fallback = defaultPlans.find((item) =>
+  const match = plans.find((item) =>
     [item.slug.toLowerCase(), item.title.toLowerCase()].includes(normalizedSlug)
   );
 
-  if (!fallback) {
+  if (!match) {
     notFound();
   }
 
-  return fallback;
+  return match;
 }
 
 export async function generateMetadata({

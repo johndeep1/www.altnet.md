@@ -1,49 +1,121 @@
-import type { PackagePlan } from "@prisma/client";
-import type { PricingPlan, PricingFeature } from "@/data/pricing-plans";
+import type { PricingFeature, PricingPlan } from "@/data/pricing-plans";
+import { slugify } from "@/lib/backend-api";
 
 export const DEFAULT_GRADIENT = "from-primary via-primary-dark to-primary";
 
-const isPricingFeature = (value: unknown): value is PricingFeature => {
-  if (!value || typeof value !== "object") return false;
-  const record = value as Record<string, unknown>;
-  return typeof record.text === "string" && record.text.trim().length > 0;
-};
+export interface ServicePackagePlan {
+  id: string;
+  type_id?: string | null;
+  type_name?: string | null;
+  name: string;
+  name_ro?: string | null;
+  name_ru?: string | null;
+  price: number | string;
+  network_speed?: string | null;
+  benefits?: string[] | null;
+  special_benefits?: string[] | null;
+  sort_order?: number | null;
+  is_active?: boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
 
-export const parseFeatures = (value: unknown): PricingFeature[] => {
+export interface AdminPackagePlan {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle: string | null;
+  price: number;
+  speed: string;
+  gradient: string;
+  features: PricingPlan["features"];
+  popularFeatures: PricingPlan["popularFeatures"];
+  isPopular: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const toStringArray = (value: unknown): string[] => {
   if (!Array.isArray(value)) return [];
   return value
-    .map((item) => {
-      if (!isPricingFeature(item)) return null;
-      const record = item as Record<string, unknown>;
-      return {
-        text: String(record.text),
-        included: Boolean(record.included),
-        highlight: Boolean(record.highlight),
-      } satisfies PricingFeature;
-    })
-    .filter((item): item is PricingFeature => Boolean(item));
-};
-
-export const parsePopularFeatures = (value: unknown): string[] => {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((item) => (typeof item === "string" ? item.trim() : ""))
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
     .filter((item) => item.length > 0);
 };
 
-export const mapPackagePlanToPricingPlan = (plan: PackagePlan): PricingPlan => {
+const buildFeatures = (
+  benefits: string[],
+  specialBenefits: string[]
+): PricingFeature[] => {
+  const base = benefits.map((benefit) => ({
+    text: benefit,
+    included: true,
+  }));
+
+  const highlighted = specialBenefits.map((benefit) => ({
+    text: benefit,
+    included: true,
+    highlight: true,
+  }));
+
+  return [...highlighted, ...base];
+};
+
+const getPopularFeatures = (benefits: string[], specialBenefits: string[]) => {
+  if (specialBenefits.length) return specialBenefits;
+  return benefits.slice(0, 3);
+};
+
+const isPopularPlan = (name: string) =>
+  name.toLowerCase().includes("popular") ||
+  name.toLowerCase().includes("premium");
+
+export const mapServicePackageToPricingPlan = (
+  plan: ServicePackagePlan
+): PricingPlan => {
+  const benefits = toStringArray(plan.benefits);
+  const specialBenefits = toStringArray(plan.special_benefits);
+  const title = plan.name?.trim() || "Pachet";
+  const slug =
+    slugify(plan.name ?? "") ||
+    slugify(plan.name_ro ?? "") ||
+    slugify(plan.name_ru ?? "") ||
+    slugify(plan.type_name ?? "") ||
+    `plan-${plan.id}`;
+
   return {
     id: plan.id,
-    slug: plan.slug,
-    title: plan.title,
-    subtitle: plan.subtitle ?? "",
-    price: Number(plan.price),
-    speed: plan.speed,
-    gradient: plan.gradient || DEFAULT_GRADIENT,
-    features: parseFeatures(plan.features),
-    popularFeatures: parsePopularFeatures(plan.popularFeatures),
-    featured: plan.isPopular,
+    slug,
+    title,
+    subtitle: plan.type_name ?? null,
+    price: Number(plan.price) || 0,
+    speed: plan.network_speed ?? "",
+    gradient: DEFAULT_GRADIENT,
+    features: buildFeatures(benefits, specialBenefits),
+    popularFeatures: getPopularFeatures(benefits, specialBenefits),
+    featured: isPopularPlan(title),
   } satisfies PricingPlan;
+};
+
+export const mapServicePackageToAdminPlan = (
+  plan: ServicePackagePlan
+): AdminPackagePlan => {
+  const pricingPlan = mapServicePackageToPricingPlan(plan);
+
+  return {
+    id: pricingPlan.id ?? plan.id,
+    title: pricingPlan.title,
+    slug: pricingPlan.slug,
+    subtitle: pricingPlan.subtitle ?? null,
+    price: pricingPlan.price,
+    speed: pricingPlan.speed,
+    gradient: pricingPlan.gradient,
+    features: pricingPlan.features,
+    popularFeatures: pricingPlan.popularFeatures,
+    isPopular: Boolean(pricingPlan.featured),
+    createdAt: plan.created_at ?? new Date().toISOString(),
+    updatedAt: plan.updated_at ?? new Date().toISOString(),
+  };
 };
 
 export const arrangePricingPlans = (plans: PricingPlan[]): PricingPlan[] => {

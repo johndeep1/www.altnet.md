@@ -1,36 +1,34 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/prisma";
 import { revalidatePath } from "next/cache";
+import {
+  PUBLIC_API_BASE_URL,
+  buildQueryString,
+  parseListResponse,
+} from "@/lib/backend-api";
+import { mapPublicProductSummary } from "@/lib/catalog-mappers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60; // Revalidate every minute
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      where: {
-        status: "ACTIVE",
-      },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        price: true,
-        images: true,
-        stock: true,
-        updatedAt: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: "desc",
-      },
-      take: 8, // Limit to 8 products
-    });
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/products${buildQueryString({
+        limit: 8,
+        offset: 0,
+      })}`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const { data } = parseListResponse<Record<string, unknown>>(payload);
+    const products = data.map(mapPublicProductSummary);
 
     // Revalidate the home page
     revalidatePath("/magazin");

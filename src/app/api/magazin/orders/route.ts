@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { PUBLIC_API_BASE_URL } from "@/lib/backend-api";
 
 // Initialize nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -23,6 +24,8 @@ interface Order {
   customerName: string;
   email: string;
   phone: string;
+  deliveryAddress: string;
+  paymentMethod: "card" | "bank_transfer" | "cash";
   items: OrderItem[];
   total: number;
 }
@@ -39,8 +42,54 @@ export async function POST(request: Request) {
     const data = await request.json() as Order;
 
     // Validate required fields
-    if (!data.orderNumber || !data.customerName || !data.email || data.items.length === 0) {
+    if (
+      !data.orderNumber ||
+      !data.customerName ||
+      !data.email ||
+      !data.phone ||
+      !data.deliveryAddress ||
+      !data.paymentMethod ||
+      data.items.length === 0
+    ) {
       return NextResponse.json({ error: "Missing required order information" }, { status: 400 });
+    }
+
+    const allowedPaymentMethods = ["card", "bank_transfer", "cash"];
+    if (!allowedPaymentMethods.includes(data.paymentMethod)) {
+      return NextResponse.json(
+        { error: "Invalid payment method" },
+        { status: 400 }
+      );
+    }
+
+    const backendResponse = await fetch(`${PUBLIC_API_BASE_URL}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        full_name: data.customerName,
+        phone_number: data.phone,
+        email: data.email,
+        delivery_type: "delivery",
+        delivery_address: data.deliveryAddress,
+        payment_method: data.paymentMethod,
+        items: data.items.map((item) => ({
+          product_id: item.id,
+          quantity: item.quantity,
+        })),
+      }),
+    });
+
+    if (!backendResponse.ok) {
+      const details = await backendResponse.json().catch(() => null);
+      return NextResponse.json(
+        {
+          error: "Failed to create order in backend",
+          details: details ?? `Backend responded with ${backendResponse.status}`,
+        },
+        { status: 502 }
+      );
     }
 
     // Format items for email template
@@ -100,6 +149,10 @@ export async function POST(request: Request) {
                   <tr>
                     <td style="padding: 8px 0; color: #666666;"><strong>Telefon:</strong></td>
                     <td style="padding: 8px 0;">${data.phone}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666;"><strong>Adresă:</strong></td>
+                    <td style="padding: 8px 0;">${data.deliveryAddress}</td>
                   </tr>
                 </table>
               </div>
@@ -192,6 +245,10 @@ export async function POST(request: Request) {
                   <tr>
                     <td style="padding: 8px 0; color: #666666;"><strong>Telefon:</strong></td>
                     <td style="padding: 8px 0;"><a href="tel:${data.phone}" style="color: #19A852; text-decoration: none;">${data.phone}</a></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666666;"><strong>Adresă:</strong></td>
+                    <td style="padding: 8px 0;">${data.deliveryAddress}</td>
                   </tr>
                 </table>
               </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { CORE_API_BASE_URL } from "@/lib/backend-api";
 
 // Initialize nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -16,6 +17,7 @@ interface PackageOrder {
   phone: string;
   address: string;
   additionalInfo?: string;
+  planId: string;
   planTitle: string;
   planSpeed: string;
   planPrice: string;
@@ -35,8 +37,40 @@ export async function POST(request: Request) {
     const orderNumber = generateOrderNumber();
 
     // Validate required fields
-    if (!data.name || !data.email || !data.phone || !data.address || !data.planTitle) {
+    if (
+      !data.name ||
+      !data.email ||
+      !data.phone ||
+      !data.address ||
+      !data.planTitle ||
+      !data.planId
+    ) {
       return NextResponse.json({ error: "Missing required order information" }, { status: 400 });
+    }
+
+    const backendResponse = await fetch(`${CORE_API_BASE_URL}/service-orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        package_id: data.planId,
+        customer_name: data.name,
+        customer_phone: data.phone,
+        customer_email: data.email,
+        customer_address: data.address,
+      }),
+    });
+
+    if (!backendResponse.ok) {
+      const details = await backendResponse.json().catch(() => null);
+      return NextResponse.json(
+        {
+          error: "Failed to create service order in backend",
+          details: details ?? `Backend responded with ${backendResponse.status}`,
+        },
+        { status: 502 }
+      );
     }
 
     // 1. Customer Email Template

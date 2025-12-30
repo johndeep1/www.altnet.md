@@ -29,6 +29,10 @@ export default function PackageOrderForm({ plan }: PackageOrderFormProps) {
     setSending(true);
 
     try {
+      if (!plan.id) {
+        throw new Error("Pachetul selectat nu este disponibil momentan.");
+      }
+
       const response = await fetch("/api/pachete", {
         method: "POST",
         headers: {
@@ -36,6 +40,7 @@ export default function PackageOrderForm({ plan }: PackageOrderFormProps) {
         },
         body: JSON.stringify({
           ...formData,
+          planId: plan.id,
           planTitle: plan.title,
           planSpeed: plan.speed,
           planPrice: plan.price,

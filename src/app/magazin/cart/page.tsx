@@ -27,6 +27,8 @@ export default function CartPage() {
     name: "",
     email: "",
     phone: "+373",
+    address: "",
+    paymentMethod: "cash",
   });
 
   useEffect(() => {
@@ -118,6 +120,8 @@ export default function CartPage() {
           customerName: customerInfo.name,
           email: customerInfo.email,
           phone: customerInfo.phone,
+          deliveryAddress: customerInfo.address,
+          paymentMethod: customerInfo.paymentMethod,
           items: items.map((item) => ({
             id: item.id,
             name: item.name,
@@ -346,6 +350,43 @@ export default function CartPage() {
                         className="h-10"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="address" className="text-sm font-medium text-gray-700">
+                        Adresă livrare
+                      </Label>
+                      <Input
+                        id="address"
+                        value={customerInfo.address}
+                        onChange={(e) =>
+                          setCustomerInfo((prev) => ({
+                            ...prev,
+                            address: e.target.value,
+                          }))
+                        }
+                        placeholder="Strada, număr, localitate"
+                        className="h-10"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentMethod" className="text-sm font-medium text-gray-700">
+                        Metodă de plată
+                      </Label>
+                      <select
+                        id="paymentMethod"
+                        value={customerInfo.paymentMethod}
+                        onChange={(e) =>
+                          setCustomerInfo((prev) => ({
+                            ...prev,
+                            paymentMethod: e.target.value,
+                          }))
+                        }
+                        className="h-10 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      >
+                        <option value="cash">Numerar</option>
+                        <option value="card">Card</option>
+                        <option value="bank_transfer">Transfer bancar</option>
+                      </select>
+                    </div>
                   </div>
 
                   <Separator className="my-6" />
@@ -374,6 +415,8 @@ export default function CartPage() {
                         !customerInfo.name ||
                         !customerInfo.email ||
                         !customerInfo.phone ||
+                        !customerInfo.address ||
+                        !customerInfo.paymentMethod ||
                         isSubmitting
                       }
                     >

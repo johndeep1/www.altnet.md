@@ -1,38 +1,41 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import { z } from "zod";
-
-const prisma = new PrismaClient();
-
-// Category update validation schema
-const categoryUpdateSchema = z.object({
-  name: z.string().min(3, "Numele trebuie să aibă cel puțin 3 caractere"),
-  description: z.string().min(10, "Descrierea trebuie să aibă cel puțin 10 caractere"),
-  image: z.string().url("Vă rugăm să introduceți un URL valid pentru imagine")
-});
+import { CORE_API_BASE_URL, safeString } from "@/lib/backend-api";
 
 // GET /api/categories/[id]
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const category = await prisma.category.findUnique({
-      where: { id: params.id },
-    });
+    const response = await fetch(
+      `${CORE_API_BASE_URL}/categories/${encodeURIComponent(params.id)}`,
+      { cache: "no-store" }
+    );
 
-    if (!category) {
+    if (response.status === 404) {
       return NextResponse.json(
-        { error: "Categoria nu a fost găsită" },
+        { error: "Categoria nu a fost gasita" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(category);
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const record = (payload?.data ?? payload) as Record<string, unknown>;
+
+    return NextResponse.json({
+      id: safeString(record.id, ""),
+      name: safeString(record.name, ""),
+      description: safeString(record.description, ""),
+      image: safeString(record.image_url, ""),
+    });
   } catch (error) {
     console.error("Error fetching category:", error);
     return NextResponse.json(
-      { error: "Eroare la încărcarea categoriei" },
+      { error: "Eroare la incarcarea categoriei" },
       { status: 500 }
     );
   }
@@ -40,75 +43,22 @@ export async function GET(
 
 // PATCH /api/categories/[id]
 export async function PATCH(
-  req: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
-  try {
-    const data = await req.json();
-    const validatedData = categoryUpdateSchema.parse(data);
-
-    const category = await prisma.category.update({
-      where: { id: params.id },
-      data: validatedData
-    });
-
-    return NextResponse.json(category);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
-    }
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "code" in error &&
-      error.code === "P2025"
-    ) {
-      return NextResponse.json({ error: "Categoria nu a fost găsită" }, { status: 404 });
-    }
-    console.error("Eroare la actualizarea categoriei:", error);
-    return NextResponse.json({ error: "Eroare la actualizarea categoriei" }, { status: 500 });
-  }
+  return NextResponse.json(
+    { error: "Actualizarea categoriilor este indisponibila in API-ul curent." },
+    { status: 501 }
+  );
 }
 
 // DELETE /api/categories/[id]
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
-  try {
-    // Check if category has products
-    const category = await prisma.category.findUnique({
-      where: { id: params.id },
-      include: { products: true },
-    });
-
-    if (!category) {
-      return NextResponse.json(
-        { error: "Categoria nu a fost găsită" },
-        { status: 404 }
-      );
-    }
-
-    if (category.products.length > 0) {
-      return NextResponse.json(
-        {
-          error:
-            "Nu se poate șterge categoria deoarece există produse asociate",
-        },
-        { status: 400 }
-      );
-    }
-
-    await prisma.category.delete({
-      where: { id: params.id },
-    });
-
-    return NextResponse.json({ message: "Categoria a fost ștearsă" });
-  } catch (error) {
-    console.error("Error deleting category:", error);
-    return NextResponse.json(
-      { error: "Eroare la ștergerea categoriei" },
-      { status: 500 }
-    );
-  }
-} 
+  return NextResponse.json(
+    { error: "Stergerea categoriilor este indisponibila in API-ul curent." },
+    { status: 501 }
+  );
+}

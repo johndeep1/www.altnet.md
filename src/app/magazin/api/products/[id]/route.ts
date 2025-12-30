@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/prisma";
 import { revalidatePath } from "next/cache";
+import { PUBLIC_API_BASE_URL } from "@/lib/backend-api";
+import { mapPublicProductDetail } from "@/lib/catalog-mappers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60; // Revalidate every minute
@@ -10,21 +11,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const product = await prisma.product.findUnique({
-      where: {
-        id: params.id,
-      },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
+    const response = await fetch(
+      `${PUBLIC_API_BASE_URL}/products/${encodeURIComponent(params.id)}`,
+      {
+        next: { revalidate: 60 },
+      }
+    );
 
-    if (!product) {
+    if (response.status === 404) {
       return NextResponse.json(
         { error: "Product not found" },
         {
@@ -36,9 +30,18 @@ export async function GET(
       );
     }
 
+    if (!response.ok) {
+      throw new Error(`Backend responded with ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const product = mapPublicProductDetail(
+      (payload?.data ?? payload) as Record<string, unknown>
+    );
+
     // Revalidate the product page and related category page
-    revalidatePath(`/products/${params.id}`);
-    revalidatePath(`/categories/${product.category.id}`);
+    revalidatePath(`/magazin/products/${product.id}`);
+    revalidatePath(`/magazin/categories/${product.category.id}`);
 
     return NextResponse.json(product, {
       headers: {

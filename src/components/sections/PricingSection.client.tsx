@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import PricingCards from '../pricing/PricingCards';
 import type { PricingPlan } from '@/data/pricing-plans';
 import { defaultPlans } from '@/data/pricing-plans';
@@ -11,10 +11,18 @@ import {
 } from '@heroicons/react/24/outline';
 
 interface PricingSectionProps {
-  plans?: PricingPlan[];
+  popularPlans?: PricingPlan[];
+  promoPlans?: PricingPlan[];
+  popularLabel?: string;
+  promoLabel?: string;
 }
 
-export default function PricingSection({ plans }: PricingSectionProps) {
+export default function PricingSection({
+  popularPlans = [],
+  promoPlans = [],
+  popularLabel = "Pachete populare",
+  promoLabel = "Produs 1 leu",
+}: PricingSectionProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10%" });
   const { scrollYProgress } = useScroll({
@@ -23,7 +31,35 @@ export default function PricingSection({ plans }: PricingSectionProps) {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const pricingPlans = plans && plans.length ? plans : defaultPlans;
+  const [activeTab, setActiveTab] = useState<"popular" | "promo">("popular");
+
+  const pricingPlans = useMemo(() => {
+    const primary = activeTab === "popular" ? popularPlans : promoPlans;
+    const secondary = activeTab === "popular" ? promoPlans : popularPlans;
+    const result: PricingPlan[] = [];
+    const seen = new Set<string>();
+
+    const addPlans = (source: PricingPlan[]) => {
+      source.forEach((plan) => {
+        if (result.length >= 3) return;
+        const key = plan.id ?? plan.slug;
+        if (key && seen.has(String(key))) return;
+        if (key) {
+          seen.add(String(key));
+        }
+        result.push(plan);
+      });
+    };
+
+    addPlans(primary);
+    addPlans(secondary);
+
+    if (result.length < 3) {
+      addPlans(defaultPlans);
+    }
+
+    return result.slice(0, 3);
+  }, [activeTab, popularPlans, promoPlans]);
 
   return (
     <section className="relative overflow-hidden pb-16" ref={ref}>
@@ -48,6 +84,33 @@ export default function PricingSection({ plans }: PricingSectionProps) {
             Alege pachetul perfect pentru tine cu servicii de calitate la prețuri competitive
           </p>
         </motion.div>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+          <button
+            type="button"
+            onClick={() => setActiveTab("popular")}
+            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
+              activeTab === "popular"
+                ? "bg-primary text-white shadow-md shadow-primary/30"
+                : "bg-white/70 text-gray-700 hover:bg-white"
+            }`}
+            aria-pressed={activeTab === "popular"}
+          >
+            {popularLabel}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("promo")}
+            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
+              activeTab === "promo"
+                ? "bg-primary text-white shadow-md shadow-primary/30"
+                : "bg-white/70 text-gray-700 hover:bg-white"
+            }`}
+            aria-pressed={activeTab === "promo"}
+          >
+            {promoLabel}
+          </button>
+        </div>
 
         {/* Popular Features Banner */}
         <motion.div
