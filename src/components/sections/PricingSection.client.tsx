@@ -85,31 +85,33 @@ export default function PricingSection({
           </p>
         </motion.div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-          <button
-            type="button"
-            onClick={() => setActiveTab("popular")}
-            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
-              activeTab === "popular"
-                ? "bg-primary text-white shadow-md shadow-primary/30"
-                : "bg-white/70 text-gray-700 hover:bg-white"
-            }`}
-            aria-pressed={activeTab === "popular"}
-          >
-            {popularLabel}
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("promo")}
-            className={`rounded-full px-6 py-2 text-sm font-semibold transition ${
-              activeTab === "promo"
-                ? "bg-primary text-white shadow-md shadow-primary/30"
-                : "bg-white/70 text-gray-700 hover:bg-white"
-            }`}
-            aria-pressed={activeTab === "promo"}
-          >
-            {promoLabel}
-          </button>
+        <div className="flex items-center justify-center mb-10">
+          <div className="inline-flex items-center p-1.5 bg-gray-100 rounded-full border border-gray-200">
+            <button
+              type="button"
+              onClick={() => setActiveTab("popular")}
+              className={`rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                activeTab === "popular"
+                  ? "bg-primary text-white shadow-md shadow-primary/30"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
+              }`}
+              aria-pressed={activeTab === "popular"}
+            >
+              {popularLabel}
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("promo")}
+              className={`rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                activeTab === "promo"
+                  ? "bg-primary text-white shadow-md shadow-primary/30"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
+              }`}
+              aria-pressed={activeTab === "promo"}
+            >
+              {promoLabel}
+            </button>
+          </div>
         </div>
 
         {/* Popular Features Banner */}

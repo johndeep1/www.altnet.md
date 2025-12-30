@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -12,12 +11,9 @@ import {
   PhoneIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { ShoppingCart } from "lucide-react";
-import dynamic from "next/dynamic";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 
 interface HeaderProps {
-  cartButton?: React.ReactNode;
   customNavigation?: Array<{
     name: string;
     href: string;
@@ -49,7 +45,6 @@ const mainNavigation = [
   { name: "Prețuri", href: "/preturi" },
   { name: "Acoperire", href: "/acoperire" },
   { name: "Despre Noi", href: "/despre" },
-    { name: "Magazin", href: "/magazin" },
   { name: "Achitare online", href: "https://oplata.md/altnet" },
 ];
 
@@ -125,23 +120,16 @@ const MobileMenuItem = ({
   );
 };
 
-export default function Header({
-  cartButton,
-  customNavigation,
-}: HeaderProps = {}) {
+export default function Header({ customNavigation }: HeaderProps = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
-  const isMagazin = pathname.startsWith("/magazin");
-
-  // Hide header on login page
-  if (pathname === "/login") return null;
 
   const isActiveLink = (href: string) => {
+    if (href.startsWith("http")) return false;
     if (href === "/") return pathname === href;
-    if (href === "/magazin" && pathname === "/magazin") return true;
-    return pathname.startsWith(href) && href !== "/magazin";
+    return pathname.startsWith(href);
   };
 
   useEffect(() => {
@@ -158,7 +146,7 @@ export default function Header({
   }, [pathname]);
 
   // Use customNavigation if provided, otherwise use the default navigation
-  const navigation = customNavigation || (isMagazin ? [] : mainNavigation);
+  const navigation = customNavigation || mainNavigation;
 
   return (
     <>
@@ -283,9 +271,9 @@ export default function Header({
               )}
             </button>
 
-            {/* Contact and Cart Buttons */}
+            {/* Contact Button */}
             <div className="hidden lg:flex lg:items-center lg:gap-4">
-              <Link href={isMagazin ? "/contact" : "/contact"}>
+              <Link href="/contact">
                 <ShimmerButton
                   background="#22C55E"
                   shimmerColor="#ffffff"
@@ -297,8 +285,6 @@ export default function Header({
                   </span>
                 </ShimmerButton>
               </Link>
-
-              {isMagazin && cartButton}
             </div>
           </div>
         </nav>
@@ -390,12 +376,6 @@ export default function Header({
                       Contactează-ne
                     </Link>
 
-                    {/* Cart Button (Only for Magazin) */}
-                    {isMagazin && (
-                      <div onClick={() => setIsMobileMenuOpen(false)}>
-                        {cartButton}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

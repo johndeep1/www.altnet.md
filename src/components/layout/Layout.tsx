@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Footer from "./Footer";
 import { motion } from "framer-motion";
@@ -11,9 +10,6 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const pathname = usePathname();
-  const isMagazin = pathname.startsWith("/magazin");
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -25,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
       >
         {children}
       </motion.main>
-      {!isMagazin && <Footer />}
+      <Footer />
     </div>
   );
 }

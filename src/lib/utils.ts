@@ -4,3 +4,10 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat("ro-MD", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(price)
+}

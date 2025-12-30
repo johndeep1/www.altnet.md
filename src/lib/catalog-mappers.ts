@@ -3,7 +3,6 @@ import {
   safeBoolean,
   safeNumber,
   safeString,
-  safeStringArray,
 } from "@/lib/backend-api";
 
 export type ProductStatus =
@@ -22,9 +21,12 @@ export interface StorefrontCategory {
 
 export interface StorefrontProductSummary {
   id: string;
+  slug: string;
   name: string;
   description: string;
   price: number;
+  originalPrice: number;
+  discountPercent: number;
   images: string[];
   stock: number;
   createdAt: string;
@@ -63,9 +65,24 @@ export interface AdminProduct {
   };
 }
 
+const getImageUrl = (value: unknown): string | null => {
+  if (typeof value === "string") return value;
+  if (!value || typeof value !== "object") return null;
+  const record = value as Record<string, unknown>;
+  return (
+    safeString(record.url, "") ||
+    safeString(record.path_global, "") ||
+    safeString(record.path, "") ||
+    null
+  );
+};
+
 const getProductImages = (record: Record<string, unknown>): string[] => {
   const mainImage = safeString(record.main_image_url, "");
-  const images = safeStringArray(record.images);
+  const rawImages = Array.isArray(record.images) ? record.images : [];
+  const images = rawImages
+    .map(getImageUrl)
+    .filter((item): item is string => Boolean(item && item.length > 0));
   const combined = [mainImage, ...images].filter((item) => item.length > 0);
   return Array.from(new Set(combined));
 };
@@ -98,6 +115,21 @@ const getProductPrice = (record: Record<string, unknown>): number => {
   );
 
   return price ?? 0;
+};
+
+const getOriginalPrice = (record: Record<string, unknown>): number => {
+  const price = pickFirstNumber(
+    record.price_mdl,
+    getPriceFromPrices(record.prices),
+    record.price_min,
+    record.price_max
+  );
+
+  return price ?? 0;
+};
+
+const getDiscountPercent = (record: Record<string, unknown>): number => {
+  return safeNumber(record.effective_discount_percent) ?? 0;
 };
 
 const getProductStock = (record: Record<string, unknown>): number => {
@@ -140,9 +172,12 @@ export const mapPublicProductSummary = (
 
   return {
     id: safeString(record.id, ""),
+    slug: safeString(record.slug, "") || safeString(record.id, ""),
     name: safeString(record.name, ""),
     description: safeString(record.description, ""),
     price: getProductPrice(record),
+    originalPrice: getOriginalPrice(record),
+    discountPercent: getDiscountPercent(record),
     images: getProductImages(record),
     stock,
     createdAt: getCreatedAt(record),
@@ -179,9 +214,12 @@ export const mapPublicProductDetail = (
 
   return {
     id: safeString(record.id, ""),
+    slug: safeString(record.slug, "") || safeString(record.id, ""),
     name: safeString(record.name, ""),
     description: safeString(record.description, ""),
     price: getProductPrice(record),
+    originalPrice: getOriginalPrice(record),
+    discountPercent: getDiscountPercent(record),
     images: getProductImages(record),
     stock,
     createdAt: getCreatedAt(record),

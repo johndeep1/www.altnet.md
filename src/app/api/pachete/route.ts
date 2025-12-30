@@ -250,34 +250,46 @@ export async function POST(request: Request) {
       </html>
     `;
 
-    // Send email to customer
-    await transporter.sendMail({
-      from: {
-        name: "ALTNET Internet",
-        address: process.env.EMAIL_USER!
-      },
-      to: data.email,
-      subject: `Confirmare comandă pachet ${data.planTitle} #${orderNumber} - ALTNET`,
-      html: customerEmailContent,
-    });
+    // Send emails (non-blocking - don't fail the order if emails fail)
+    let emailsSent = false;
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      try {
+        // Send email to customer
+        await transporter.sendMail({
+          from: {
+            name: "ALTNET Internet",
+            address: process.env.EMAIL_USER
+          },
+          to: data.email,
+          subject: `Confirmare comandă pachet ${data.planTitle} #${orderNumber} - ALTNET`,
+          html: customerEmailContent,
+        });
 
-    // Send email to admin
-    await transporter.sendMail({
-      from: {
-        name: "ALTNET Internet",
-        address: process.env.EMAIL_USER!
-      },
-      to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER!,
-      subject: `Comandă nouă pachet ${data.planTitle} #${orderNumber} - ALTNET`,
-      html: adminEmailContent,
-      replyTo: data.email
-    });
-
-    // TODO: Here you would typically save the order to a database
+        // Send email to admin
+        await transporter.sendMail({
+          from: {
+            name: "ALTNET Internet",
+            address: process.env.EMAIL_USER
+          },
+          to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
+          subject: `Comandă nouă pachet ${data.planTitle} #${orderNumber} - ALTNET`,
+          html: adminEmailContent,
+          replyTo: data.email
+        });
+        emailsSent = true;
+      } catch (emailError) {
+        console.error("Failed to send notification emails:", emailError);
+        // Don't fail the request - order was already saved to backend
+      }
+    } else {
+      console.warn("Email credentials not configured - skipping email notifications");
+    }
 
     return NextResponse.json({
       success: true,
-      message: "Package order placed successfully and emails sent"
+      message: emailsSent
+        ? "Package order placed successfully and emails sent"
+        : "Package order placed successfully (email notifications skipped)"
     });
   } catch (error) {
     console.error("Error processing package order:", error);

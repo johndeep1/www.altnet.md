@@ -3,14 +3,12 @@ Allow: /
 
 # Disallow admin pages
 Disallow: /admin/
-Disallow: /inventar/
 
 # Encourage search engines to crawl important pages
 Allow: /preturi
 Allow: /pachete
 Allow: /acoperire
 Allow: /contact
-Allow: /magazin
 Allow: /blog
 
 # Sitemap

@@ -1,29 +1,22 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/app` holds Next.js App Router routes such as `magazin`, `pachete`, and API routes; page entrypoints live in route directories.
-- `src/components` hosts UI modules grouped by feature (`layout`, `speedtest`, `ui`), and `src/lib`, `src/utils`, `src/types` provide shared logic, helpers, and TypeScript contracts callable via the `@/*` path alias (see `tsconfig.json`).
-- Static assets live under `public/`; shared content data lives in `src/data/`.
+`src/app` uses the Next.js App Router; each folder maps to a route segment (e.g., `src/app/pachete/page.tsx`). API routes live in `src/app/api`. Shared UI lives in `src/components` (notably `src/components/sections` for page blocks). Reusable logic and helpers are in `src/lib` and `src/utils`, domain types in `src/types`, and fixtures/data in `src/data`. Static assets (images, icons, manifest) are in `public`, while global styles are in `src/app/globals.css`.
 
 ## Build, Test, and Development Commands
-- `npm run dev` launches the Next.js dev server at `http://localhost:3000`.
-- `npm run build` compiles the production bundle.
-- `npm run start` serves the built app; `npm run lint` executes Next + ESLint.
+- `npm run dev`: start the local Next.js dev server on `http://localhost:3000` (bound to `0.0.0.0`).
+- `npm run build`: create a production build.
+- `npm run start`: run the production build locally.
+- `npm run lint`: run ESLint via `next lint` for code quality checks.
 
 ## Coding Style & Naming Conventions
-- TypeScript is strictly typed (`strict: true`); prefer functional React components and server actions consistent with existing files.
-- Use 2-space indentation, Tailwind utility classes in JSX, and descriptive component names (PascalCase for components, camelCase for helpers).
-- Keep shared logic in `src/lib`/`src/utils` and export via the `@/` alias; colocate CSS in Tailwind classes or module-level styles where necessary.
+Use TypeScript + React with the App Router. Follow the existing style: 2-space indentation, single quotes, and semicolons. Components and component files are PascalCase (e.g., `HeroSection.tsx`), while route folders mirror URL segments (e.g., `src/app/preturi`). Prefer the `@/` alias for imports from `src` (configured in `tsconfig.json`). Tailwind CSS is the primary styling system; keep global CSS changes in `src/app/globals.css`.
 
 ## Testing Guidelines
-- Automated tests are not yet configured; when adding them, keep spec files near their subjects (`component.test.tsx`) and run them before commits.
-- Until a framework is adopted, rely on `npm run lint` and manual QA across key routes (e.g., `/magazin`), documenting scenarios in PRs.
+There is no dedicated test runner configured yet. For now, rely on `npm run lint` and manual validation in `npm run dev`. If you add tests, co-locate them with the feature and use `*.test.ts(x)` naming so they can be picked up by future tooling.
 
 ## Commit & Pull Request Guidelines
-- Git history is currently informal (`Update changes`, `alot`); move toward clear, imperative summaries such as `feat(magazin): add product filters`.
-- Each PR should describe motivation, list notable changes, link issues, and attach screenshots or recordings for UI updates.
-- Confirm lint/build results and note any env var changes in the PR body.
+Commit history mixes short summaries with Conventional Commits (e.g., `feat(app): switch to backend API`). Prefer the Conventional Commit style when possible and keep messages imperative and concise. PRs should include a brief summary, testing notes (commands run), and screenshots for UI changes; link related issues if they exist.
 
 ## Security & Configuration Tips
-- Store secrets in `.env.local` (`EMAIL_USER`, `EMAIL_PASS`, `EMAIL_RECIPIENT`, `JWT_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GOOGLE_VERIFICATION`, `GMAIL_USER`, `GMAIL_APP_PASSWORD`), and never commit them.
-- When adding client-side code, audit for privacy-sensitive data and depend on `process.env.NEXT_PUBLIC_*` only for safe public values.
+Local configuration belongs in `.env`. Do not commit secrets; if new config is needed, document the required keys in the PR description.

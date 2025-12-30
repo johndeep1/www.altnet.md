@@ -36,12 +36,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/magazin`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
   ];
 
   // Package pages - using fallback plans instead of trying to import defaultPlans

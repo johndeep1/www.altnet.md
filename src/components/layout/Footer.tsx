@@ -1,6 +1,4 @@
 "use client";
-
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -32,23 +30,6 @@ const mainNavigation: FooterSection[] = [
       { name: "Internet", href: "/servicii/internet" },
       { name: "TV Digital", href: "/servicii/tv" },
       { name: "Prețuri", href: "/preturi" },
-    ],
-  },
-  {
-    title: "Magazin",
-    links: [
-      { name: "Produse", href: "/magazin" },
-
-    ],
-  },
-];
-
-const magazinNavigation: FooterSection[] = [
-  {
-    title: "Link-uri Rapide",
-    links: [
-      { name: "Despre Noi", href: "/despre" },
-      { name: "Contact", href: "/contact" },
     ],
   },
   {
@@ -88,16 +69,9 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const pathname = usePathname();
-
-  // Hide footer on login page
-  if (pathname === "/login") return null;
-
-  const isMagazin = pathname.startsWith("/magazin");
-  const navigation = isMagazin ? magazinNavigation : mainNavigation;
-  const description = isMagazin
-    ? "Magazinul tău online de încredere pentru produse IT și electronice."
-    : "Furnizor local de servicii de internet și televiziune digitală, oferind conectivitate de înaltă viteză și divertisment de calitate.";
+  const navigation = mainNavigation;
+  const description =
+    "Furnizor local de servicii de internet și televiziune digitală, oferind conectivitate de înaltă viteză și divertisment de calitate.";
 
   return (
     <footer className="bg-white border-t border-gray-100">
@@ -110,7 +84,7 @@ export default function Footer() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <Link href={isMagazin ? "/magazin" : "/"} className="block">
+              <Link href="/" className="block">
                 <Image
                   src="/ALTNET-LOGO.svg"
                   alt="ALTNET"
@@ -186,19 +160,17 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-100">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()}{" "}
-              {isMagazin ? "AltNet Store" : "ALTNET"}. Toate drepturile
-              rezervate.
+              © {new Date().getFullYear()} ALTNET. Toate drepturile rezervate.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link
-                href={isMagazin ? "/magazin/terms" : "/termeni"}
+                href="/termeni"
                 className="text-gray-500 hover:text-primary text-sm"
               >
                 Termeni și Condiții
               </Link>
               <Link
-                href={isMagazin ? "/magazin/privacy" : "/confidentialitate"}
+                href="/confidentialitate"
                 className="text-gray-500 hover:text-primary text-sm"
               >
                 Politica de Confidențialitate

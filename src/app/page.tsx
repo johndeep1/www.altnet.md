@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import HeroSection from '@/components/sections/HeroSection';
 import ServicesSection from '@/components/sections/ServicesSection';
+import ProductsSection from '@/components/sections/ProductsSection';
 import PricingSection from '@/components/sections/PricingSection';
 import CoverageSection from '@/components/sections/CoverageSection';
 import { generateMetadata } from '@/components/seo/metadata';
@@ -28,8 +29,9 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <ServicesSection />
       <PricingSection />
+      <ProductsSection />
+      <ServicesSection />
       <CoverageSection />
     </>
   );

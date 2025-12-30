@@ -75,9 +75,10 @@ async function getPlanBySlug(slug: string): Promise<PricingPlan> {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const plan = await getPlanBySlug(params.slug);
+  const { slug } = await params;
+  const plan = await getPlanBySlug(slug);
 
   return {
     title: `Pachet ${plan.title} - Viteză ${plan.speed} - Altnet Moldova`,
@@ -93,9 +94,10 @@ export async function generateMetadata({
 export default async function PackagePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const plan = await getPlanBySlug(params.slug);
+  const { slug } = await params;
+  const plan = await getPlanBySlug(slug);
   const schema = buildPlanSchema(plan);
 
   return (
