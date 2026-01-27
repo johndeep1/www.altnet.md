@@ -11,9 +11,19 @@ import {
   PUBLIC_API_BASE_URL,
   buildQueryString,
   parseListResponse,
+  slugify,
 } from "@/lib/backend-api";
 
-const fetchPricingPlans = cache(async (): Promise<PricingPlan[]> => {
+const POPULAR_LABEL = "Pachete populare";
+const LEU_LABEL = "Produs 1 leu";
+const LEU_KEY = slugify(LEU_LABEL);
+
+type PricingPlansByType = {
+  popular: PricingPlan[];
+  leu: PricingPlan[];
+};
+
+const fetchPricingPlans = cache(async (): Promise<PricingPlansByType> => {
   try {
     const response = await fetch(
       `${PUBLIC_API_BASE_URL}/service-packages${buildQueryString({
@@ -29,15 +39,44 @@ const fetchPricingPlans = cache(async (): Promise<PricingPlan[]> => {
 
     const payload = await response.json();
     const { data } = parseListResponse<ServicePackagePlan>(payload);
-    const mapped = data.map(mapServicePackageToPricingPlan);
-    return arrangePricingPlans(mapped);
+
+    const buckets: PricingPlansByType = {
+      popular: [],
+      leu: [],
+    };
+
+    data.forEach((plan) => {
+      const typeKey = slugify(plan.type_name ?? "");
+      const mapped = mapServicePackageToPricingPlan(plan);
+      if (typeKey === LEU_KEY) {
+        buckets.leu.push(mapped);
+        return;
+      }
+      buckets.popular.push(mapped);
+    });
+
+    return {
+      popular: arrangePricingPlans(buckets.popular),
+      leu: arrangePricingPlans(buckets.leu),
+    };
   } catch (error) {
     console.error("Failed to load pricing plans", error);
-    return defaultPlans;
+    const arranged = arrangePricingPlans(defaultPlans);
+    return {
+      popular: arranged.length ? arranged : defaultPlans,
+      leu: [],
+    };
   }
 });
 
 export default async function PricingPage() {
-  const plans = await fetchPricingPlans();
-  return <PricingPageClient plans={plans} />;
+  const plansByType = await fetchPricingPlans();
+  return (
+    <PricingPageClient
+      popularPlans={plansByType.popular}
+      promoPlans={plansByType.leu}
+      popularLabel={POPULAR_LABEL}
+      promoLabel={LEU_LABEL}
+    />
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import PricingCards from "@/components/pricing/PricingCards";
 import type { PricingPlan } from "@/data/pricing-plans";
@@ -101,16 +101,49 @@ const comparisonFeatures = [
 ];
 
 interface PricingPageClientProps {
-  plans: PricingPlan[];
+  popularPlans: PricingPlan[];
+  promoPlans: PricingPlan[];
+  popularLabel: string;
+  promoLabel: string;
 }
 
-export default function PricingPageClient({ plans }: PricingPageClientProps) {
+export default function PricingPageClient({
+  popularPlans,
+  promoPlans,
+  popularLabel,
+  promoLabel,
+}: PricingPageClientProps) {
   const router = useRouter();
   const containerRef = useRef(null);
+  const [activeTab, setActiveTab] = useState<"popular" | "promo">("popular");
 
   const pricingPlans = useMemo(() => {
-    return plans.length ? plans : defaultPlans;
-  }, [plans]);
+    const primary = activeTab === "popular" ? popularPlans : promoPlans;
+    const secondary = activeTab === "popular" ? promoPlans : popularPlans;
+    const result: PricingPlan[] = [];
+    const seen = new Set<string>();
+
+    const addPlans = (source: PricingPlan[]) => {
+      source.forEach((plan) => {
+        if (result.length >= 3) return;
+        const key = plan.id ?? plan.slug;
+        if (key && seen.has(String(key))) return;
+        if (key) {
+          seen.add(String(key));
+        }
+        result.push(plan);
+      });
+    };
+
+    addPlans(primary);
+    addPlans(secondary);
+
+    if (result.length < 3) {
+      addPlans(defaultPlans);
+    }
+
+    return result.slice(0, 3);
+  }, [activeTab, popularPlans, promoPlans]);
 
   const comparisonPlans = useMemo(() => {
     const primary = pricingPlans.slice(0, 3);
@@ -334,6 +367,40 @@ export default function PricingPageClient({ plans }: PricingPageClientProps) {
                 </motion.div>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Toggle Section */}
+      <section className="mb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
+            <div className="inline-flex items-center p-1.5 bg-gray-100 rounded-full border border-gray-200">
+              <button
+                type="button"
+                onClick={() => setActiveTab("popular")}
+                className={`rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                  activeTab === "popular"
+                    ? "bg-primary text-white shadow-md shadow-primary/30"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
+                }`}
+                aria-pressed={activeTab === "popular"}
+              >
+                {popularLabel}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("promo")}
+                className={`rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                  activeTab === "promo"
+                    ? "bg-primary text-white shadow-md shadow-primary/30"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
+                }`}
+                aria-pressed={activeTab === "promo"}
+              >
+                {promoLabel}
+              </button>
+            </div>
           </div>
         </div>
       </section>
