@@ -83,19 +83,6 @@ const comparisonFeatures = [
     features: [
       { name: "Canale TV", tv: "200+ canale", popular: "HD", premium: "Premium" },
       { name: "TV pe mobil", tv: true, popular: true, premium: true },
-      {
-        name: "Multi-screen",
-        tv: "1 device",
-        popular: "2 devices",
-        premium: "4 devices",
-      },
-      {
-        name: "Cadou Televizor",
-        tv: false,
-        popular: false,
-        premium: "45 inch",
-        highlight: true,
-      },
     ] as ComparisonFeature[],
   },
 ];
