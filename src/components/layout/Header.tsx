@@ -37,7 +37,7 @@ const mainNavigation = [
       },
       {
         name: "Televiziune",
-        href: "/servicii/tv",
+        href: "/servicii/internet",
         description: "Televiziune digitală HD",
       },
     ],

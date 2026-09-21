@@ -28,7 +28,7 @@ const mainNavigation: FooterSection[] = [
     title: "Servicii",
     links: [
       { name: "Internet", href: "/servicii/internet" },
-      { name: "TV Digital", href: "/servicii/tv" },
+      { name: "TV Digital", href: "/servicii/internet" },
       { name: "Prețuri", href: "/preturi" },
     ],
   },
