@@ -16,6 +16,7 @@ interface PricingCardProps {
   gradient: string;
   featured?: boolean;
   popularFeatures: string[];
+  priceNote?: string;
   index: number;
   isInView: boolean;
 }
@@ -30,6 +31,7 @@ export default function PricingCard({
   gradient,
   featured,
   popularFeatures,
+  priceNote = "pe lună, TVA inclus",
   index,
   isInView,
 }: PricingCardProps) {
@@ -42,7 +44,6 @@ export default function PricingCard({
         }}
         className="h-full"
       >
-        {/* Card Background with Glass Effect */}
         <div
           className={`absolute inset-0 rounded-3xl transition-all duration-300
                       ${
@@ -53,7 +54,6 @@ export default function PricingCard({
         />
 
         <div className={`relative ${featured ? "p-8 lg:p-10" : "p-8"}`}>
-          {/* Featured Badge */}
           {featured && (
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
               <div
@@ -66,7 +66,6 @@ export default function PricingCard({
             </div>
           )}
 
-          {/* Plan Header */}
           <div className="text-center mb-8">
             <motion.div
               whileHover={{
@@ -79,22 +78,19 @@ export default function PricingCard({
               <img
                 src="/ALTNET-LOGO.svg"
                 alt="ALTNET Logo"
-                className={`w-full h-full`}
+                className="w-full h-full"
               />
             </motion.div>
             <h3 className="text-2xl font-bold text-gray-900 mb-1">{title}</h3>
             <p className="text-gray-500 text-sm font-medium">{subtitle}</p>
           </div>
 
-          {/* Enhanced Price Section */}
           <div className="relative mb-8">
-            {/* Price Tag Background */}
             <div
               className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 rounded-2xl`}
             />
 
             <div className="relative p-4 text-center">
-              {/* Speed Indicator */}
               <div className="mb-2">
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-sm font-medium
@@ -108,7 +104,6 @@ export default function PricingCard({
                 </span>
               </div>
 
-              {/* Price Display */}
               <div className="flex items-baseline justify-center gap-1 mb-1">
                 <span className="text-sm text-gray-500">de la</span>
                 <span
@@ -120,12 +115,10 @@ export default function PricingCard({
                 <span className="text-xl text-gray-500">lei</span>
               </div>
 
-              {/* Period */}
-              <span className="text-sm text-gray-500">pe lună, TVA inclus</span>
+              <span className="text-sm text-gray-500">{priceNote}</span>
             </div>
           </div>
 
-          {/* Popular Features Section */}
           <div className="bg-gray-50/80 backdrop-blur-sm rounded-2xl p-4 mb-8">
             <p className="text-xs font-medium text-gray-500 uppercase mb-3">
               Beneficii incluse
@@ -151,7 +144,6 @@ export default function PricingCard({
             </div>
           </div>
 
-          {/* Features List */}
           <ul className="space-y-4 mb-8">
             {features.map((feature, i) => (
               <motion.li
@@ -178,12 +170,13 @@ export default function PricingCard({
                   </span>
                 )}
                 <span
-                  className={`
-                    ${feature.included ? "text-gray-600" : "text-gray-400"}
-                    ${feature.highlight
+                  className={`${
+                    feature.included ? "text-gray-600" : "text-gray-400"
+                  } ${
+                    feature.highlight
                       ? "font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md"
-                      : ""}
-                  `}
+                      : ""
+                  }`}
                 >
                   {feature.text}
                 </span>
@@ -191,13 +184,10 @@ export default function PricingCard({
             ))}
           </ul>
 
-          {/* Enhanced Action Button */}
           <Link href={`/pachete/${slug}`}>
             <AnimatedButton
               variant={featured ? "primary" : "outline"}
-              className={`w-full ${
-                featured ? `bg-gradient-to-r ${gradient}` : ""
-              }`}
+              className={`w-full ${featured ? `bg-gradient-to-r ${gradient}` : ""}`}
             >
               {featured ? "Comandă Acum" : "Alege Pachetul"}
               <ArrowIcon direction="right" />

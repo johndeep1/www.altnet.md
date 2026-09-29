@@ -15,53 +15,145 @@ export interface PricingPlan {
   features: PricingFeature[];
   popularFeatures: string[];
   featured?: boolean;
+  priceNote?: string;
 }
 
-export const defaultPlans: PricingPlan[] = [
+const residentialGradient = "from-primary via-primary-dark to-primary";
+const businessGradient = "from-primary via-primary-dark to-primary";
+
+export const residentialPlans: PricingPlan[] = [
   {
-    slug: "tv",
+    slug: "tv-217",
     title: "TV",
     subtitle: "Televiziune digitală",
-    price: 79,
-    speed: "200+ canale",
-    gradient: "from-blue-500 via-blue-600 to-blue-700",
+    price: 89,
+    speed: "217 canale",
+    gradient: residentialGradient,
     features: [
-      { text: "Canale HD incluse", included: true },
-      { text: "Acces TV pe mobil", included: true },
-      { text: "Instalare gratuită", included: true },
-      { text: "Internet", included: false },
+      { text: "217 canale TV", included: true },
+      { text: "Televiziune digitală", included: true },
     ],
-    popularFeatures: ["200+ canale TV", "Canale HD incluse"],
+    popularFeatures: ["217 canale TV", "Televiziune digitală"],
+    priceNote: "pe lună",
   },
   {
-    slug: "popular",
-    title: "Popular",
-    subtitle: "Cel mai ales",
+    slug: "net-tv-100",
+    title: "Net+TV 100",
+    subtitle: "Persoane fizice",
     price: 130,
-    speed: "600 Mbps",
-    gradient: "from-primary via-primary-dark to-violet-600",
+    speed: "100 Mbps",
+    gradient: residentialGradient,
     features: [
-      { text: "Internet de mare viteză", included: true },
-      { text: "Router WiFi 6", included: true },
-      { text: "Instalare gratuită", included: true },
-      { text: "TV Digital HD", included: true },
+      { text: "Internet 100 Mbps", included: true },
+      { text: "Televiziune digitală", included: true },
     ],
-    popularFeatures: ["TV pe mobil inclus", "Gaming optimizat"],
+    popularFeatures: ["Internet + TV", "100 Mbps"],
     featured: true,
+    priceNote: "pe lună",
   },
   {
-    slug: "premium",
-    title: "Premium",
-    subtitle: "Pentru pretențioși",
-    price: 295,
-    speed: "1000 Mbps",
-    gradient: "from-violet-500 via-purple-600 to-purple-700",
+    slug: "net-tv-300",
+    title: "Net+TV 300",
+    subtitle: "Persoane fizice",
+    price: 150,
+    speed: "300 Mbps",
+    gradient: residentialGradient,
     features: [
-      { text: "Internet Gigabit", included: true },
-      { text: "Router WiFi 6E", included: true },
-      { text: "Cadou Televizor 45 inch", included: true, highlight: true },
-      { text: "Instalare prioritară", included: true },
+      { text: "Internet 300 Mbps", included: true },
+      { text: "Televiziune digitală", included: true },
     ],
-    popularFeatures: ["TV Premium inclus", "IP Static inclus"],
+    popularFeatures: ["Internet + TV", "300 Mbps"],
+    priceNote: "pe lună",
+  },
+  {
+    slug: "net-tv-500",
+    title: "Net+TV 500",
+    subtitle: "Persoane fizice",
+    price: 180,
+    speed: "500 Mbps",
+    gradient: residentialGradient,
+    features: [
+      { text: "Internet 500 Mbps", included: true },
+      { text: "Televiziune digitală", included: true },
+    ],
+    popularFeatures: ["Internet + TV", "500 Mbps"],
+    priceNote: "pe lună",
+  },
+  {
+    slug: "net-tv-1g",
+    title: "Net+TV 1G",
+    subtitle: "Persoane fizice",
+    price: 200,
+    speed: "1 Gbps",
+    gradient: residentialGradient,
+    features: [
+      { text: "Internet 1 Gbps", included: true },
+      { text: "Televiziune digitală", included: true },
+    ],
+    popularFeatures: ["Internet + TV", "1 Gbps"],
+    priceNote: "pe lună",
   },
 ];
+
+export const businessPlans: PricingPlan[] = [
+  {
+    slug: "business-100",
+    title: "Business 100",
+    subtitle: "Persoane juridice",
+    price: 450,
+    speed: "100 Mbps",
+    gradient: businessGradient,
+    features: [
+      { text: "Internet 100 Mbps", included: true },
+      { text: "Persoane juridice", included: true },
+    ],
+    popularFeatures: ["Persoane juridice", "Net 100 Mbps"],
+    priceNote: "pe lună",
+  },
+  {
+    slug: "business-300",
+    title: "Business 300",
+    subtitle: "Persoane juridice",
+    price: 600,
+    speed: "300 Mbps",
+    gradient: businessGradient,
+    features: [
+      { text: "Internet 300 Mbps", included: true },
+      { text: "Persoane juridice", included: true },
+    ],
+    popularFeatures: ["Persoane juridice", "Net 300 Mbps"],
+    featured: true,
+    priceNote: "pe lună",
+  },
+  {
+    slug: "business-600",
+    title: "Business 600",
+    subtitle: "Persoane juridice",
+    price: 920,
+    speed: "600 Mbps",
+    gradient: businessGradient,
+    features: [
+      { text: "Internet 600 Mbps", included: true },
+      { text: "Persoane juridice", included: true },
+    ],
+    popularFeatures: ["Persoane juridice", "Net 600 Mbps"],
+    priceNote: "pe lună",
+  },
+  {
+    slug: "business-1g",
+    title: "Business 1G",
+    subtitle: "Persoane juridice",
+    price: 1250,
+    speed: "1 Gbps",
+    gradient: businessGradient,
+    features: [
+      { text: "Internet 1 Gbps", included: true },
+      { text: "Persoane juridice", included: true },
+    ],
+    popularFeatures: ["Persoane juridice", "Net 1 Gbps"],
+    priceNote: "pe lună",
+  },
+];
+
+// Keep the legacy export for pages/components that still expect defaultPlans.
+export const defaultPlans: PricingPlan[] = residentialPlans.slice(0, 3);
